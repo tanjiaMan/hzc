@@ -2,7 +2,8 @@ import Vue from 'vue'
 import store from './store'
 import App from './App'
 
-import Http from './Request.js';
+import Http from './utils/Request.js';
+import Config from './utils/Config.js';
 import Json from './Json' //测试用数据
 
 import cuCustom from './colorui/components/cu-custom.vue'
@@ -38,6 +39,10 @@ const json = type=>{
 	})
 }
 
+const config = type=>{
+	return Config[type];
+}
+
 const prePage = ()=>{
 	let pages = getCurrentPages();
 	let prePage = pages[pages.length - 2];
@@ -51,7 +56,7 @@ const prePage = ()=>{
 Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
-Vue.prototype.$api = {msg, json, prePage};
+Vue.prototype.$api = {msg, json, prePage, config};
 Vue.prototype.$http = Http;
 
 App.mpType = 'app'

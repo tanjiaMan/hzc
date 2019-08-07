@@ -1,4 +1,5 @@
-import store from './store'
+import store from '../store'
+import config from './Config.js';
 
 const requestPost = (url, data, opt) => {
 	if(opt.silence != true){
@@ -8,7 +9,7 @@ const requestPost = (url, data, opt) => {
 	}
 	let token = store.state.token;
 	let header = {
-		'shopId': '1001',
+		'shopId': config.shopId,
 		'content-type': 'application/json',
 		'accept': 'application/json',
 	};
