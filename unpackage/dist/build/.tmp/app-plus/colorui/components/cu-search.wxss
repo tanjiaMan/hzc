@@ -1,0 +1,39 @@
+
+.cu-custom-search{
+	background-color: #19947E;
+}
+.cu-custom .shop-name{
+	font-size: 16px !important;
+	font-weight: 600 !important;
+}
+.cu-custom .input-view {
+	width: 65%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	background-color: #2da797;
+	height: 30px;
+	border-radius: 15px;
+	padding: 0 4%;
+	-webkit-flex-wrap: nowrap;
+	    -ms-flex-wrap: nowrap;
+	        flex-wrap: nowrap;
+	/* margin: 7px 0; */
+	line-height: 30px;
+}
+.cu-custom .input-view .input {
+	height: 30px;
+	line-height: 30px;
+	/* width: 94%; */
+	padding: 0 3%;
+}
+.cu-custom .input-view /deep/ .uni-input-form{
+	height: 100%;
+}
+.cu-custom .input-view /deep/ .uni-input-placeholder{
+	color: #ececec;
+	font-size: 13px;
+	font-weight: 400;
+}
+
