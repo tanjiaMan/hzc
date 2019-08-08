@@ -38,7 +38,7 @@
 			</view> -->
 			<button v-if="needLogin == true" type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">授权登录</button>
 			<button v-if="needGetMobile == true" type="primary" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意绑定手机号码</button>
-			<!-- <button type="primary" open-type="contact" @contact="handleContact">微信客服</button> -->
+			<button type="primary" open-type="contact" @contact="handleContact">微信客服</button>
 			<!-- <button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button> -->
 		</view>
 		<!-- <view class="register-section">
