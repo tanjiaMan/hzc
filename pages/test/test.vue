@@ -1,21 +1,24 @@
 <template>
 	<view>
-		<button type="primary" @tap="upload">chooseImg</button>
+		图片地址：{{picUrl}}
+		<button type="primary" @tap="uploadPic">chooseImg</button>
+		视频地址: {{videoUrl}}
+		<button type="primary" @tap="uploadVide">chooseVideo</button>
+		<video v-if="videoUrl != null && videoUrl != '' " :src="videoUrl" controls></video>
 	</view>
 </template>
 
 <script>
 	
-	import * as qiniu from 'qiniu-js'
-	
 	export default {
 		data() {
 			return {
-				
+				picUrl: '',
+				videoUrl: '',
 			}
 		},
 		methods: {
-			upload(){
+			uploadPic(){
 				var that = this;
 				uni.chooseImage({
 					count:1,
@@ -32,7 +35,6 @@
 						that.$request.ModelCommons.getOssConfig(values).then(result => {
 							console.log('ossconfig',result);
 							let ossConfig = result.data[0];
-							console.log('ossConfig',ossConfig.token);
 							uni.uploadFile({
 								url: 'https://upload.qiniup.com',
 								filePath:file.path,
@@ -42,6 +44,7 @@
 									'token': ossConfig.token
 								},
 								success:(uploadFile) => {
+									that.picUrl = ossConfig.accessFile;
 									console.log('success',uploadFile);
 								},
 								fail:(e) => {
@@ -54,6 +57,46 @@
 						})
 					}
 				})
+			},
+			uploadVide(){
+				var that = this;
+				uni.chooseVideo({
+					count: 1,
+					sourceType: ['camera', 'album'],
+					success:(res) => {
+						console.log('video',res);
+						if(res.errMsg != 'chooseVideo:ok'){
+							that.$api.msg(res.errMsg);
+							return;
+						}
+						//上传视频
+						console.log('file',res);
+						let values = {fileType:'VIDEO',fileNames:res.tempFilePath};
+						that.$request.ModelCommons.getOssConfig(values).then(result => {
+							console.log('ossconfig',result);
+							let ossConfig = result.data[0];
+							uni.uploadFile({
+								url: 'https://upload.qiniup.com',
+								filePath:res.tempFilePath,
+								name:'file',
+								formData:{
+									'key': ossConfig.fileName,
+									'token': ossConfig.token
+								},
+								success:(uploadFile) => {
+									that.videoUrl = ossConfig.accessFile;
+									console.log('success',uploadFile);
+								},
+								fail:(e) => {
+									console.log('fail',e);
+								},
+								complete:(result) => {
+									console.log('complete',result);
+								}
+							});
+						})
+					}
+				});
 			}
 		}
 	}
