@@ -151,6 +151,10 @@
 				"navigationBarTitleText": "商品列表"
 			}
         }
+        ,{
+            "path" : "pages/test/test",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
