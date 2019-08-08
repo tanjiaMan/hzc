@@ -2,9 +2,11 @@ import Vue from 'vue'
 import store from './store'
 import App from './App'
 
-import Http from './utils/Request.js';
-import Config from './utils/Config.js';
 import Json from './Json' //测试用数据
+
+/** 接口  */
+import ModelCommons from './utils/model/model.commons.js';
+import ModelUser from './utils/model/model.user.js';
 
 import cuCustom from './colorui/components/cu-custom.vue'
 import cuSearch from './colorui/components/cu-search.vue'
@@ -39,10 +41,6 @@ const json = type=>{
 	})
 }
 
-const config = type=>{
-	return Config[type];
-}
-
 const prePage = ()=>{
 	let pages = getCurrentPages();
 	let prePage = pages[pages.length - 2];
@@ -56,8 +54,8 @@ const prePage = ()=>{
 Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
-Vue.prototype.$api = {msg, json, prePage, config};
-Vue.prototype.$http = Http;
+Vue.prototype.$api = {msg, json, prePage};
+Vue.prototype.$request = {ModelCommons,ModelUser};
 
 App.mpType = 'app'
 

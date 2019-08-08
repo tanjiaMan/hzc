@@ -1,7 +1,7 @@
 import store from '../store'
 import config from './Config.js';
 
-const requestPost = (url, data, opt) => {
+const post = (url, data, opt) => {
 	if(opt.silence != true){
 		uni.showLoading({
 			title: '加载中'
@@ -36,5 +36,5 @@ const requestPost = (url, data, opt) => {
 };
 
 export default {
-	requestPost,
+	post
 }

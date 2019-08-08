@@ -132,8 +132,7 @@
 					return;
 				}
 				let value = {encryptedData: res.encryptedData,iv: res.iv};
-				let url = this.$api.config('api') + "/h5/user/bindMobile";
-				this.$http.requestPost(url,value,{}).then(result => {
+				this.$request.ModelUser.bindmobile(value).then(result => {
 					if(result.code == 'ok' && result.data){
 						let data = result.data;
 						if(data.mobile == null || data.mobile == ''){
@@ -153,7 +152,7 @@
 			async loginRequest(res){
 				let userInfo = res.userInfo
 				let value = {code: this.wxCode,encryptedData: res.encryptedData,iv: res.iv};
-				let result = await this.$http.requestPost(this.$api.config('api') + '/h5/auth/user/wxapp/signIn',value,{});
+				let result = await this.$request.ModelUser.login(value);
 				if(result.code == 'ok' && result.data){
 					this.needLogin = false;
 					let data = result.data;
