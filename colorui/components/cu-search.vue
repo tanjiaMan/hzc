@@ -68,7 +68,7 @@
 
 <style>
 	.cu-custom-search{
-		background-color: #19947E;
+		background-color: #00A08E;
 	}
 	
 	.cu-custom .shop-name{
