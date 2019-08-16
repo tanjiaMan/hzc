@@ -180,7 +180,7 @@
 					</view>
 					<view class="hot-floor">
 						<view class="floor-img-box">
-							<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image>
+							<image class="floor-img" src="https://pic.youx365.com/5@2x.png" mode="scaleToFill"></image>
 						</view>
 						<scroll-view class="floor-list" scroll-x>
 							<view class="scoll-wrapper">
