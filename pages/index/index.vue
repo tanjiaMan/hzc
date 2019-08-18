@@ -41,8 +41,7 @@
 					<view class="v-ad">
 						<swiper class="carousel" circular 
 						indicator-dots='true' indicator-active-color="#00A08E" indicator-color="#fff" 
-						autoplay="true" interval="3000" duration="1000"
-						@change="swiperChange">
+						autoplay="true" interval="3000" duration="1000">
 							<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
 								<image :src="item.src" />
 							</swiper-item>
@@ -80,8 +79,8 @@
 							<img src='https://pic.youx365.com/toutiao_2.png' />
 							<img src='https://pic.youx365.com/toutiao_3.png' />
 						</view>
-						<view class="flex-item d-news">
-							<uni-notice-bar @getmore="getnewsMore" :show-get-more="true" :single="true" 
+						<view class="flex-item d-news" @click="getnewsMore">
+							<uni-notice-bar :show-get-more="true" :single="true" 
 							text="年末大礼：uni-app1.4 新增百度、支付宝小程序。插件市场重磅上线！"></uni-notice-bar>
 						</view>
 					</view>
@@ -138,10 +137,10 @@
 					</view>
 					<view class="tg-floor">
 						<uni-swiper-dot :info="info" :current="tgCurrent" mode="long" :dots-styles="dotsStyles" field="content">
-							<swiper class="swiper-box-tg" @change="tgSwitch">
+							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
 								<swiper-item v-for="(item, index) in info" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in 3" :key="o">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in 2" :key="o">
 											<view class="tg-img flex-item">
 												<img src="https://pic.youx365.com/shop1.png" />
 											</view>
@@ -182,36 +181,37 @@
 						<view class="floor-img-box">
 							<image class="floor-img" src="https://pic.youx365.com/5@2x.png" mode="scaleToFill"></image>
 						</view>
-						<scroll-view class="floor-list" scroll-x>
-							<view class="scoll-wrapper">
-								<view 
-									v-for="(item, index) in goodsList" :key="index"
-									class="floor-item"
-									@click="navToDetailPage(item)"
-								>
-									<image :src="item.image" mode="aspectFill"></image>
-									<text class="title clamp">{{item.title}}</text>
-									<text class="price">￥{{item.price}}</text>
-								</view>
-								<view class="more">
-									<text>查看全部</text>
-									<text>More+</text>
-								</view>
-							</view>
-						</scroll-view>
+						<uni-swiper-dot :info="bkInfo" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+							<swiper @change="bkSwitch" style="height: 350rpx;">
+								<swiper-item v-for="(item, index) in info" :key="index">
+									<view class="bk-list">
+										<view class="uni-flex uni-row">
+										    <view class="flex-item bk_frame" v-for="(item,index) in 3" :key="item">
+												<view :class="'bk_index bk_index_' + (index%3) "></view>
+												<text class="bk_index_text">{{index + 1}}</text>
+												<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
+												<text class="title clamp">兰兰女鞋运动鞋</text>
+												<text class="price">￥14.9</text>
+											</view>
+										</view>
+									</view>
+								</swiper-item>
+							</swiper>
+						</uni-swiper-dot>
 					</view>
 					<!-- end 爆款推荐 -->
 					
 					<!-- 热销单品 -->
-					<view class="f-header m-t">
-						<image src="/static/temp/h1.png"></image>
-						<view class="tit-box">
-							<text class="tit">热销单品</text>
+					<view class="rx_header m-t">
+						<image src="https://pic.youx365.com/rx_img.png"></image>
+						<view class="tit-frame" style="width: 430rpx;">
+							<text class="tit1">|</text>
 							<text class="tit2">精彩商品不容错过</text>
 						</view>
-						<text class="yticon icon-you"></text>
+						<view class="tit-frame">
+							<text class="tit3">更多</text>
+						</view>
 					</view>
-					
 					<view class="guess-section">
 						<view 
 							v-for="(item, index) in goodsList" :key="index"
@@ -221,8 +221,15 @@
 							<view class="image-wrapper">
 								<image :src="item.image" mode="aspectFill"></image>
 							</view>
+							 <view class="uni-flex uni-row" style="width: 100%;">
+							    <view class="flex-item" style="width: 50%;">
+									<text class="price">￥{{item.price}}</text>
+								</view>
+							    <view class="flex-item" style="width: 50%;text-align: right;">
+									<text class="buysum">2563人已付款</text>
+								</view>
+							 </view>
 							<text class="title clamp">{{item.title}}</text>
-							<text class="price">￥{{item.price}}</text>
 						</view>
 					</view>
 					<view style="height: 60rpx;"></view>
@@ -244,29 +251,34 @@
 		},
 		data() {
 			return {
-				titleNViewBackground: '',
-				swiperCurrent: 0,
-				swiperLength: 0,
-				carouselList: [],
-				goodsList: [],
+				dotsStyles: {
+					backgroundColor: '#DBDBDB',
+					border: '1px #DBDBDB solid',
+					color: '#fff',
+					selectedBackgroundColor: '#00A390',
+					selectedBorder: '1px #00A390 solid'
+				},
+				
+				//高度 3个： 760,2: 520, 1:  140 rpx
+				tgFrameHeight: 'height: 520rpx !important;',
+				
+				carouselList: [], //头部广告数据
+				goodsList: [], //
 				
 				//团购
 				info: [{},{},{}],
 				tgCurrent: 0,
-				dotsStyles: {
-						backgroundColor: '#DBDBDB',
-						border: '1px #DBDBDB solid',
-						color: '#fff',
-						selectedBackgroundColor: '#00A390',
-						selectedBorder: '1px #00A390 solid'
-					},
+				avatar: [
+					'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+					'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
+					'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
+					'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
+				],
+				
+				//爆款
+				bkInfo: [{},{},{}],
+				bkCurrent: 0,	
 					
-					avatar: [
-						'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-						'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
-						'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-						'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
-					],
 				
 				//头部菜单
 				isClickChange: false,
@@ -314,18 +326,10 @@
 			 */
 			async loadData() {
 				let carouselList = await this.$api.json('carouselList');
-				this.titleNViewBackground = carouselList[0].background;
-				this.swiperLength = carouselList.length;
 				this.carouselList = carouselList;
 				
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
-			},
-			//轮播图切换修改背景色
-			swiperChange(e) {
-				const index = e.detail.current;
-				this.swiperCurrent = index;
-				this.titleNViewBackground = this.carouselList[index].background;
 			},
 			//详情页
 			navToDetailPage(item) {
@@ -338,7 +342,7 @@
 			hqmsclick(){
 				var that = this;
 				uni.showToast({
-				  title: '成功',
+				  title: '点击菜单',
 				  icon: 'success',
 				  duration: 2000
 				})
@@ -346,6 +350,10 @@
 			//团购切换
 			async tgSwitch(e){
 				this.tgCurrent = e.detail.current
+			},
+			//爆款
+			async bkSwitch(e){
+				this.bkCurrent = e.detail.current
 			},
 			// 头部菜单切换
 			async tabSelect(e) {
@@ -681,7 +689,6 @@
 		height:196rpx;
 		width: 750rpx;
 
-		
 		image{
 			height:96rpx;
 			width:136rpx;
@@ -863,8 +870,63 @@
 			}
 		}
 	}
-	.swiper-box-tg{
-		height: 760rpx !important;
+	
+	/* 爆款 */
+	.bk-list{
+		.bk_frame{
+			margin-left: 20rpx;
+			
+			>image{
+				height: 197rpx;
+				width: 211rpx;
+			}
+			
+			.clamp{
+				font-size:22rpx;
+				font-family:SourceHanSansCN-Regular;
+				font-weight:400;
+				color:#121212;
+			}
+			
+			.price{
+				font-size:22rpx;
+				color:#FF443F;
+				font-weight:500;
+			}
+			
+			.bk_index_text{
+				color:white;
+				position:absolute;
+				top:-1rpx;
+				z-index:9999;
+				margin-left:9rpx;
+				font-size:20rpx;
+				font-family:PangMenZhengDao;
+				font-weight:400;
+			}
+			
+			.bk_index{
+				width:0;
+				height:0;
+				position:absolute;
+				top:3rpx;
+				z-index:999;
+				border-right:47rpx solid transparent;
+				margin-left:4rpx;
+			}
+			
+			.bk_index_0{
+				border-top:47rpx solid #F1103D;
+			}
+			
+			.bk_index_1{
+				border-top:47rpx solid #FEC84B;
+			}
+			
+			.bk_index_2{
+				border-top:47rpx solid #00A390;
+			}
+		}
 	}
 	
 	/* 分类推荐楼层 */
@@ -876,18 +938,7 @@
 
 		.floor-img-box{
 			height:300rpx;
-			position:relative;
 			padding:20rpx;
-			
-			&:after{
-				content: '';
-				position:absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(rgba(255,255,255,.06) 30%, #f8f8f8);
-			}
 		}
 		.floor-img{
 			width: 100%;
@@ -958,7 +1009,7 @@
 		}
 		.image-wrapper{
 			width: 100%;
-			height: 330upx;
+			height: 300rpx;
 			border-radius: 3px;
 			overflow: hidden;
 			image{
@@ -968,14 +1019,19 @@
 			}
 		}
 		.title{
-			font-size: $font-lg;
-			color: $font-color-dark;
-			line-height: 80upx;
+			font-size: 20rpx;
+			color: #000000;
+		}
+		.buysum{
+			font-size: 18rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color: #9F9F9F;
 		}
 		.price{
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 1;
+			font-size: 24rpx;
+			color: #FF443F;
+			font-weight:500;
 		}
 	}
 	
@@ -1143,6 +1199,58 @@
 			color:#896A44;
 			border-radius:10rpx;
 			margin-right:9rpx;
+		}
+	}
+	
+	.rx_header{
+		display:-webkit-box;
+		display:-webkit-flex;
+		display:-ms-flexbox;
+		display:flex;
+		-webkit-box-align:center;
+		-webkit-align-items:center;
+		-ms-flex-align:center;
+		align-items:center;
+		margin:16rpx auto 0;
+		border-radius:16rpx 16rpx 0 0;
+		background-repeat:no repeat;
+		background-size:750rpx;
+		background-color:#fff;
+		height:104rpx;
+		width:710rpx;
+
+		image{
+			height:40rpx;
+			width:128rpx;
+			margin-left: 23rpx;
+		}
+		.tit-box{
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+		.tit-frame{
+			display:flex;
+			line-height:104rpx;
+		}
+		.tit1{
+			margin:0 12rpx;
+			font-weight:bold;
+			color:#2D2D2D;
+			opacity:0.4;
+		}
+		.tit2{
+			font-size:24rpx;
+			color:#333333;
+			font-weight:400;
+			font-family:SourceHanSansCN-Normal;
+		}
+		.tit3{
+			font-size: 22rpx;
+			font-weight: 400;
+			color:#333333;
+			font-family:SourceHanSansCN-Normal;
+			margin-left: 50rpx;
 		}
 	}
 </style>
