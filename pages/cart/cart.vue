@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
 		<!-- 未登陆 -->
-		<view v-if="!hasLogin" class="empty">
+		<!-- <view v-if="!hasLogin" class="empty">
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view class="empty-tips">
 				空空如也
 				<view class="navigator" @click="navToLogin">去登陆></view>
 			</view>
-		</view>
+		</view> -->
 		
 		<!-- 空白页 -->
 		<view v-if="empty===true" class="empty">
@@ -17,7 +17,8 @@
 				<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
 			</view>
 		</view>
-		<view v-if="hasLogin">
+		<!-- <view v-if="hasLogin"> -->
+		<view>
 			<!-- 列表 -->
 			<view class="cart-list">
 				<block v-for="(item, index) in cartList" :key="item.id">
@@ -25,6 +26,13 @@
 						class="cart-item" 
 						:class="{'b-b': index!==cartList.length-1}"
 					>
+						<view class="check-wrapper">
+							<view
+								class="yticon icon-xuanzhong2 checkbox"
+								:class="{checked: item.checked}"
+								@click="check('item', index)"
+							></view>
+						</view>
 						<view class="image-wrapper">
 							<image :src="item.image" 
 								:class="[item.loaded]"
@@ -33,50 +41,87 @@
 								@load="onImageLoad('cartList', index)" 
 								@error="onImageError('cartList', index)"
 							></image>
-							<view 
-								class="yticon icon-xuanzhong2 checkbox"
-								:class="{checked: item.checked}"
-								@click="check('item', index)"
-							></view>
 						</view>
 						<view class="item-right">
 							<text class="clamp title">{{item.title}}</text>
-							<text class="attr">{{item.attr_val}}</text>
-							<text class="price">¥{{item.price}}</text>
-							<uni-number-box 
-								class="step"
-								:min="1" 
-								:max="item.stock"
-								:value="item.number>item.stock?item.stock:item.number"
-								:isMax="item.number>=item.stock?true:false"
-								:isMin="item.number===1"
-								:index="index"
-								@eventChange="numberChange"
-							></uni-number-box>
+							
+							<view class="uni-flex uni-row" style="width: 100%;">
+								<view class="flex-item" style="width: 80%;">
+									<text class="attr">{{item.attr_val}}</text>
+								</view>
+								<view class="flex-item del-log" style="width: 20%;">
+									<img src="https://pic.youx365.com/del.png" @click="deleteCartItem(index)" />
+								</view>
+							</view>
+							<view class="uni-flex uni-row" style="width: 100%;">
+								<view class="flex-item" style="width: 40%;">
+									<text class="price">¥{{item.price}}</text>
+								</view>
+								<view class="flex-item" style="width: 60%;">
+									<uni-number-box
+										class="step"
+										:min="1" 
+										:max="item.stock"
+										:value="item.number>item.stock?item.stock:item.number"
+										:isMax="item.number>=item.stock?true:false"
+										:isMin="item.number===1"
+										:index="index"
+										@eventChange="numberChange"
+									></uni-number-box>
+								</view>
+							</view>
 						</view>
-						<text class="del-btn yticon icon-fork" @click="deleteCartItem(index)"></text>
 					</view>
 				</block>
 			</view>
-			<!-- 底部菜单栏 -->
-			<view class="action-section">
-				<view class="checkbox">
-					<image 
-						:src="allChecked?'/static/selected.png':'/static/select.png'" 
-						mode="aspectFit"
-						@click="check('all')"
-					></image>
-					<view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
-						清空
+			
+			<!-- 猜你喜欢 -->
+			<view class="guess-like">
+				<view class="header">
+					<img src="https://pic.youx365.com/split-1.png" />
+					<text>猜你喜欢</text>
+					<img src="https://pic.youx365.com/split-1.png" />
+				</view>
+				<view class="guess-section">
+					<view 
+						v-for="(item, index) in goodsList" :key="index"
+						class="guess-item"
+						@click="navToDetailPage(item)"
+					>
+						<view class="image-wrapper">
+							<image :src="item.image" mode="aspectFill"></image>
+						</view>
+						 <view class="uni-flex uni-row" style="width: 100%;">
+						    <view class="flex-item" style="width: 50%;">
+								<text class="price">￥{{item.price}}</text>
+							</view>
+						    <view class="flex-item" style="width: 50%;text-align: right;">
+								<text class="buysum">2563人已付款</text>
+							</view>
+						 </view>
+						<text class="title clamp">{{item.title}}</text>
 					</view>
 				</view>
+			</view>
+			
+			<!-- 底部菜单栏 -->
+			<view class="action-section">
+				<view class="check-wrapper">
+					<view
+						class="yticon icon-xuanzhong2 checkbox"
+						:class="{checked: allChecked}"
+						@click="check('all')"
+						style="font-size: 60rpx;height: auto;"
+					></view>
+				</view>
+				<view class="qx">全选</view>
 				<view class="total-box">
-					<text class="price">¥{{total}}</text>
-					<text class="coupon">
+					<text class="price">总计：¥{{total}}</text>
+					<!-- <text class="coupon">
 						已优惠
 						<text>74.35</text>
 						元
-					</text>
+					</text> -->
 				</view>
 				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
 			</view>
@@ -99,6 +144,7 @@
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
 				cartList: [],
+				goodsList:[],
 			};
 		},
 		onLoad(){
@@ -126,6 +172,11 @@
 				});
 				this.cartList = cartList;
 				this.calcTotal();  //计算总价
+				
+				/* 猜你喜欢 */
+				let goodsList = await this.$api.json('goodsList');
+				this.goodsList = goodsList || [];
+				
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -255,14 +306,26 @@
 			}
 		}
 	}
+	
+	.cart-list{
+		background: #FFFFFF;
+	}
+	
 	/* 购物车列表项 */
 	.cart-item{
 		display:flex;
 		position:relative;
-		padding:30upx 40upx;
+		padding:30rpx 40rpx 30rpx 0;
+		
+		.check-wrapper{
+			height: 181rpx;
+			width: 119rpx;
+			text-align: center;
+		}
+		
 		.image-wrapper{
-			width: 230upx;
-			height: 230upx;
+			width: 237rpx;
+			height: 181rpx;
 			flex-shrink: 0;
 			position:relative;
 			image{
@@ -270,12 +333,8 @@
 			}
 		}
 		.checkbox{
-			position:absolute;
-			left:-16upx;
-			top: -16upx;
-			z-index: 8;
 			font-size: 44upx;
-			line-height: 1;
+			line-height: 181rpx;
 			padding: 4upx;
 			color: $font-color-disabled;
 			background:#fff;
@@ -287,22 +346,113 @@
 			flex: 1;
 			overflow: hidden;
 			position:relative;
-			padding-left: 30upx;
-			.title,.price{
-				font-size:$font-base + 2upx;
-				color: $font-color-dark;
-				height: 40upx;
-				line-height: 40upx;
+			padding-left: 23rpx;
+			
+			.clamp{
+				white-space: unset;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+			
+			.title{
+				font-size:30rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
 			}
 			.attr{
-				font-size: $font-sm + 2upx;
-				color: $font-color-light;
-				height: 50upx;
-				line-height: 50upx;
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(153,153,153,1);
 			}
 			.price{
-				height: 50upx;
-				line-height:50upx;
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(255,68,63,1);
+			}
+			
+			.del-log{
+				text-align: right;
+				
+				img{
+					width: 48rpx;
+					height: 48rpx;
+				}
+			}
+			
+			/* 加减 */
+			.uni-numbox{
+				position: relative !important;
+				height: 50rpx !important;
+				line-height: 50rpx;
+				background: #fff;
+				
+				/deep/ .uni-numbox-minus{
+					border: 1px solid #999999;
+					width: 38rpx;
+					height: 38rpx;
+					background-color: #fff;
+					line-height: 32rpx;
+					border-radius: 50%;
+				}
+				
+				/deep/ .uni-numbox-plus{
+					border: 1px solid #00A390;
+					width: 38rpx;
+					height: 38rpx;
+					background-color: #00A390;
+					line-height: 32rpx;
+					border-radius: 50%;
+					
+					.yticon{
+						color: #FFFFFF;
+					}
+				}
+				
+				/deep/ .uni-numbox-value{
+					background: #fff;
+				}
+				
+				/deep/ .yticon{
+					font-size: 12px;
+					font-weight: bold;
+				}
+				
+				.uni-numbox-minus{
+					border: 1px solid #999999;
+					width: 38rpx;
+					height: 38rpx;
+					background-color: #fff;
+					line-height: 32rpx;
+					border-radius: 50%;
+				}
+				
+				.uni-numbox-plus{
+					border: 1px solid #00A390;
+					width: 38rpx;
+					height: 38rpx;
+					background-color: #00A390;
+					line-height: 32rpx;
+					border-radius: 50%;
+					
+					.yticon{
+						color: #FFFFFF;
+					}
+				}
+				
+				.uni-numbox-value{
+					background: #fff;
+				}
+				
+				.yticon{
+					font-size: 12px;
+					font-weight: bold;
+				}
 			}
 		}
 		.del-btn{
@@ -318,17 +468,15 @@
 		margin-bottom:100upx;
 		/* #endif */
 		position:fixed;
-		left: 30upx;
-		bottom:30upx;
+		left: 0;
+		bottom:0;
 		z-index: 95;
 		display: flex;
 		align-items: center;
-		width: 690upx;
-		height: 100upx;
+		width: 100%;
+		height: 120rpx;
 		padding: 0 30upx;
 		background: rgba(255,255,255,.9);
-		box-shadow: 0 0 20upx 0 rgba(0,0,0,.5);
-		border-radius: 16upx;
 		.checkbox{
 			height:52upx;
 			position:relative;
@@ -366,8 +514,10 @@
 			text-align:right;
 			padding-right: 40upx;
 			.price{
-				font-size: $font-lg;
-				color: $font-color-dark;
+				font-size:34rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(51,51,51,1);
 			}
 			.coupon{
 				font-size: $font-sm;
@@ -381,16 +531,88 @@
 			padding: 0 38upx;
 			margin: 0;
 			border-radius: 100px;
-			height: 76upx;
-			line-height: 76upx;
+			height: 80rpx;
+			line-height: 80rpx;
 			font-size: $font-base + 2upx;
-			background: $uni-color-primary;
-			box-shadow: 1px 2px 5px rgba(217, 60, 93, 0.72)
+			background: #FF443F;
+		}
+		
+		.qx{
+			font-size:30rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(51,51,51,1);
+			margin-left: 26rpx;
 		}
 	}
 	/* 复选框选中状态 */
 	.action-section .checkbox.checked,
 	.cart-item .checkbox.checked{
-		color: $uni-color-primary;
+		color: #00A390;
+	}
+	
+	.guess-like{
+		margin-top: 49rpx;
+		
+		.header{
+			text-align: center;
+			font-size:32rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			
+			
+			img{
+				height: 48rpx;
+				width: 48rpx;
+				vertical-align: middle;
+				padding: 0px 5px 0 5px;
+			}
+		}
+		
+		.guess-section{
+			display:flex;
+			flex-wrap:wrap;
+			padding: 48rpx 30rpx 0 30rpx;
+			width: 710rpx;
+			margin:0 auto 30rpx;
+			border-radius:0rpx 0 16rpx 16rpx;
+			
+			.guess-item{
+				display:flex;
+				flex-direction: column;
+				width: 48%;
+				padding-bottom: 40upx;
+				&:nth-child(2n+1){
+					margin-right: 4%;
+				}
+			}
+			.image-wrapper{
+				width: 100%;
+				height: 300rpx;
+				border-radius: 3px;
+				overflow: hidden;
+				image{
+					width: 100%;
+					height: 100%;
+					opacity: 1;
+				}
+			}
+			.title{
+				font-size: 20rpx;
+				color: #000000;
+			}
+			.buysum{
+				font-size: 18rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color: #9F9F9F;
+			}
+			.price{
+				font-size: 24rpx;
+				color: #FF443F;
+				font-weight:500;
+			}
+		}
 	}
 </style>

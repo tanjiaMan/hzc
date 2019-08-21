@@ -118,7 +118,7 @@
 		color: $font-color-base;
 		position: relative;
 		&.active{
-			color: $base-color;
+			color: #00A390;
 			background: #f8f8f8;
 			&:before{
 				content: '';
@@ -128,7 +128,7 @@
 				transform: translateY(-50%);
 				height: 36upx;
 				width: 8upx;
-				background-color: $base-color;
+				background-color: #00A390;
 				border-radius: 0 4px 4px 0;
 				opacity: .8;
 			}
