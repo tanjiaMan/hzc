@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
 		<!-- 未登陆 -->
-		<!-- <view v-if="!hasLogin" class="empty">
+		<view v-if="!hasLogin" class="empty">
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view class="empty-tips">
 				空空如也
 				<view class="navigator" @click="navToLogin">去登陆></view>
 			</view>
-		</view> -->
+		</view>
 		
 		<!-- 空白页 -->
 		<view v-if="empty===true" class="empty">
@@ -17,8 +17,7 @@
 				<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
 			</view>
 		</view>
-		<!-- <view v-if="hasLogin"> -->
-		<view>
+		<view v-if="hasLogin">
 			<!-- 列表 -->
 			<view class="cart-list">
 				<block v-for="(item, index) in cartList" :key="item.id">
@@ -480,6 +479,7 @@
 		.checkbox{
 			height:52upx;
 			position:relative;
+			color:#C0C4CC;
 			image{
 				width: 52upx;
 				height: 100%;

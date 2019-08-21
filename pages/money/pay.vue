@@ -1,24 +1,24 @@
 <template>
 	<view class="app">
 		<view class="price-box">
-			<text>支付金额</text>
+			<text>剩余支付时间 14:59</text>
 			<text class="price">38.88</text>
 		</view>
 
 		<view class="pay-type-list">
 
 			<view class="type-item b-b" @click="changePayType(1)">
-				<text class="icon yticon icon-weixinzhifu"></text>
+				<img src="https://pic.youx365.com/pay-wx.png" />
 				<view class="con">
 					<text class="tit">微信支付</text>
-					<text>推荐使用微信支付</text>
+					<!-- <text>推荐使用微信支付</text> -->
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 1' />
+					<radio value="" color="#00A390" :checked='payType == 1' />
 					</radio>
 				</label>
 			</view>
-			<view class="type-item b-b" @click="changePayType(2)">
+			<!-- <view class="type-item b-b" @click="changePayType(2)">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
@@ -27,15 +27,14 @@
 					<radio value="" color="#fa436a" :checked='payType == 2' />
 					</radio>
 				</label>
-			</view>
+			</view> -->
 			<view class="type-item" @click="changePayType(3)">
-				<text class="icon yticon icon-erjiye-yucunkuan"></text>
+				<img src="https://pic.youx365.com/pay-yue.png" />
 				<view class="con">
-					<text class="tit">预存款支付</text>
-					<text>可用余额 ¥198.5</text>
+					<text class="tit">余额支付（¥198.5）</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 3' />
+					<radio value="" color="#00A390" :checked='payType == 3' />
 					</radio>
 				</label>
 			</view>
@@ -88,24 +87,29 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		font-size: 28upx;
-		color: #909399;
+		font-size:32rpx;
+		font-family:SourceHanSansCN;
+		font-weight:400;
+		color:rgba(0,0,0,1);
 
 		.price{
-			font-size: 50upx;
-			color: #303133;
-			margin-top: 12upx;
+			font-size:55rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,163,144,1);
+			margin-top: 12rpx;
 			&:before{
 				content: '￥';
-				font-size: 40upx;
+				font-size: 55rpx;
+				margin-right: 10px;
 			}
 		}
 	}
 
 	.pay-type-list {
-		margin-top: 20upx;
+		margin-top: 20rpx;
 		background-color: #fff;
-		padding-left: 60upx;
+		padding-left: 30rpx;
 		
 		.type-item{
 			height: 120upx;
@@ -114,8 +118,17 @@
 			justify-content: space-between;
 			align-items: center;
 			padding-right: 60upx;
-			font-size: 30upx;
 			position:relative;
+			font-size:32rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			
+			img{
+				height: 60rpx;
+				width: 60rpx;
+				margin-right: 19rpx;
+			}
 		}
 		
 		.icon{
@@ -143,6 +156,13 @@
 			font-size: $font-sm;
 			color: $font-color-light;
 		}
+		
+		.radio{
+			radio .wx-radio-input.wx-radio-input-checked{
+				border:none;
+				background: #00A390 !important;
+			}
+		}
 	}
 	.mix-btn {
 		display: flex;
@@ -153,9 +173,8 @@
 		margin: 80upx auto 30upx;
 		font-size: $font-lg;
 		color: #fff;
-		background-color: $base-color;
+		background-color: #00A390;
 		border-radius: 10upx;
-		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
 
 </style>
