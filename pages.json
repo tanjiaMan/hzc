@@ -9,19 +9,19 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "和之初",
+				"navigationBarTitleText": "社集优选",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/product/product",
 			"style": {
-				"navigationBarTitleText": "详情展示",
-				"app-plus": {
-					"titleNView": {
-						"type": "transparent"
-					}
-				}
+				"navigationBarTitleText": "商品详情"
+				// "app-plus": {
+				// 	"titleNView": {
+				// 		"type": "transparent"
+				// 	}
+				// }
 			}
 		}, {
 			"path": "pages/set/set",
@@ -138,10 +138,7 @@
         ,{
             "path" : "pages/category/category",
             "style" : {
-				"navigationBarTitleText": "分类",
-				"app-plus": {
-					"bounce": "none"
-				}
+				"navigationBarTitleText": "分类"
 			}
         }
         ,{

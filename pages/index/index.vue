@@ -15,9 +15,8 @@
 						</view>
 					</scroll-view>
 				</view>
-				<view class="flex-item d-nav-more">
+				<view class="flex-item d-nav-more" @click="navToCategory">
 					<text class="lg text-white cuIcon-unfold"></text>
-				
 				</view>
                <view class="flex-item d-nav-notice">
 				   <view class="uni-flex uni-row">
@@ -337,6 +336,11 @@
 				let id = item.title;
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
+				})
+			},
+			navToCategory(){
+				uni.switchTab({
+					url: `/pages/category/category`
 				})
 			},
 			hqmsclick(){
@@ -688,6 +692,12 @@
 		background-color:#EEEEEE;
 		height:196rpx;
 		width: 750rpx;
+
+		img{
+			height:96rpx;
+			width:136rpx;
+			margin-left: 60rpx;
+		}
 
 		image{
 			height:96rpx;
