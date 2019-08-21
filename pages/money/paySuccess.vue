@@ -2,12 +2,10 @@
 	<view class="content">
 		<img class="showimg" src="https://pic.youx365.com/pay-success-show.png" />
 		<text class="tit">订单成功支付 199.00元</text>
-		<view class="tit1">
-			<text>恭喜您获得</text>
-			<text style="color: #FF443F !important;">1</text>
-			<text>次抽奖机会</text>
-		</view>
 		
+		<!-- 大转盘 -->
+		<adventures />
+			
 		<view class="btn-group">
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item" style="width: 50%;">
@@ -22,7 +20,13 @@
 </template>
 
 <script>
+	
+	import adventures from '@/components/adventures';
+	
 	export default {
+		components: {
+			adventures
+		},
 		data() {
 			return {
 				
@@ -64,13 +68,6 @@
 		font-weight:400;
 		color:rgba(0,0,0,1);
 		margin-top: 40rpx;
-	}
-	.tit1{
-		font-size:26rpx;
-		font-family:SourceHanSansCN;
-		font-weight:400;
-		color:rgba(152,152,152,1);
-		margin-top: 28rpx;
 	}
 	.btn-group{
 		padding-top: 100upx;
