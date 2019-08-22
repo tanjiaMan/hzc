@@ -117,9 +117,15 @@
 	    ,{
             "path" : "pages/notice/notice",
             "style" : {
-				"navigationBarTitleText": "通知"
+				"navigationBarTitleText": "消息"
 			}
         }
+		,{
+		    "path" : "pages/notice/message",
+		    "style" : {
+				"navigationBarTitleText": "消息"
+			}
+		}
         ,{
             "path" : "pages/category/category",
             "style" : {

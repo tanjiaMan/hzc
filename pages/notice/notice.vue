@@ -1,5 +1,26 @@
 <template>
 	<view>
+		<view class="notice-header uni-flex uni-row">
+			<view class="flex-item d_1">
+				<img src="https://pic.youx365.com/notice_3.png" />
+				<view class="tit">
+					赞和收藏
+				</view>
+			</view>
+			<view class="flex-item d_1">
+				<img src="https://pic.youx365.com/notice_1.png" />
+				<view class="tit">
+					新增关注
+				</view>
+			</view>
+			<view class="flex-item d_1">
+				<img src="https://pic.youx365.com/notice_2.png" />
+				<view class="tit">
+					评论我的
+				</view>
+			</view>
+		</view>
+		
 		<view class="notice-item">
 			<text class="time">11:30</text>
 			<view class="content">
@@ -67,8 +88,36 @@
 
 <style lang='scss'>
 	page {
-		background-color: #f7f7f7;
+		background-color: #FFFFFF;
 		padding-bottom: 30upx;
+	}
+
+	.notice-header{
+		width: 100%;
+		background-color: #F6F6F6;
+		
+		.d_1{
+			width: 33.33%;
+			text-align: center;
+			padding: 30rpx 0;
+		}
+		
+		.tit{
+			font-size:28rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(51,51,51,1);
+		}
+		
+		image{
+			width: 56rpx;
+			height: 56rpx;
+		}
+		
+		img{
+			width: 56rpx;
+			height: 56rpx;
+		}
 	}
 
 	.notice-item {

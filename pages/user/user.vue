@@ -15,7 +15,7 @@
 					<text class="mobile">13659847589</text>
 				</view>
 			    <view class="flex-item d_3">
-					<view class="uni-flex uni-row">
+					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
 						<view class="flex-item d-avatar">
 							<img  src='https://pic.youx365.com/notice.png' />
 							<view class="cu-tag badge">1</view>

@@ -19,7 +19,7 @@
 					<text class="lg text-white cuIcon-unfold"></text>
 				</view>
                <view class="flex-item d-nav-notice">
-				   <view class="uni-flex uni-row">
+				   <view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
 					   <view class="flex-item d-avatar">
 						   <img  src='https://pic.youx365.com/notice.png' />
 						   <view class="cu-tag badge">1</view>
@@ -243,10 +243,14 @@
 
 	import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue';
+	import {mapState} from 'vuex';  
 
 	export default {
 		components: {
 			uniNoticeBar,uniSwiperDot
+		},
+		computed: {
+			...mapState(['hasLogin','userInfo'])
 		},
 		data() {
 			return {
@@ -329,6 +333,14 @@
 				
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
+			},
+			navTo(url){
+				if(!this.hasLogin){
+					url = '/pages/public/login';
+				}
+				uni.navigateTo({  
+					url
+				})  
 			},
 			//详情页
 			navToDetailPage(item) {

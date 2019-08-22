@@ -139,6 +139,7 @@
 		.tab_item{
 			width: 100%;
 			height: 129rpx;
+			border-bottom: 1px solid #E8E8E8;
 			
 			.img{
 				width:80rpx;
