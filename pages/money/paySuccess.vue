@@ -70,7 +70,8 @@
 		margin-top: 40rpx;
 	}
 	.btn-group{
-		padding-top: 100upx;
+		padding-top: 40rpx;
+		padding-bottom: 73rpx;
 	}
 	.mix-btn {
 		margin-top: 32rpx;
