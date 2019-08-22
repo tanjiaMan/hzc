@@ -165,7 +165,7 @@
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom uni-flex uni-row">
 		    <view class="flex-item frame1">
-				<button class="p-b-btn" :class="{active: favorite}" open-type="contact" @contact="handleContact">
+				<button class="p-b-btn" open-type="contact" @contact="handleContact">
 					<img src="https://pic.youx365.com/kf.png" />
 					<text>客服</text>
 				</button>

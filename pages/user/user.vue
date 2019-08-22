@@ -1,149 +1,206 @@
 <template>  
-    <view class="container">  
+    <view class="container">
 		
-		<view class="user-section">
-			<image class="bg" src="/static/user-bg.jpg"></image>
-			<view class="user-info-box">
-				<view class="portrait-box">
+		<!-- 头部 -->
+		<view class="user-header">
+			<view class="uni-flex uni-row">
+			    <view class="flex-item d_1">
 					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
 				</view>
-				<view class="info-box">
-					<text class="username">{{userInfo.nickname || '游客'}}</text>
+			    <view class="flex-item d_2">
+					<view class="username">
+						{{userInfo.nickname || '游客'}}
+						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
+					</view>
+					<text class="mobile">13659847589</text>
 				</view>
-			</view>
-			<view class="vip-card-box">
-				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
-				<view class="b-btn">
-					立即开通
-				</view>
-				<view class="tit">
-					<text class="yticon icon-iLinkapp-"></text>
-					DCloud会员
-				</view>
-				<text class="e-m">DCloud Union</text>
-				<text class="e-b">开通会员开发无bug 一测就上线</text>
+			    <view class="flex-item d_3">
+					<view class="uni-flex uni-row">
+						<view class="flex-item d-avatar">
+							<img  src='https://pic.youx365.com/notice.png' />
+							<view class="cu-tag badge">1</view>
+						</view>
+						<view class="flex-item d_title">
+								消息
+						</view>
+					 </view>
+				</view> 
 			</view>
 		</view>
 		
-		<view 
-			class="cover-container"
-			:style="[{
-				transform: coverTransform,
-				transition: coverTransition
-			}]"
-			@touchstart="coverTouchstart"
-			@touchmove="coverTouchmove"
-			@touchend="coverTouchend"
-		>
-			<image class="arc" src="/static/arc.png"></image>
-			
-			<view class="tj-sction">
-				<view class="tj-item">
-					<text class="num">128.8</text>
-					<text>余额</text>
-				</view>
-				<view class="tj-item">
-					<text class="num">0</text>
-					<text>优惠券</text>
-				</view>
-				<view class="tj-item">
-					<text class="num">20</text>
-					<text>积分</text>
-				</view>
+		<!-- 我的订单 -->
+		<view class="my-order">
+			<view class="title">
+				我的订单
 			</view>
-			<!-- 订单 -->
-			<view class="order-section">
-				<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="yticon icon-shouye"></text>
-					<text>全部订单</text>
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=1')">
+					<img src="https://pic.youx365.com/user_1.png" />
+					<view class="tit">待付款</view>
 				</view>
-				<view class="order-item" @click="navTo('/pages/order/order?state=1')"  hover-class="common-hover" :hover-stay-time="50">
-					<text class="yticon icon-daifukuan"></text>
-					<text>待付款</text>
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=2')" >
+					<img src="https://pic.youx365.com/user_2.png" />
+					<view class="tit">待发货</view>
 				</view>
-				<view class="order-item" @click="navTo('/pages/order/order?state=2')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="yticon icon-yishouhuo"></text>
-					<text>待收货</text>
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=2')" >
+					<img src="https://pic.youx365.com/user_3.png" />
+					<view class="tit">待收货</view>
 				</view>
-				<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="yticon icon-shouhoutuikuan"></text>
-					<text>退款/售后</text>
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
+					<img src="https://pic.youx365.com/user_4.png" />
+					<view class="tit">评价</view>
 				</view>
-			</view>
-			<!-- 浏览历史 -->
-			<view class="history-section icon">
-				<view class="sec-header">
-					<text class="yticon icon-lishijilu"></text>
-					<text>浏览历史</text>
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
+					<img src="https://pic.youx365.com/user_5.png" />
+					<view class="tit">售后</view>
 				</view>
-				<scroll-view scroll-x class="h-list">
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105186633&di=c121a29beece4e14269948d990f9e720&imgtype=0&src=http%3A%2F%2Fimg004.hc360.cn%2Fm8%2FM04%2FDE%2FDE%2FwKhQplZ-QteEBvsbAAAAADUkobU751.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105231218&di=09534b9833b5243296630e6d5b728eff&imgtype=0&src=http%3A%2F%2Fimg002.hc360.cn%2Fm1%2FM05%2FD1%2FAC%2FwKhQcFQ3iN2EQTo8AAAAAHQU6_8355.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105320890&di=c743386be51f2c4c0fd4b75754d14f3c&imgtype=0&src=http%3A%2F%2Fimg007.hc360.cn%2Fhb%2FMTQ1OTg4ODY0MDA3Ny05OTQ4ODY1NDQ%3D.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2691146630,2165926318&fm=26&gp=0.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105443324&di=8141bf13f3f208c61524d67f9bb83942&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ac9a5548d29b0000019ae98e6d98.jpg" mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=191678693,2701202375&fm=26&gp=0.jpg" mode="aspectFill"></image>
-				</scroll-view>
-				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="我的钱包" tips="您的会员还有3天过期"></list-cell>
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" @eventClick="navTo('/pages/address/address')"></list-cell>
-				<list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell>
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="晒单" tips="晒单抢红包"></list-cell>
-				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏" @eventClick="navTo('/pages/test/test')"></list-cell>
-				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
-			
+    
+		<!-- 钱包 -->
+		<view class="user-money">
+			<text class="num">5400</text>
+			<view class="desc">
+				<img src="https://pic.youx365.com/user_money.png" />
+				我的钱包
+			</view>
+			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
+				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
+					<view class="tit1">今日收入</view>
+					<view class="tit2">860.00</view>
+				</view>
+				<view class="flex-item" style="width: 50%;">
+					<view class="tit1">本月收入</view>
+					<view class="tit2">1860.00</view>
+				</view>
+			</view>
+		</view>
 		
-    </view>  
+		<!-- 我的优惠券 -->
+		<view class="user-coupon">
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="flex-item d_1">
+					<view class="tit1">我的优惠券</view>
+					<view class="tit2">7</view>
+				</view>
+				<view class="flex-item d_1">
+					<view class="tit1">我的红包</view>
+					<view class="tit2">6</view>
+				</view>
+				<view class="flex-item d_1">
+					<view class="tit1">我的收藏</view>
+					<view class="tit2">3</view>
+				</view>
+				<view class="flex-item d_1">
+					<view class="tit3">
+						签到
+					</view>
+				</view>
+			</view>
+		</view>
+		
+		<!-- 短视频 -->
+		<view class="user-video">
+			<view class="title">
+				短视频
+			</view>
+			<view class="line"></view>
+			<uni-grid :column="3" :square="false" :show-border="false" :highlight="false" >
+			    <uni-grid-item>
+			        <view class="tit1">268</view>
+					<view class="tit2">我的发布</view>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <view class="tit1">3205</view>
+			       <view class="tit2">我的收藏</view>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <view class="tit1">17</view>
+			       <view class="tit2">草稿箱</view>
+			    </uni-grid-item>
+				<uni-grid-item>
+				   <view class="tit1">268</view>
+				   <view class="tit2">我的关注</view>
+				</uni-grid-item>
+				<uni-grid-item>
+				   <view class="tit1">35</view>
+				   <view class="tit2">粉丝</view>
+				</uni-grid-item>
+				<uni-grid-item>
+				   <view class="tit1">1112</view>
+				   <view class="tit2">获赞</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+		
+		<!-- 其他 -->
+		<view class="user-other">
+			<view class="title">
+				其他
+			</view>
+			<view class="line"></view>
+			<uni-grid :column="4" :square="false" :show-border="false" :highlight="false" >
+			    <uni-grid-item>
+					<button class="contract-btn" open-type="contact" @contact="handleContact" style="line-height: initial;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_1.png" />
+						<view class="tit2">公司客服</view>
+					</button>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <img class="tit1" src="https://pic.youx365.com/usr_o_2.png" />
+			       <view class="tit2">关于我们</view>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <img class="tit1" src="https://pic.youx365.com/usr_o_3.png" />
+			       <view class="tit2">帮助中心</view>
+			    </uni-grid-item>
+				<uni-grid-item>
+				   <img class="tit1" src="https://pic.youx365.com/usr_o_4.png" />
+				   <view class="tit2">意见反馈</view>
+				</uni-grid-item>
+				<uni-grid-item>
+				   <img class="tit1" src="https://pic.youx365.com/usr_o_5.png" />
+				   <view class="tit2">邀请好友</view>
+				</uni-grid-item>
+				<uni-grid-item>
+				   <img class="tit1" src="https://pic.youx365.com/usr_o_6.png" />
+				   <view class="tit2">平台客服</view>
+				</uni-grid-item>
+				<uni-grid-item>
+					<view @click="navTo('/pages/set/set')" style="line-height: initial;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_7.png" />
+						<view class="tit2">设置</view>
+					</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+		
+		<view style="height: 56rpx;">
+			
+		</view>
+	</view>  
 </template>  
-<script>  
-	import listCell from '@/components/mix-list-cell';
-    import {  
-        mapState 
-    } from 'vuex';  
-	let startY = 0, moveY = 0, pageAtTop = true;
+<script>
+	
+	import uniGrid from "@/components/uni-grid/uni-grid.vue";
+	import uniGridItem from "@/components/uni-grid-item/uni-grid-item.vue";
+    import {mapState} from 'vuex';  
+	
     export default {
 		components: {
-			listCell
+			uniGrid,uniGridItem
 		},
 		data(){
 			return {
-				coverTransform: 'translateY(0px)',
-				coverTransition: '0s',
-				moving: false,
+				
 			}
 		},
 		onLoad(){
 		},
-		// #ifndef MP
-		onNavigationBarButtonTap(e) {
-			const index = e.index;
-			if (index === 0) {
-				this.navTo('/pages/set/set');
-			}else if(index === 1){
-				// #ifdef APP-PLUS
-				const pages = getCurrentPages();
-				const page = pages[pages.length - 1];
-				const currentWebview = page.$getAppWebview();
-				currentWebview.hideTitleNViewButtonRedDot({
-					index
-				});
-				// #endif
-				uni.navigateTo({
-					url: '/pages/notice/notice'
-				})
-			}
-		},
-		// #endif
         computed: {
 			...mapState(['hasLogin','userInfo'])
 		},
         methods: {
-
-			/**
-			 * 统一跳转接口,拦截未登录路由
-			 * navigator标签现在默认没有转场动画，所以用view
-			 */
 			navTo(url){
 				if(!this.hasLogin){
 					url = '/pages/public/login';
@@ -151,224 +208,333 @@
 				uni.navigateTo({  
 					url
 				})  
-			}, 
-	
-			/**
-			 *  会员卡下拉和回弹
-			 *  1.关闭bounce避免ios端下拉冲突
-			 *  2.由于touchmove事件的缺陷（以前做小程序就遇到，比如20跳到40，h5反而好很多），下拉的时候会有掉帧的感觉
-			 *    transition设置0.1秒延迟，让css来过渡这段空窗期
-			 *  3.回弹效果可修改曲线值来调整效果，推荐一个好用的bezier生成工具 http://cubic-bezier.com/
-			 */
-			coverTouchstart(e){
-				if(pageAtTop === false){
-					return;
-				}
-				this.coverTransition = 'transform .1s linear';
-				startY = e.touches[0].clientY;
 			},
-			coverTouchmove(e){
-				moveY = e.touches[0].clientY;
-				let moveDistance = moveY - startY;
-				if(moveDistance < 0){
-					this.moving = false;
-					return;
-				}
-				this.moving = true;
-				if(moveDistance >= 80 && moveDistance < 100){
-					moveDistance = 80;
-				}
-		
-				if(moveDistance > 0 && moveDistance <= 80){
-					this.coverTransform = `translateY(${moveDistance}px)`;
-				}
-			},
-			coverTouchend(){
-				if(this.moving === false){
-					return;
-				}
-				this.moving = false;
-				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
-				this.coverTransform = 'translateY(0px)';
-			}
         }  
     }  
 </script>  
 <style lang='scss'>
-	%flex-center {
-	 display:flex;
-	 flex-direction: column;
-	 justify-content: center;
-	 align-items: center;
-	}
-	%section {
-	  display:flex;
-	  justify-content: space-around;
-	  align-content: center;
-	  background: #fff;
-	  border-radius: 10upx;
-	}
-
-	.user-section{
-		height: 520upx;
-		padding: 100upx 30upx 0;
-		position:relative;
-		.bg{
-			position:absolute;
-			left: 0;
-			top: 0;
+	.container{
+		.user-header{
 			width: 100%;
-			height: 100%;
-			filter: blur(1px);
-			opacity: .7;
-		}
-	}
-	.user-info-box{
-		height: 180upx;
-		display:flex;
-		align-items:center;
-		position:relative;
-		z-index: 1;
-		.portrait{
-			width: 130upx;
-			height: 130upx;
-			border:5upx solid #fff;
-			border-radius: 50%;
-		}
-		.username{
-			font-size: $font-lg + 6upx;
-			color: $font-color-dark;
-			margin-left: 20upx;
-		}
-	}
+			height: 301rpx;
+			background-color: #00A390;
+			
+			.d_1{
+				width: 178rpx;
+				height: 198rpx;
+				text-align: center;
+				
+				.portrait{
+					width: 104rpx;
+					height: 104rpx;
+					top: 41rpx;
+					border-radius: 50%;
+				}
+			}
+			
+			.d_2{
+				width: 450rpx;
+				height: 198rpx;
+				padding-top: 44rpx;
+				
+				.username{
+					font-size:32rpx;
+					font-family:SourceHanSansCN;
+					font-weight:500;
+					color:rgba(255,255,255,1);
+				}
+				
+				.mobile{
+					font-size:24rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(255,255,255,1);
+				}
+				
+				.user-vip{
+					width:105rpx;
+					height:30rpx;
+					border:1px solid rgba(255,210,0,1);
+					opacity:0.8;
+					border-radius:3rpx;
+					font-size:18rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(255,210,0,1);
+					margin-left: 22rpx;
+					padding:0 9rpx 0 9rpx;
 
-	.vip-card-box{
-		display:flex;
-		flex-direction: column;
-		color: #f7d680;
-		height: 240upx;
-		background: linear-gradient(left, rgba(0,0,0,.7), rgba(0,0,0,.8));
-		border-radius: 16upx 16upx 0 0;
-		overflow: hidden;
-		position: relative;
-		padding: 20upx 24upx;
-		.card-bg{
-			position:absolute;
-			top: 20upx;
-			right: 0;
-			width: 380upx;
-			height: 260upx;
-		}
-		.b-btn{
-			position: absolute;
-			right: 20upx;
-			top: 16upx;
-			width: 132upx;
-			height: 40upx;
-			text-align: center;
-			line-height: 40upx;
-			font-size: 22upx;
-			color: #36343c;
-			border-radius: 20px;
-			background: linear-gradient(left, #f9e6af, #ffd465);
-			z-index: 1;
-		}
-		.tit{
-			font-size: $font-base+2upx;
-			color: #f7d680;
-			margin-bottom: 28upx;
-			.yticon{
-				color: #f6e5a3;
-				margin-right: 16upx;
+					img{
+						width: 16rpx;
+						height: 16rpx;
+						margin-right:5rpx;
+					}
+				}
+			}
+			
+			.d_3{
+				width: 122rpx;
+				height: 198rpx;
+				padding-top: 44rpx;
+				
+				.d_title{
+					font-size:26rpx;
+					margin-left: 15rpx;
+					color: #fff;
+				}
+				
+				.d-avatar{
+					font-variant:small-caps;
+					margin:0;
+					padding:0;
+					display:-webkit-inline-box;
+					display:-webkit-inline-flex;
+					display:-ms-inline-flexbox;
+					display:inline-flex;
+					text-align:center;
+					-webkit-box-pack:center;
+					-webkit-justify-content:center;
+					-ms-flex-pack:center;
+					justify-content:center;
+					-webkit-box-align:center;
+					-webkit-align-items:center;
+					-ms-flex-align:center;
+					align-items:center;
+					white-space:nowrap;
+					position:relative;
+					background-size:cover;
+					background-position:center;
+					vertical-align:middle;
+					width:42rpx;
+					
+					>img{
+						width: 32rpx;
+						height: 32rpx;
+					}
+				}
 			}
 		}
-		.e-b{
-			font-size: $font-sm;
-			color: #d8cba9;
-			margin-top: 10upx;
-		}
-	}
-	.cover-container{
-		background: $page-color-base;
-		margin-top: -150upx;
-		padding: 0 30upx;
-		position:relative;
-		background: #f5f5f5;
-		padding-bottom: 20upx;
-		.arc{
-			position:absolute;
-			left: 0;
-			top: -34upx;
-			width: 100%;
-			height: 36upx;
-		}
-	}
-	.tj-sction{
-		@extend %section;
-		.tj-item{
-			@extend %flex-center;
-			flex-direction: column;
-			height: 140upx;
-			font-size: $font-sm;
-			color: #75787d;
-		}
-		.num{
-			font-size: $font-lg;
-			color: $font-color-dark;
-			margin-bottom: 8upx;
-		}
-	}
-	.order-section{
-		@extend %section;
-		padding: 28upx 0;
-		margin-top: 20upx;
-		.order-item{
-			@extend %flex-center;
-			width: 120upx;
-			height: 120upx;
-			border-radius: 10upx;
-			font-size: $font-sm;
-			color: $font-color-dark;
-		}
-		.yticon{
-			font-size: 48upx;
-			margin-bottom: 18upx;
-			color: #fa436a;
-		}
-		.icon-shouhoutuikuan{
-			font-size:44upx;
-		}
-	}
-	.history-section{
-		padding: 30upx 0 0;
-		margin-top: 20upx;
-		background: #fff;
-		border-radius:10upx;
-		.sec-header{
-			display:flex;
-			align-items: center;
-			font-size: $font-base;
-			color: $font-color-dark;
-			line-height: 40upx;
-			margin-left: 30upx;
-			.yticon{
-				font-size: 44upx;
-				color: #5eba8f;
-				margin-right: 16upx;
-				line-height: 40upx;
-			}
-		}
-		.h-list{
-			white-space: nowrap;
-			padding: 30upx 30upx 0;
-			image{
-				display:inline-block;
-				width: 160upx;
-				height: 160upx;
-				margin-right: 20upx;
-				border-radius: 10upx;
-			}
-		}
-	}
 	
+		.my-order{
+			width: 711rpx;
+			height: 279rpx;
+			margin: -103rpx auto 0;
+			background-color: #fff;
+			border-radius:10rpx;
+			font-size:24rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(0,0,0,1);
+			
+			.title{
+				font-size:28rpx !important;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(51,51,51,1);
+				padding: 28rpx 32rpx 16rpx 32rpx;
+			}
+			
+			image{
+				width: 96rpx;
+				height: 96rpx;
+			}
+			
+			img{
+				width: 96rpx;
+				height: 96rpx;
+			}
+			
+			.tit{
+				margin-top: -14rpx;
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(0,0,0,1);
+			}
+			
+			.d_4{
+				width: 25%;
+				text-align: center;
+			}
+		}
+	
+		.user-money{
+			width:711rpx;
+			height:311rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			text-align: center;
+			padding-top: 32rpx;
+			
+			.num{
+				font-size:50rpx;
+				font-family:SourceHanSansCN;
+				font-weight:bold;
+				color:rgba(0,0,0,1);
+			}
+			
+			.desc{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,163,144,1);
+				height: 60rpx;
+				line-height: 60rpx;
+				margin-top: -20rpx;
+				
+				img{
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 13rpx;
+					vertical-align: middle;
+				}
+				
+				image{
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 13rpx;
+					vertical-align: middle;
+				}
+			}
+			
+			.tit1{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(102,102,102,1);
+			}
+			
+			.tit2{
+				font-size:36rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,163,144,1);
+				margin-top: -10rpx;
+			}
+		}
+		
+		.user-coupon{
+			width:711rpx;
+			height:149rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			
+			.d_1{
+				width: 25%;
+				text-align: center;
+			}
+			
+			.tit1{
+				padding-top: 30rpx;
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(102,102,102,1);
+			}
+			
+			.tit2{
+				font-size:36rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+			}
+			
+			.tit3{
+				margin: 12rpx auto 0;
+				width: 128rpx;
+				height: 128rpx;
+				line-height: 128rpx;
+				background-image: url('https://pic.youx365.com/user_sign.png');
+				background-size: cover;
+				font-size:30rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+			}
+		}
+		
+		.user-video{
+			width:711rpx;
+			height:360rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			
+			.title{
+				font-size:28rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(0,163,144,1);
+				line-height: 80rpx;
+				height: 80rpx;
+				padding-left: 27rpx;
+			}
+			
+			.line{
+				height:1px;
+				background:rgba(246,246,246,1);
+			}
+			
+			.tit1{
+				font-size:30rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(0,0,0,1);
+			}
+			
+			.tit2{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(102,102,102,1);
+			}
+		}
+		
+		.user-other{
+			width:711rpx;
+			height:399rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			
+			.title{
+				font-size:28rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(0,163,144,1);
+				line-height: 80rpx;
+				height: 80rpx;
+				padding-left: 27rpx;
+			}
+			
+			.line{
+				height:1px;
+				background:rgba(246,246,246,1);
+			}
+			
+			.tit1{
+				width: 48rpx;
+				height: 48rpx;
+			}
+			
+			.tit2{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+			}
+		}
+		
+		.contract-btn{
+			background:#FFF;
+			height: 100%;
+			line-height: unset;
+			padding: 0 !important;
+		}
+		.contract-btn:after{
+			border: 0;
+		}
+	}
 </style>

@@ -257,11 +257,11 @@
 		*/  
 		.canvas-btn {  
 		  position: absolute;  
-		  left: 160rpx;  
-		  top: 160rpx;  
+		  left: 128rpx;  
+		  top: 114rpx;  
 		  z-index: 400;  
-		  width: 160rpx;  
-		  height: 160rpx;  
+		  width: 225rpx;  
+		  height: 253rpx;  
 		  /* border-radius: 50%;  */
 		  /* color: #f4e9cc;  */
 		  /* background-color: #e44025; */
