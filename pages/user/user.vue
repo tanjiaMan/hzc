@@ -60,7 +60,7 @@
 		<!-- 钱包 -->
 		<view class="user-money">
 			<text class="num">5400</text>
-			<view class="desc">
+			<view class="desc" @click="navTo('/pages/user/money')">
 				<img src="https://pic.youx365.com/user_money.png" />
 				我的钱包
 			</view>

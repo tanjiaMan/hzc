@@ -61,7 +61,12 @@
 				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
 			}
-		}, {
+		},{
+			"path": "pages/user/money",
+			"style": {
+				"navigationBarTitleText": "我的钱包"
+			}
+		},{
 			"path": "pages/detail/detail",
 			"style": {
 				"navigationBarTitleText": "",
