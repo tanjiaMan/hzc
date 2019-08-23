@@ -87,7 +87,7 @@
 					<view class="tit1">我的红包</view>
 					<view class="tit2">6</view>
 				</view>
-				<view class="flex-item d_1">
+				<view class="flex-item d_1" @click="navTo('/pages/user/collection')">
 					<view class="tit1">我的收藏</view>
 					<view class="tit2">3</view>
 				</view>
@@ -170,6 +170,66 @@
 					<view @click="navTo('/pages/set/set')" style="line-height: initial;">
 						<img class="tit1" src="https://pic.youx365.com/usr_o_7.png" />
 						<view class="tit2">设置</view>
+					</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+		
+		<view class="user_shop">
+			<view class="uni-flex uni-row">
+			    <view class="flex-item d_1">
+					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+				</view>
+			    <view class="flex-item d_2">
+					<view class="username">
+						{{userInfo.nickname || '游客'}}
+						<span class="user-vip"><img src="https://pic.youx365.com/user_vip_s.png"/> 代理商V2</span>
+					</view>
+				</view>
+			</view>
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="flex-item d_3">
+					<img class="img" src="https://pic.youx365.com/user_s_1.png" />
+				</view>
+				<view class="flex-item d_3">
+					<img class="img" src="https://pic.youx365.com/user_s_2.png" />
+				</view>
+				<view class="flex-item d_3">
+					<img class="img" src="https://pic.youx365.com/user_s_3.png" />
+				</view>
+			</view>
+		</view>
+		
+		<view class="user_shop_manager">
+			<view class="title">
+				店铺管理
+			</view>
+			<view class="line"></view>
+			<uni-grid :column="4" :square="false" :show-border="false" :highlight="false" >
+			    <uni-grid-item>
+					<img class="tit1" src="https://pic.youx365.com/user_m_1.png" />
+					<view class="tit2">分类管理</view>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <img class="tit1" src="https://pic.youx365.com/user_m_2.png" />
+			       <view class="tit2">商品管理</view>
+			    </uni-grid-item>
+			    <uni-grid-item>
+			       <img class="tit1" src="https://pic.youx365.com/user_m_3.png" />
+			       <view class="tit2">订单管理</view>
+			    </uni-grid-item>
+				<uni-grid-item>
+				   <img class="tit1" src="https://pic.youx365.com/user_m_4.png" />
+				   <view class="tit2">评价管理</view>
+				</uni-grid-item>
+				<uni-grid-item>
+				   <img class="tit1" src="https://pic.youx365.com/user_m_5.png" />
+				   <view class="tit2">资金管理</view>
+				</uni-grid-item>
+				<uni-grid-item>
+					<view @click="navTo('/pages/set/set')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/user_m_6.png" />
+						<view class="tit2">统计报表</view>
 					</view>
 				</uni-grid-item>
 			</uni-grid>
@@ -497,6 +557,106 @@
 			height:399rpx;
 			background:rgba(255,255,255,1);
 			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			
+			.title{
+				font-size:28rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(0,163,144,1);
+				line-height: 80rpx;
+				height: 80rpx;
+				padding-left: 27rpx;
+			}
+			
+			.line{
+				height:1px;
+				background:rgba(246,246,246,1);
+			}
+			
+			.tit1{
+				width: 48rpx;
+				height: 48rpx;
+			}
+			
+			.tit2{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+			}
+		}
+		
+		.user_shop{
+			width: 711rpx;
+			height: 304rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			margin: 15rpx auto 0;
+			
+			.d_1{
+				width: 178rpx;
+				height: 144rpx;
+				text-align: center;
+				
+				.portrait{
+					width: 86rpx;
+					height: 86rpx;
+					top: 41rpx;
+					border-radius: 50%;
+				}
+			}
+			
+			.d_2{
+				width: 450rpx;
+				height: 144rpx;
+				
+				.username{
+					font-size:32rpx;
+					font-family:SourceHanSansCN;
+					font-weight:500;
+					color:#000000;
+					line-height: 144rpx;
+				}
+
+				.user-vip{
+					width:105rpx;
+					height:30rpx;
+					border:1px solid #FF443F;
+					opacity:0.8;
+					border-radius:3rpx;
+					font-size:18rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:#FF443F;
+					margin-left: 22rpx;
+					padding:0 9rpx 0 9rpx;
+			
+					img{
+						width: 16rpx;
+						height: 16rpx;
+						margin-right:5rpx;
+					}
+				}
+			}
+			
+			.d_3{
+				width: 33.33%;
+				text-align: center;
+				margin-top: 20rpx;
+				
+				.img{
+					width: 214rpx;
+					height: 95rpx;
+				}
+			}
+		}
+		
+		.user_shop_manager{
+			width:711rpx;
+			height:399rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10px;
 			margin: 15rpx auto 0;
 			
 			.title{
