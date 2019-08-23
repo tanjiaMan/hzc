@@ -13,7 +13,7 @@
 					<view class="tit2">《走在乡间的小路上》</view>
 				</view>
 				<view class="flex-item d_3">
-					<img class="img" :src=" item % 2 == 0?'https://pic.youx365.com/collection_s.png': 'https://pic.youx365.com/collection_z.png'" />
+					<image :class="item % 2 == 0?'img1':'img2'" :src=" item % 2 == 0?'https://pic.youx365.com/collection_s_1.png': 'https://pic.youx365.com/collection_z.png'" mode="aspectFit"></image>
 				</view>
 			</view>
 		</view>
@@ -118,8 +118,13 @@
 				line-height: 172rpx;
 				text-align: center;
 				
-				.img{
-					width: 40rpx;
+				.img1{
+					width: 39rpx;
+					height: 35rpx;
+				}
+				
+				.img2{
+					width: 42rpx;
 					height: 40rpx;
 				}
 			}

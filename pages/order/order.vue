@@ -36,7 +36,7 @@
 							></text>
 						</view>
 						
-						<scroll-view v-if="item.goodsList.length > 1" class="goods-box" scroll-x>
+						<scroll-view v-if="item.goodsList.length > 1" class="goods-box" scroll-x @click="navTo('/pages/order/orderDetail')">
 							<view
 								v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
 								class="goods-item"
@@ -48,6 +48,7 @@
 							v-if="item.goodsList.length === 1" 
 							class="goods-box-single"
 							v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+							@click="navTo('/pages/order/orderDetail')"
 						>
 							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
 							<view class="right">
@@ -141,6 +142,11 @@
 		},
 		 
 		methods: {
+			navTo(url){
+				uni.navigateTo({
+					url
+				})  
+			},
 			//获取订单列表
 			loadData(source){
 				//这里是将订单挂载到tab列表下

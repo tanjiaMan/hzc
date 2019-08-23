@@ -93,6 +93,11 @@
 				"navigationBarTitleText": "创建订单"
 			}
 		}, {
+			"path": "pages/order/orderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},{
 			"path": "pages/address/address",
 			"style": {
 				"navigationBarTitleText": "收货地址"

@@ -2,16 +2,23 @@
 	<view class="content">
 		<view class="navbar" :style="{position:headerPosition,top:headerTop}">
 			<view class="nav-item" :class="{current: filterIndex === 0}" @click="tabClick(0)">
-				综合排序
+				综合
 			</view>
-			<view class="nav-item" :class="{current: filterIndex === 1}" @click="tabClick(1)">
-				销量优先
+			<view class="nav-item" :class="{current: filterIndex === 3}" @click="tabClick(3)">
+				最新
 			</view>
 			<view class="nav-item" :class="{current: filterIndex === 2}" @click="tabClick(2)">
 				<text>价格</text>
 				<view class="p-box">
 					<text :class="{active: priceOrder === 1 && filterIndex === 2}" class="yticon icon-shang"></text>
 					<text :class="{active: priceOrder === 2 && filterIndex === 2}" class="yticon icon-shang xia"></text>
+				</view>
+			</view>
+			<view class="nav-item" :class="{current: filterIndex === 1}" @click="tabClick(1)">
+				销量
+				<view class="p-box">
+					<text :class="{active: saleOrder === 1 && filterIndex === 1}" class="yticon icon-shang"></text>
+					<text :class="{active: saleOrder === 2 && filterIndex === 1}" class="yticon icon-shang xia"></text>
 				</view>
 			</view>
 			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
@@ -25,11 +32,11 @@
 				<view class="image-wrapper">
 					<image :src="item.image" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
 				<view class="price-box">
 					<text class="price">{{item.price}}</text>
 					<text>已售 {{item.sales}}</text>
 				</view>
+				<text class="title clamp">{{item.title}}</text>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -69,6 +76,7 @@
 				filterIndex: 0, 
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
+				saleOrder: 0, //1 销量从低到高 2 销量从高到低
 				cateList: [],
 				goodsList: []
 			};
@@ -128,7 +136,13 @@
 				}
 				//筛选，测试数据直接前端筛选了
 				if(this.filterIndex === 1){
-					goodsList.sort((a,b)=>b.sales - a.sales)
+					goodsList.sort((a,b)=>{
+						if(this.saleOrder == 1){
+							return a.sales - b.sales;
+						}else{
+							return b.sales - a.sales;
+						}
+					})
 				}
 				if(this.filterIndex === 2){
 					goodsList.sort((a,b)=>{
@@ -153,7 +167,7 @@
 			},
 			//筛选点击
 			tabClick(index){
-				if(this.filterIndex === index && index !== 2){
+				if(this.filterIndex === index && index !== 2 && index !== 1){
 					return;
 				}
 				this.filterIndex = index;
@@ -161,6 +175,11 @@
 					this.priceOrder = this.priceOrder === 1 ? 2: 1;
 				}else{
 					this.priceOrder = 0;
+				}
+				if(index === 1){
+					this.saleOrder = this.saleOrder === 2? 1: 2;
+				}else{
+					this.saleOrder = 0;
 				}
 				uni.pageScrollTo({
 					duration: 300,
@@ -230,21 +249,23 @@
 			justify-content: center;
 			align-items: center;
 			height: 100%;
-			font-size: 30upx;
-			color: $font-color-dark;
+			font-size: 28rpx;
+			color: #333333;
+			font-family:SourceHanSansCN;
+			font-weight:500;
 			position: relative;
 			&.current{
-				color: $base-color;
-				&:after{
-					content: '';
-					position: absolute;
-					left: 50%;
-					bottom: 0;
-					transform: translateX(-50%);
-					width: 120upx;
-					height: 0;
-					border-bottom: 4upx solid $base-color;
-				}
+				color: #00A390;
+				// &:after{
+				// 	content: '';
+				// 	position: absolute;
+				// 	left: 50%;
+				// 	bottom: 0;
+				// 	transform: translateX(-50%);
+				// 	width: 120upx;
+				// 	height: 0;
+				// 	border-bottom: 4upx solid $base-color;
+				// }
 			}
 		}
 		.p-box{
@@ -261,7 +282,7 @@
 				font-size: 26upx;
 				color: #888;
 				&.active{
-					color: $base-color;
+					color: #00A390;
 				}
 			}
 			.xia{
@@ -370,25 +391,32 @@
 			}
 		}
 		.title{
-			font-size: $font-lg;
-			color: $font-color-dark;
-			line-height: 80upx;
+			font-size:20rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
 		}
 		.price-box{
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding-right: 10upx;
-			font-size: 24upx;
-			color: $font-color-light;
+			padding-right: 10rpx;
+			
+			font-size:18rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(159,159,159,1);
+			line-height: 64rpx;
 		}
 		.price{
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 1;
+			font-size:24rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,68,63,1);
+			
 			&:before{
 				content: '￥';
-				font-size: 26upx;
+				font-size: 24rpx;
 			}
 		}
 	}
