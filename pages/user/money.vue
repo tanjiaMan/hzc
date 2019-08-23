@@ -6,7 +6,7 @@
 				<img src="https://pic.youx365.com/money_logo.png" />
 				<text>账户余额</text>
 			</view>
-			<view class="tit3">去提现</view>
+			<view class="tit3" @click="navTo('/pages/withdraw/withdraw')">去提现</view>
 		</view>
 		<view class="tab_title">
 			余额明细
@@ -17,7 +17,7 @@
 					<img class="img" src="https://pic.youx365.com/wazi2.JPG"  />
 				</view>
 				<view class="flex-item d_2">
-					<view class="tit1">zhang三 分佣</view>
+					<view class="tit1">zhang三 分佣{{item}}</view>
 					<view class="tit2">14:20:30</view>
 				</view>
 				<view class="flex-item d_3">
@@ -58,6 +58,11 @@
 			this.$api.msg('加载更多');
 		},
         methods: {
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
+			}, 
         }  
     }  
 </script>  

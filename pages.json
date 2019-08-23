@@ -139,6 +139,19 @@
 				"navigationBarTitleText": "商品列表"
 			}
         }
+		,{
+		    "path" : "pages/withdraw/withdraw",
+		    "style" : {
+				"navigationBarTitleText": "申请提现"
+			}
+		}
+		,{
+		    "path" : "pages/withdraw/record",
+		    "style" : {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "提现记录"
+			}
+		}
         ,{
             "path" : "pages/test/test",
             "style" : {}
