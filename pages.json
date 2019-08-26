@@ -50,12 +50,17 @@
 					"animationType": "slide-in-bottom"
 				}
 			}
-		}, {
+		},{
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
-		}, {
+		},{
+			"path": "pages/user/statement",
+			"style": {
+				"navigationBarTitleText": "统计报表"
+			}
+		},{
 			"path": "pages/user/home",
 			"style": {
 				"navigationBarTitleText": "我的",

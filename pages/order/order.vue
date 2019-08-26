@@ -103,6 +103,12 @@
 						orderList: []
 					},
 					{
+						state: 5,
+						text: '待发货',
+						loadingType: 'more',
+						orderList: []
+					},
+					{
 						state: 2,
 						text: '待收货',
 						loadingType: 'more',
@@ -277,11 +283,14 @@
 			justify-content: center;
 			align-items: center;
 			height: 100%;
-			font-size: 15px;
-			color: $font-color-dark;
 			position: relative;
+			font-size:30rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(68,68,68,1);
+			
 			&.current{
-				color: $base-color;
+				color: #00A390;
 				&:after{
 					content: '';
 					position: absolute;
@@ -290,7 +299,7 @@
 					transform: translateX(-50%);
 					width: 44px;
 					height: 0;
-					border-bottom: 2px solid $base-color;
+					border-bottom: 2px solid #00A390;
 				}
 			}
 		}
@@ -379,11 +388,13 @@
 					padding: 10upx 12upx;
 				}
 				.price{
-					font-size: $font-base + 2upx;
-					color: $font-color-dark;
+					font-size:24rpx;
+					font-family:SourceHanSansCN;
+					font-weight:500;
+					color:rgba(237,35,35,1);
 					&:before{
 						content: '￥';
-						font-size: $font-sm;
+						font-size: 24rpx;
 						margin: 0 2upx 0 8upx;
 					}
 				}

@@ -227,7 +227,7 @@
 				   <view class="tit2">资金管理</view>
 				</uni-grid-item>
 				<uni-grid-item>
-					<view @click="navTo('/pages/set/set')" style="line-height: initial;text-align: center;">
+					<view @click="navTo('/pages/user/statement')" style="line-height: initial;text-align: center;">
 						<img class="tit1" src="https://pic.youx365.com/user_m_6.png" />
 						<view class="tit2">统计报表</view>
 					</view>
