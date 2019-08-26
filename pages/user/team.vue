@@ -64,7 +64,8 @@
 				},{
 					name: '其他',
 					id: 2
-				}]
+				}],
+				loadingType: 'more',
 			}
 		},
 		onLoad(){

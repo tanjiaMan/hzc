@@ -46,7 +46,8 @@
 				},{
 					name: '已提现',
 					id: 1
-				}]
+				}],
+				loadingType: 'more',
 			}
 		},
 		onPageScroll(e){

@@ -223,8 +223,10 @@
 				   <view class="tit2">评价管理</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/user_m_5.png" />
-				   <view class="tit2">资金管理</view>
+					<view @click="navTo('/pages/money/moneymsg')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/user_m_5.png" />
+						<view class="tit2">资金管理</view>
+					</view>
 				</uni-grid-item>
 				<uni-grid-item>
 					<view @click="navTo('/pages/user/statement')" style="line-height: initial;text-align: center;">

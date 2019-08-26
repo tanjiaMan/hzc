@@ -122,8 +122,12 @@
 			"style": {
 				"navigationBarTitleText": "支付"
 			}
-		},
-		{
+		},{
+			"path": "pages/money/moneymsg",
+			"style": {
+				"navigationBarTitleText": "资金管理"
+			}
+		},{
 			"path": "pages/money/paySuccess",
 			"style": {
 				"navigationBarTitleText": "支付成功"
