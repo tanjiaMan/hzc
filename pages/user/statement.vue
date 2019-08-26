@@ -13,7 +13,7 @@
 					</view>
 				</view>
 			    <view class="flex-item d_2">
-					<view class="tit1">
+					<view class="tit1" @click="navTo('/pages/user/team')">
 						<view class="tit1_1">团队人数</view>
 						<view class="tit1_2">2356</view>
 					</view>
@@ -207,9 +207,6 @@
 		},
         methods: {
 			navTo(url){
-				if(!this.hasLogin){
-					url = '/pages/public/login';
-				}
 				uni.navigateTo({  
 					url
 				})  

@@ -61,6 +61,11 @@
 				"navigationBarTitleText": "统计报表"
 			}
 		},{
+			"path": "pages/user/team",
+			"style": {
+				"navigationBarTitleText": "我的团队"
+			}
+		},{
 			"path": "pages/user/home",
 			"style": {
 				"navigationBarTitleText": "我的",

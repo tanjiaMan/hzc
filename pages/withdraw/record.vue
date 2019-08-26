@@ -69,10 +69,6 @@
 			//菜单切换
 			async tabSelect(e) {
 				this.tabCur = e.currentTarget.dataset.id;
-			},
-			async changeTab(e) {
-				let index = e.target.current;
-				this.tabCur = index;
 			}
 		}
 	}
