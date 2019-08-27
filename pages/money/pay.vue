@@ -13,10 +13,10 @@
 					<text class="tit">微信支付</text>
 					<!-- <text>推荐使用微信支付</text> -->
 				</view>
-				<label class="radio">
-					<radio value="" color="#00A390" :checked='payType == 1' />
-					</radio>
-				</label>
+				<view
+					class="yticon icon-xuanzhong2 checkbox"
+					:class="payType == 1? 'checked':''"
+				></view>
 			</view>
 			<!-- <view class="type-item b-b" @click="changePayType(2)">
 				<text class="icon yticon icon-alipay"></text>
@@ -33,10 +33,10 @@
 				<view class="con">
 					<text class="tit">余额支付（¥198.5）</text>
 				</view>
-				<label class="radio">
-					<radio value="" color="#00A390" :checked='payType == 3' />
-					</radio>
-				</label>
+				<view
+					class="yticon icon-xuanzhong2 checkbox"
+					:class="payType == 3? 'checked':''"
+				></view>
 			</view>
 		</view>
 		
@@ -157,12 +157,12 @@
 			color: $font-color-light;
 		}
 		
-		.radio{
+		/* .radio{
 			radio .wx-radio-input.wx-radio-input-checked{
 				border:none;
 				background: #00A390 !important;
 			}
-		}
+		} */
 	}
 	.mix-btn {
 		display: flex;
@@ -177,4 +177,14 @@
 		border-radius: 10upx;
 	}
 
+	.checkbox{
+		font-size: 56rpx;
+		color: $font-color-disabled;
+		background:#fff;
+		border-radius: 50px;
+		height: 100%;
+	}
+	.checkbox.checked{
+		color: #00A390;
+	}
 </style>

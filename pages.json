@@ -180,6 +180,11 @@
         ,{
             "path" : "pages/test/test",
             "style" : {}
+        },{
+            "path" : "pages/article/list",
+            "style" : {
+				"navigationBarTitleText": "文章列表"
+			}
         }
     ],
 	"globalStyle": {

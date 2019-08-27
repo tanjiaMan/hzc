@@ -6,7 +6,7 @@
 					社集优选
 				</view>
 				<view class="input-view">
-					<uni-icon type="search" size="16" color="#fff" style="line-height: 30px !important;"></uni-icon>
+					<uni-icon type="search" size="16" color="#fff" style="height: 0px !important;line-height: 30px;" ></uni-icon>
 					<input confirm-type="search" @confirm="confirm" value="" class="input" type="text" placeholder="输入搜索关键词" placeholder-style="color:#fff;font-size:13px;" />
 				</view>
 				<slot name="right"></slot>

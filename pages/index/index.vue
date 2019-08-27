@@ -383,6 +383,7 @@
 			},
 			getnewsMore(){
 				this.$api.msg('get news more');
+				this.navTo('/pages/article/list');
 			},
 			async changeTab(e) {
 				let index = e.target.current;
@@ -1187,6 +1188,10 @@
 				padding-right:10px;
 				border-radius:35rpx;
 			}
+			
+			.uni-icon{
+				font-size: 25rpx !important;
+			}
 		}
 	}
 	
@@ -1210,6 +1215,7 @@
 			background:#F6E1BB;
 			text-align:center;
 			border-radius:10rpx;
+			line-height: 20rpx;
 		}
 		
 		.goods_rate_2{
@@ -1221,6 +1227,7 @@
 			color:#896A44;
 			border-radius:10rpx;
 			margin-right:9rpx;
+			line-height: 20rpx;
 		}
 	}
 	
