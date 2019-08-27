@@ -1,11 +1,22 @@
 <template>
 	<view class="container">
 		<!-- 头部菜单 -->
-		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
-		    <view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
-		        <text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
-		    </view>
-		</scroll-view>
+		<view style="width: 710rpx; margin: 0 auto;flex-direction: row;">
+			<view class="d-tabar">
+				<scroll-view id="tab-bar" class="scroll-h flex-item" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
+				    <view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
+				        <text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
+				    </view>
+				</scroll-view>
+			</view>
+			<view class="d-search-frame">
+				<view class="bt-search">
+					<img class="img" src="https://pic.youx365.com/icon-search.png" />
+					<text class="tit">搜索</text>
+				</view>
+			</view>
+		</view>
+		
 		
 		<!-- 文章列表 -->
 		<swiper :current="tabIndex" class="swiper-box" style="flex: 1;" :duration="300" @change="ontabchange">
@@ -31,8 +42,27 @@
 							</swiper>
 						</uni-swiper-dot>
 					</view>
-		            <view v-for="(newsitem,index2) in tab.data" :key="newsitem.id">
-		                <media-item :options="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-item>
+		            <view v-for="(newsitem) in tab.data" :key="newsitem.id">
+		                <!-- <media-item :options="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-item> -->
+						<view class="d-news-item" @click="goDetail(newsitem)">
+							<view class="d-img">
+								<img class="img" :src="newsitem.image_url" />
+							</view>
+							<view class="d-text-frame">
+								<view class="tit">
+									法德合资的ARTE电视台是一个专注艺术和文化内容的电视台
+								</view>
+								<view class="d-bottom">
+									<view class="tit1">
+										2019-08-07
+									</view>
+									<view class="bt-look">
+										<img class="img" src="https://pic.youx365.com/icon-look.png" />
+										<text class="tit2">200</text>
+									</view>
+								</view>
+							</view>
+						</view>
 		            </view>
 		            <view class="loading-more">
 		                <text class="loading-more-text">{{tab.loadingText}}</text>
@@ -54,11 +84,12 @@
 	
 	const newsData = {
 	    data0: {
-	        "datetime": "40分钟前",
-	        "article_type": 0,
-	        "title": "uni-app行业峰会频频亮相，开发者反响热烈!",
-	        "source": "DCloud",
-	        "comment_count": 639
+	       "datetime": "2小时前",
+	       "article_type": 2,
+	       "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
+	       "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
+	       "source": "DCloud",
+	       "comment_count": 69
 	    },
 	    data1: {
 	        "datetime": "一天前",
@@ -77,28 +108,16 @@
 	        "comment_count": 11395
 	    },
 	    data3: {
-	        "article_type": 3,
-	        "image_list": [{
-	            "url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
-	            "width": 563,
-	            "height": 316
-	        }, {
-	            "url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg?imageView2/3/w/200/h/100/q/90",
-	            "width": 641,
-	            "height": 360
-	        }, {
-	            "url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg?imageView2/3/w/200/h/100/q/90",
-	            "width": 640,
-	            "height": 360
-	        }],
-	        "datetime": "5分钟前",
-	        "title": "uni-app 支持使用 npm 安装第三方包，生态更趋丰富",
+	        "datetime": "2小时前",
+	        "article_type": 2,
+	        "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
+	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
 	        "source": "DCloud",
-	        "comment_count": 11
+	        "comment_count": 69
 	    },
 	    data4: {
 	        "datetime": "2小时前",
-	        "article_type": 4,
+	        "article_type": 2,
 	        "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
 	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
 	        "source": "DCloud",
@@ -202,7 +221,7 @@
 			    }
 			    this.navigateFlag = true;
 			    uni.navigateTo({
-			        url: './detail/detail?title=' + e.title
+			        url: './detail?title=' + e.title
 			    });
 			    setTimeout(() => {
 			        this.navigateFlag = false;
@@ -326,8 +345,41 @@
 	    /* #endif */
 	}
 	
+	.d-tabar{
+		width: 564rpx;
+	}
+	
+	.d-search-frame{
+		width: 146rpx;
+		
+		.bt-search{
+			width:135rpx;
+			height:48rpx;
+			line-height:48rpx;
+			background:#E5E5E5;
+			border-radius:24rpx;
+			text-align: center;
+			display: inline-block;
+			margin: 16rpx 16rpx;
+			
+			.img{
+				height: 24rpx;
+				width: 24rpx;
+				vertical-align: middle;
+				margin-right: 11rpx;
+			}
+			
+			.tit{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(53,53,53,1);
+			}
+		}
+	}
+	
 	.scroll-h {
-	    width: 564rpx;
+	    width: 100%;
 	    height: 80rpx;
 	    flex-direction: row;
 	    /* #ifndef APP-PLUS */
@@ -503,6 +555,78 @@
 				line-height: 70rpx;
 				width: 100%;
 				padding-left: 24rpx;
+			}
+		}
+	}
+	
+	.d-news-item{
+		width: 710rpx; 
+		margin: 36rpx auto 0;
+		flex-direction: row;
+		
+		.d-img{
+			
+			.img{
+				width: 216rpx;
+				height: 160rpx;
+				border-radius: 8rpx;
+			}
+		}
+		
+		.d-text-frame{
+			width: 494rpx;
+			padding: 4rpx 0 0 35rpx;
+			
+			.tit{
+				font-size:26rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+				
+				white-space: unset;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+		}
+		
+		.d-bottom{
+			flex-direction: row;
+			margin-top: 14rpx;
+			line-height: 50rpx;
+			height: 50rpx;
+			
+			.tit1{
+				width: 359rpx;
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(155,155,155,1);
+				line-height: 50rpx;
+			}
+			
+			.bt-look{
+				width: 100rpx;
+				flex-direction: row;
+				height: 50rpx;
+				line-height: 50rpx;
+				
+				.tit2{
+					font-size:22rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(155,155,155,1);
+				}
+				
+				.img{
+					width: 24rpx;
+					height: 24rpx;
+					vertical-align: middle;
+					margin-right: 11rpx;
+					margin-top: 14rpx;
+				}
 			}
 		}
 	}

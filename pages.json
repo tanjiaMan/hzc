@@ -185,6 +185,11 @@
             "style" : {
 				"navigationBarTitleText": "文章列表"
 			}
+        },{
+            "path" : "pages/article/detail",
+            "style" : {
+				"navigationBarTitleText": "文章详情"
+			}
         }
     ],
 	"globalStyle": {
