@@ -1,15 +1,15 @@
 <template>
 	<view class="container">
-		<view class="list-cell b-b m-t" @click="navTo('个人资料')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="navTo('/pages/userinfo/userinfo')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">个人资料</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell b-b" @click="navTo('收货地址')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell" @click="navTo('实名认证')" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">实名认证</text>
+		<view class="list-cell" @click="navTo('/pages/test/test')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">测试</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 		
@@ -51,6 +51,9 @@
 
 			navTo(url){
 				this.$api.msg(`跳转到${url}`);
+				uni.navigateTo({
+					url
+				})
 			},
 			//退出登录
 			toLogout(){
