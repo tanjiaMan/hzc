@@ -227,21 +227,11 @@
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
-		<!-- 分享 -->
-		<share 
-			ref="share" 
-			:contentHeight="580"
-			:shareList="shareList"
-		></share>
 	</view>
 </template>
 
 <script>
-	import share from '@/components/share';
 	export default{
-		components: {
-			share
-		},
 		data() {
 			return {
 				specClass: 'none',
@@ -249,7 +239,6 @@
 				
 				goodsList: [],
 				favorite: true,
-				shareList: [],
 				imgList: [
 					{
 						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
@@ -348,7 +337,6 @@
 					}
 				}
 			})
-			this.shareList = await this.$api.json('shareList');
 			
 			//
 			let goodsList = await this.$api.json('goodsList');

@@ -53,12 +53,6 @@
 				"navigationBarTitleText": "我的团队"
 			}
 		},{
-			"path": "pages/user/home",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationStyle": "custom"
-			}
-		},{
 			"path": "pages/user/money",
 			"style": {
 				"navigationBarTitleText": "我的钱包"
@@ -167,11 +161,16 @@
             "style" : {
 				"navigationBarTitleText": "文章详情"
 			}
+        },{
+            "path" : "pages/video/index",
+            "style" : {
+				"navigationBarTitleText": "短视频"
+			}
         }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "社集优选",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},
@@ -193,7 +192,7 @@
 				"text": "分类"
 			},
 			{
-				"pagePath": "pages/user/home",
+				"pagePath": "pages/video/index",
 				"iconPath": "static/menu/tab-video.png",
 				"selectedIconPath": "static/menu/tab-video.png",
 				"text": "短视频"
