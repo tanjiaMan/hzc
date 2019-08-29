@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "社集优选",
+				"navigationBarTitleText": "玺盟优选",
 				"navigationStyle": "custom"
 			}
 		},
@@ -170,7 +170,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "社集优选",
+		"navigationBarTitleText": "玺盟优选",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},
