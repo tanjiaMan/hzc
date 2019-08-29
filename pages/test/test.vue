@@ -75,7 +75,7 @@
 						that.$request.ModelCommons.getOssConfig(values).then(result => {
 							console.log('ossconfig',result);
 							let ossConfig = result.data[0];
-							uni.uploadFile({
+							const uploadTask = uni.uploadFile({
 								url: 'https://upload.qiniup.com',
 								filePath:res.tempFilePath,
 								name:'file',
@@ -94,6 +94,18 @@
 									console.log('complete',result);
 								}
 							});
+							
+							uploadTask.onProgressUpdate((res) => {
+							    console.log('上传进度' + res.progress);
+							    console.log('已经上传的数据长度' + res.totalBytesSent);
+							    console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+							
+							    // 测试条件，取消上传任务。
+							    // if (res.progress > 50) {
+							    //     uploadTask.abort();
+							    // }
+							});
+							
 						})
 					}
 				});
