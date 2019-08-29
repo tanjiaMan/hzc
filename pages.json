@@ -166,6 +166,11 @@
             "style" : {
 				"navigationBarTitleText": "短视频"
 			}
+        },{
+            "path" : "pages/video/detail",
+            "style" : {
+				"navigationBarTitleText": "短视频"
+			}
         }
     ],
 	"globalStyle": {
