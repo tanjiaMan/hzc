@@ -48,28 +48,58 @@
 					</view>
 					
 					<!-- 中部分类菜单 -->
-					<view class="cate-section">
-						<view class="cate-item" @click="hqmsclick()">
-							<image src="https://pic.youx365.com/c3.png"></image>
-							<text>直播</text>
+					<scroll-view class="cate-section1" scroll-x>
+						<view class="scoll-wrapper">
+							<!-- <view 
+								v-for="(item, index) in 10" :key="index"
+								class="floor-item"
+							>
+								<image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553187020783&di=bac9dd78b36fd984502d404d231011c0&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F26%2F20160926173213_s5adi.jpeg" mode="aspectFill"></image>
+							</view> -->
+							
+							<view class="cate-item" @click="hqmsclick()">
+								<image src="https://pic.youx365.com/c3.png"></image>
+								<text>直播</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c5.png"></image>
+								<text>女装</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c6.png"></image>
+								<text>男装</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c7.png"></image>
+								<text>美妆</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c8.png"></image>
+								<text>家电</text>
+							</view>
+							<view class="cate-item" @click="hqmsclick()">
+								<image src="https://pic.youx365.com/c3.png"></image>
+								<text>直播</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c5.png"></image>
+								<text>女装</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c6.png"></image>
+								<text>男装</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c7.png"></image>
+								<text>美妆</text>
+							</view>
+							<view class="cate-item">
+								<image src="https://pic.youx365.com/c8.png"></image>
+								<text>家电</text>
+							</view>
 						</view>
-						<view class="cate-item">
-							<image src="https://pic.youx365.com/c5.png"></image>
-							<text>女装</text>
-						</view>
-						<view class="cate-item">
-							<image src="https://pic.youx365.com/c6.png"></image>
-							<text>男装</text>
-						</view>
-						<view class="cate-item">
-							<image src="https://pic.youx365.com/c7.png"></image>
-							<text>美妆</text>
-						</view>
-						<view class="cate-item">
-							<image src="https://pic.youx365.com/c8.png"></image>
-							<text>家电</text>
-						</view>
-					</view>
+					</scroll-view>
+					
 					
 					<!-- 今日头条 -->
 					<view class="d-toutiao uni-flex uni-row">
@@ -564,6 +594,53 @@
 		}
 	}
 	/* 分类 */
+	.cate-section1{
+		white-space: nowrap;
+		padding: 30upx 22upx;
+		background: #fff;
+		border-radius: 16rpx 16rpx 0 0;
+		width: 710rpx;
+		margin: 16rpx auto 0;
+		
+		.scoll-wrapper{
+			display:flex;
+			align-items: flex-start;
+		}
+		.floor-item{
+			width: 168rpx;
+			margin-right: 26rpx;
+			
+			image{
+				width: 168rpx;
+				height: 168rpx;
+				border-radius: 10rpx;
+			}
+			
+			img{
+				width: 168rpx;
+				height: 168rpx;
+				border-radius: 10rpx;
+			}
+		}
+		
+		.cate-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-size: $font-sm + 2upx;
+			color: $font-color-dark;
+			font-family:SourceHanSansCN-Regular;
+			font-weight:400;
+			margin: 0 20rpx 0 20rpx;
+		}
+		/* 原图标颜色太深,不想改图了,所以加了透明度 */
+		image {
+			width:96rpx;
+			height:96rpx;
+			margin-bottom:14rpx;
+		}
+	}
+	
 	.cate-section {
 		display: flex;
 		justify-content: space-around;
