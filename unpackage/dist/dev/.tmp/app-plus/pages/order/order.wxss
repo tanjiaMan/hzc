@@ -6,7 +6,7 @@
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
 page, .content {
-  background: #f8f8f8;
+  background: #F6F6F6;
   height: 100%;
 }
 .swiper-box {
@@ -46,12 +46,14 @@ page, .content {
         -ms-flex-align: center;
             align-items: center;
     height: 100%;
-    font-size: 15px;
-    color: #303133;
     position: relative;
+    font-size: 30rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #444444;
 }
 .navbar .nav-item.current {
-      color: #fa436a;
+      color: #00A390;
 }
 .navbar .nav-item.current:after {
         content: '';
@@ -63,7 +65,7 @@ page, .content {
                 transform: translateX(-50%);
         width: 44px;
         height: 0;
-        border-bottom: 2px solid #fa436a;
+        border-bottom: 2px solid #00A390;
 }
 .uni-swiper-item {
   height: auto;
@@ -182,8 +184,10 @@ page, .content {
         padding: 10rpx 12rpx;
 }
 .order-item .goods-box-single .right .price {
-        font-size: 30rpx;
-        color: #303133;
+        font-size: 24rpx;
+        font-family: SourceHanSansCN;
+        font-weight: 500;
+        color: #ed2323;
 }
 .order-item .goods-box-single .right .price:before {
           content: '\FFE5';

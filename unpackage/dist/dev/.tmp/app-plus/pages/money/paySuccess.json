@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "支付成功",
-  "usingComponents": {}
+  "usingComponents": {
+    "adventures": "/components/adventures"
+  }
 }

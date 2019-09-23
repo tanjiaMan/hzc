@@ -7,6 +7,7 @@ import Json from './Json' //测试用数据
 /** 接口  */
 import ModelCommons from './utils/model/model.commons.js';
 import ModelUser from './utils/model/model.user.js';
+import ModelHome from './utils/model/model.home.js';
 
 import cuCustom from './colorui/components/cu-custom.vue'
 import cuSearch from './colorui/components/cu-search.vue'
@@ -55,7 +56,7 @@ Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
 Vue.prototype.$api = {msg, json, prePage};
-Vue.prototype.$request = {ModelCommons,ModelUser};
+Vue.prototype.$request = {ModelCommons,ModelUser,ModelHome};
 
 App.mpType = 'app'
 

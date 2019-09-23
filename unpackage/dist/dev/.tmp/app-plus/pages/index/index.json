@@ -1,8 +1,9 @@
 {
-  "navigationBarTitleText": "和之初",
+  "navigationBarTitleText": "玺盟优选",
   "navigationStyle": "custom",
   "usingComponents": {
     "cu-search": "/colorui/components/cu-search",
-    "uni-notice-bar": "/components/uni-notice-bar/uni-notice-bar"
+    "uni-notice-bar": "/components/uni-notice-bar/uni-notice-bar",
+    "uni-swiper-dot": "/components/uni-swiper-dot/uni-swiper-dot"
   }
 }

@@ -3,67 +3,96 @@
     "pages/index/index",
     "pages/product/product",
     "pages/set/set",
-    "pages/userinfo/userinfo",
     "pages/cart/cart",
     "pages/public/login",
     "pages/user/user",
-    "pages/detail/detail",
+    "pages/user/statement",
+    "pages/user/team",
+    "pages/user/money",
     "pages/order/order",
     "pages/money/money",
     "pages/order/createOrder",
+    "pages/order/orderDetail",
     "pages/address/address",
     "pages/address/addressManage",
     "pages/money/pay",
+    "pages/money/moneymsg",
     "pages/money/paySuccess",
     "pages/notice/notice",
+    "pages/notice/message",
     "pages/category/category",
-    "pages/product/list"
+    "pages/product/list",
+    "pages/withdraw/withdraw",
+    "pages/withdraw/record",
+    "pages/user/collection",
+    "pages/test/test",
+    "pages/article/detail",
+    "pages/video/index",
+    "pages/video/detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
+    "navigationBarTitleText": "玺盟优选",
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#f8f8f8"
   },
   "tabBar": {
-    "color": "#C0C4CC",
-    "selectedColor": "#fa436a",
-    "borderStyle": "black",
+    "color": "#333333",
+    "selectedColor": "#00A390",
+    "borderStyle": "white",
     "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/tab-home.png",
-        "selectedIconPath": "static/tab-home-current.png",
+        "iconPath": "static/menu/tab-home.png",
+        "selectedIconPath": "static/menu/tab-home.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/category/category",
-        "iconPath": "static/tab-cate.png",
-        "selectedIconPath": "static/tab-cate-current.png",
+        "iconPath": "static/menu/tab-cate.png",
+        "selectedIconPath": "static/menu/tab-cate.png",
         "text": "分类"
       },
       {
+        "pagePath": "pages/video/index",
+        "iconPath": "static/menu/tab-video.png",
+        "selectedIconPath": "static/menu/tab-video.png",
+        "text": "短视频"
+      },
+      {
         "pagePath": "pages/cart/cart",
-        "iconPath": "static/tab-cart.png",
-        "selectedIconPath": "static/tab-cart-current.png",
+        "iconPath": "static/menu/tab-cart.png",
+        "selectedIconPath": "static/menu/tab-cart.png",
         "text": "购物车"
       },
       {
         "pagePath": "pages/user/user",
-        "iconPath": "static/tab-my.png",
-        "selectedIconPath": "static/tab-my-current.png",
+        "iconPath": "static/menu/tab-my.png",
+        "selectedIconPath": "static/menu/tab-my.png",
         "text": "我的"
       }
     ]
   },
-  "nvueCompiler": "weex",
+  "nvue": {
+    "pages": {
+      "pages/article/list.html": {
+        "window": {
+          "usingComponents": {},
+          "navigationBarTitleText": "文章列表"
+        },
+        "nvue": true
+      }
+    }
+  },
+  "nvueCompiler": "uni-app",
+  "renderer": "auto",
   "splashscreen": {
     "alwaysShowBeforeRender": true,
     "autoclose": false
   },
-  "appname": "社集优选",
-  "compilerVersion": "2.1.3",
+  "appname": "玺盟优选",
+  "compilerVersion": "2.2.1",
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom",
     "cu-search": "/colorui/components/cu-search"

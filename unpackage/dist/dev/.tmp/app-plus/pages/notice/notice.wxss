@@ -6,8 +6,31 @@
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
 page {
-  background-color: #f7f7f7;
+  background-color: #FFFFFF;
   padding-bottom: 30rpx;
+}
+.notice-header {
+  width: 100%;
+  background-color: #F6F6F6;
+}
+.notice-header .d_1 {
+    width: 33.33%;
+    text-align: center;
+    padding: 30rpx 0;
+}
+.notice-header .tit {
+    font-size: 28rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #333333;
+}
+.notice-header image {
+    width: 56rpx;
+    height: 56rpx;
+}
+.notice-header ._img {
+    width: 56rpx;
+    height: 56rpx;
 }
 .notice-item {
   display: -webkit-box;

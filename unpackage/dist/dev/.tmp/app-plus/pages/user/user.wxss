@@ -5,219 +5,372 @@
 /* 边框颜色 */
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
-.tj-sction .tj-item, .order-section .order-item {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+.container .user-header {
+  width: 100%;
+  height: 301rpx;
+  background-color: #00A390;
 }
-.tj-sction, .order-section {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
-  -webkit-align-content: center;
-      -ms-flex-line-pack: center;
-          align-content: center;
-  background: #fff;
-  border-radius: 10rpx;
-}
-.user-section {
-  height: 520rpx;
-  padding: 100rpx 30rpx 0;
-  position: relative;
-}
-.user-section .bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    -webkit-filter: blur(1px);
-            filter: blur(1px);
-    opacity: .7;
-}
-.user-info-box {
-  height: 180rpx;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  position: relative;
-  z-index: 1;
-}
-.user-info-box .portrait {
-    width: 130rpx;
-    height: 130rpx;
-    border: 5rpx solid #fff;
-    border-radius: 50%;
-}
-.user-info-box .username {
-    font-size: 38rpx;
-    color: #303133;
-    margin-left: 20rpx;
-}
-.vip-card-box {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  color: #f7d680;
-  height: 240rpx;
-  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
-  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8));
-  background: linear-gradient(left, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8));
-  border-radius: 16rpx 16rpx 0 0;
-  overflow: hidden;
-  position: relative;
-  padding: 20rpx 24rpx;
-}
-.vip-card-box .card-bg {
-    position: absolute;
-    top: 20rpx;
-    right: 0;
-    width: 380rpx;
-    height: 260rpx;
-}
-.vip-card-box .b-btn {
-    position: absolute;
-    right: 20rpx;
-    top: 16rpx;
-    width: 132rpx;
-    height: 40rpx;
+.container .user-header .d_1 {
+    width: 178rpx;
+    height: 198rpx;
     text-align: center;
-    line-height: 40rpx;
-    font-size: 22rpx;
-    color: #36343c;
-    border-radius: 20px;
-    background: -webkit-gradient(linear, left top, right top, from(#f9e6af), to(#ffd465));
-    background: -o-linear-gradient(left, #f9e6af, #ffd465);
-    background: linear-gradient(left, #f9e6af, #ffd465);
-    z-index: 1;
 }
-.vip-card-box .tit {
-    font-size: 30rpx;
-    color: #f7d680;
-    margin-bottom: 28rpx;
+.container .user-header .d_1 .portrait {
+      width: 104rpx;
+      height: 104rpx;
+      top: 41rpx;
+      border-radius: 50%;
 }
-.vip-card-box .tit .yticon {
-      color: #f6e5a3;
-      margin-right: 16rpx;
+.container .user-header .d_2 {
+    width: 450rpx;
+    height: 198rpx;
+    padding-top: 44rpx;
 }
-.vip-card-box .e-b {
-    font-size: 24rpx;
-    color: #d8cba9;
-    margin-top: 10rpx;
+.container .user-header .d_2 .username {
+      font-size: 32rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      color: white;
 }
-.cover-container {
-  background: #f8f8f8;
-  margin-top: -150rpx;
-  padding: 0 30rpx;
-  position: relative;
-  background: #f5f5f5;
-  padding-bottom: 20rpx;
+.container .user-header .d_2 .mobile {
+      font-size: 24rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: white;
 }
-.cover-container .arc {
-    position: absolute;
-    left: 0;
-    top: -34rpx;
-    width: 100%;
-    height: 36rpx;
+.container .user-header .d_2 .user-vip {
+      width: 105rpx;
+      height: 30rpx;
+      border: 1px solid #ffd200;
+      opacity: 0.8;
+      border-radius: 3rpx;
+      font-size: 18rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: #ffd200;
+      margin-left: 22rpx;
+      padding: 0 9rpx 0 9rpx;
 }
-.tj-sction .tj-item {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 140rpx;
-  font-size: 24rpx;
-  color: #75787d;
+.container .user-header .d_2 .user-vip ._img {
+        width: 16rpx;
+        height: 16rpx;
+        margin-right: 5rpx;
 }
-.tj-sction .num {
-  font-size: 32rpx;
-  color: #303133;
-  margin-bottom: 8rpx;
+.container .user-header .d_3 {
+    width: 122rpx;
+    height: 198rpx;
+    padding-top: 44rpx;
 }
-.order-section {
-  padding: 28rpx 0;
-  margin-top: 20rpx;
+.container .user-header .d_3 .d_title {
+      font-size: 26rpx;
+      margin-left: 15rpx;
+      color: #fff;
 }
-.order-section .order-item {
-    width: 120rpx;
-    height: 120rpx;
-    border-radius: 10rpx;
-    font-size: 24rpx;
-    color: #303133;
+.container .user-header .d_3 .d-avatar {
+      font-variant: small-caps;
+      margin: 0;
+      padding: 0;
+      display: -webkit-inline-box;
+      display: -webkit-inline-flex;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      text-align: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+      white-space: nowrap;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      vertical-align: middle;
+      width: 42rpx;
 }
-.order-section .yticon {
-    font-size: 48rpx;
-    margin-bottom: 18rpx;
-    color: #fa436a;
+.container .user-header .d_3 .d-avatar > ._img {
+        width: 32rpx;
+        height: 32rpx;
 }
-.order-section .icon-shouhoutuikuan {
-    font-size: 44rpx;
-}
-.history-section {
-  padding: 30rpx 0 0;
-  margin-top: 20rpx;
-  background: #fff;
+.container .my-order {
+  width: 711rpx;
+  height: 279rpx;
+  margin: -103rpx auto 0;
+  background-color: #fff;
   border-radius: 10rpx;
+  font-size: 24rpx;
+  font-family: SourceHanSansCN;
+  font-weight: 500;
+  color: black;
 }
-.history-section .sec-header {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+.container .my-order .title {
+    font-size: 28rpx !important;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: #333333;
+    padding: 28rpx 32rpx 16rpx 32rpx;
+}
+.container .my-order image {
+    width: 96rpx;
+    height: 96rpx;
+}
+.container .my-order ._img {
+    width: 96rpx;
+    height: 96rpx;
+}
+.container .my-order .tit {
+    margin-top: -14rpx;
+    font-size: 24rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: black;
+}
+.container .my-order .d_4 {
+    width: 25%;
+    text-align: center;
+}
+.container .user-money {
+  width: 711rpx;
+  height: 311rpx;
+  background: white;
+  border-radius: 10rpx;
+  margin: 15rpx auto 0;
+  text-align: center;
+  padding-top: 32rpx;
+}
+.container .user-money .num {
+    font-size: 50rpx;
+    font-family: SourceHanSansCN;
+    font-weight: bold;
+    color: black;
+}
+.container .user-money .desc {
+    font-size: 22rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #00a390;
+    height: 60rpx;
+    line-height: 60rpx;
+    margin-top: -20rpx;
+}
+.container .user-money .desc ._img {
+      width: 32rpx;
+      height: 32rpx;
+      margin-right: 13rpx;
+      vertical-align: middle;
+}
+.container .user-money .desc image {
+      width: 32rpx;
+      height: 32rpx;
+      margin-right: 13rpx;
+      vertical-align: middle;
+}
+.container .user-money .tit1 {
+    font-size: 22rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #666666;
+}
+.container .user-money .tit2 {
+    font-size: 36rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #00a390;
+    margin-top: -10rpx;
+}
+.container .user-coupon {
+  width: 711rpx;
+  height: 149rpx;
+  background: white;
+  border-radius: 10rpx;
+  margin: 15rpx auto 0;
+}
+.container .user-coupon .d_1 {
+    width: 25%;
+    text-align: center;
+}
+.container .user-coupon .tit1 {
+    padding-top: 30rpx;
+    font-size: 22rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #666666;
+}
+.container .user-coupon .tit2 {
+    font-size: 36rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: black;
+}
+.container .user-coupon .tit3 {
+    margin: 12rpx auto 0;
+    width: 128rpx;
+    height: 128rpx;
+    line-height: 128rpx;
+    background-image: url("https://pic.youx365.com/user_sign.png");
+    background-size: cover;
+    font-size: 30rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: white;
+}
+.container .user-video {
+  width: 711rpx;
+  height: 360rpx;
+  background: white;
+  border-radius: 10rpx;
+  margin: 15rpx auto 0;
+}
+.container .user-video .title {
     font-size: 28rpx;
-    color: #303133;
-    line-height: 40rpx;
-    margin-left: 30rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: #00a390;
+    line-height: 80rpx;
+    height: 80rpx;
+    padding-left: 27rpx;
 }
-.history-section .sec-header .yticon {
-      font-size: 44rpx;
-      color: #5eba8f;
-      margin-right: 16rpx;
-      line-height: 40rpx;
+.container .user-video .line {
+    height: 1px;
+    background: #f6f6f6;
 }
-.history-section .h-list {
-    white-space: nowrap;
-    padding: 30rpx 30rpx 0;
+.container .user-video .tit1 {
+    font-size: 30rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: black;
 }
-.history-section .h-list image {
-      display: inline-block;
-      width: 160rpx;
-      height: 160rpx;
-      margin-right: 20rpx;
-      border-radius: 10rpx;
+.container .user-video .tit2 {
+    font-size: 22rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #666666;
+}
+.container .user-other {
+  width: 711rpx;
+  height: 399rpx;
+  background: white;
+  border-radius: 10rpx;
+  margin: 15rpx auto 0;
+}
+.container .user-other .title {
+    font-size: 28rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: #00a390;
+    line-height: 80rpx;
+    height: 80rpx;
+    padding-left: 27rpx;
+}
+.container .user-other .line {
+    height: 1px;
+    background: #f6f6f6;
+}
+.container .user-other .tit1 {
+    width: 48rpx;
+    height: 48rpx;
+}
+.container .user-other .tit2 {
+    font-size: 24rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: black;
+}
+.container .user_shop {
+  width: 711rpx;
+  height: 304rpx;
+  background: white;
+  border-radius: 10rpx;
+  margin: 15rpx auto 0;
+}
+.container .user_shop .d_1 {
+    width: 178rpx;
+    height: 144rpx;
+    text-align: center;
+}
+.container .user_shop .d_1 .portrait {
+      width: 86rpx;
+      height: 86rpx;
+      top: 41rpx;
+      border-radius: 50%;
+}
+.container .user_shop .d_2 {
+    width: 450rpx;
+    height: 144rpx;
+}
+.container .user_shop .d_2 .username {
+      font-size: 32rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      color: #000000;
+      line-height: 144rpx;
+}
+.container .user_shop .d_2 .user-vip {
+      width: 105rpx;
+      height: 30rpx;
+      border: 1px solid #FF443F;
+      opacity: 0.8;
+      border-radius: 3rpx;
+      font-size: 18rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: #FF443F;
+      margin-left: 22rpx;
+      padding: 0 9rpx 0 9rpx;
+}
+.container .user_shop .d_2 .user-vip ._img {
+        width: 16rpx;
+        height: 16rpx;
+        margin-right: 5rpx;
+}
+.container .user_shop .d_3 {
+    width: 33.33%;
+    text-align: center;
+    margin-top: 20rpx;
+}
+.container .user_shop .d_3 .img {
+      width: 214rpx;
+      height: 95rpx;
+}
+.container .user_shop_manager {
+  width: 711rpx;
+  height: 399rpx;
+  background: white;
+  border-radius: 10px;
+  margin: 15rpx auto 0;
+}
+.container .user_shop_manager .title {
+    font-size: 28rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: #00a390;
+    line-height: 80rpx;
+    height: 80rpx;
+    padding-left: 27rpx;
+}
+.container .user_shop_manager .line {
+    height: 1px;
+    background: #f6f6f6;
+}
+.container .user_shop_manager .tit1 {
+    width: 48rpx;
+    height: 48rpx;
+}
+.container .user_shop_manager .tit2 {
+    font-size: 24rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: black;
+}
+.container .contract-btn {
+  background: #FFF;
+  height: 100%;
+  line-height: unset;
+  padding: 0 !important;
+}
+.container .contract-btn:after {
+  border: 0;
 }
 

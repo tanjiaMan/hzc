@@ -8,6 +8,8 @@ const store = new Vuex.Store({
 		hasLogin: false,
 		userInfo: {},
 		token:null,
+		//菜单缓存
+		firstMenu:[]
 	},
 	mutations: {
 		login(state, provider) {
@@ -34,6 +36,9 @@ const store = new Vuex.Store({
 			    key: 'token',  
 			    data: provider  
 			}) 
+		},
+		setFirstMenu(state, provider){
+			state.firstMenu = provider;
 		}
 	},
 	actions: {

@@ -5,6 +5,9 @@
 /* 边框颜色 */
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
+page {
+  background-color: #fff !important;
+}
 .content {
   display: -webkit-box;
   display: -webkit-flex;
@@ -24,6 +27,11 @@
       -ms-flex-align: center;
           align-items: center;
 }
+.showimg {
+  margin-top: 50rpx;
+  height: 302rpx;
+  width: 302rpx;
+}
 .success-icon {
   font-size: 160rpx;
   color: #fa436a;
@@ -31,13 +39,17 @@
 }
 .tit {
   font-size: 38rpx;
-  color: #303133;
+  font-family: SourceHanSansCN;
+  font-weight: 400;
+  color: black;
+  margin-top: 40rpx;
 }
 .btn-group {
-  padding-top: 100rpx;
+  padding-top: 40rpx;
+  padding-bottom: 73rpx;
 }
 .mix-btn {
-  margin-top: 30rpx;
+  margin-top: 32rpx;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -50,16 +62,17 @@
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 600rpx;
-  height: 80rpx;
+  width: 240rpx;
+  height: 88rpx;
   font-size: 32rpx;
   color: #fff;
-  background-color: #fa436a;
-  border-radius: 10rpx;
+  border-radius: 0rpx;
+  margin: 0px 15rpx 0px 15rpx;
+  background: url(https://pic.youx365.com/bt_red.png);
+  background-size: contain;
 }
 .mix-btn.hollow {
-    background: #fff;
-    color: #303133;
-    border: 1px solid #ccc;
+    background: url(https://pic.youx365.com/bt_blue.png);
+    background-size: contain;
 }
 

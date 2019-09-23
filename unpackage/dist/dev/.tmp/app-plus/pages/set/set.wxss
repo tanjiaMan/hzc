@@ -6,7 +6,7 @@
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
 page {
-  background: #f8f8f8;
+  background: #F6F6F6;
 }
 .list-cell {
   display: -webkit-box;

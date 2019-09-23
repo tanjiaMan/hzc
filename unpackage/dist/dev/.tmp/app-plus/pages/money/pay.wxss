@@ -28,22 +28,33 @@
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  font-size: 28rpx;
-  color: #909399;
+  font-size: 32rpx;
+  font-family: SourceHanSansCN;
+  font-weight: 400;
+  color: black;
 }
 .price-box .price {
-    font-size: 50rpx;
-    color: #303133;
+    font-size: 55rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #00a390;
     margin-top: 12rpx;
 }
 .price-box .price:before {
       content: '\FFE5';
-      font-size: 40rpx;
+      font-size: 55rpx;
+      margin-right: 10px;
 }
 .pay-type-list {
   margin-top: 20rpx;
   background-color: #fff;
-  padding-left: 60rpx;
+  padding-left: 30rpx;
+  /* .radio{
+		radio .wx-radio-input.wx-radio-input-checked{
+			border:none;
+			background: #00A390 !important;
+		}
+	} */
 }
 .pay-type-list .type-item {
     height: 120rpx;
@@ -61,8 +72,16 @@
         -ms-flex-align: center;
             align-items: center;
     padding-right: 60rpx;
-    font-size: 30rpx;
     position: relative;
+    font-size: 32rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: black;
+}
+.pay-type-list .type-item ._img {
+      height: 60rpx;
+      width: 60rpx;
+      margin-right: 19rpx;
 }
 .pay-type-list .icon {
     width: 100rpx;
@@ -117,9 +136,17 @@
   margin: 80rpx auto 30rpx;
   font-size: 32rpx;
   color: #fff;
-  background-color: #fa436a;
+  background-color: #00A390;
   border-radius: 10rpx;
-  -webkit-box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-          box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+}
+.checkbox {
+  font-size: 56rpx;
+  color: #C0C4CC;
+  background: #fff;
+  border-radius: 50px;
+  height: 100%;
+}
+.checkbox.checked {
+  color: #00A390;
 }
 

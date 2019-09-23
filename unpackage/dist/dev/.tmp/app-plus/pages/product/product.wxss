@@ -6,7 +6,7 @@
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
 page {
-  background: #f8f8f8;
+  background: #FFFFFF;
   padding-bottom: 160rpx;
 }
 .icon-you {
@@ -43,16 +43,84 @@ page {
       width: 100%;
       height: 100%;
 }
+/* 其他商品属性 */
+.tg_frame {
+  height: 93rpx;
+  width: 750rpx;
+  background-color: #FF443F;
+}
+.tg_frame .tag {
+    width: 78rpx;
+    height: 33rpx;
+    background-color: #FFDD3F;
+    border: 1px solid white;
+    border-radius: 2rpx;
+    font-size: 18rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    color: #ff443f;
+    margin-left: 22rpx;
+    margin-right: 22rpx;
+}
+.tg_frame .now_price {
+    line-height: 93rpx;
+    font-size: 42rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: white;
+}
+.tg_frame .org_price {
+    margin-left: 21rpx;
+    line-height: 93rpx;
+    font-size: 24rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    text-decoration: line-through;
+    color: white;
+    opacity: 0.55;
+}
 /* 标题简介 */
 .introduce-section {
   background: #fff;
-  padding: 20rpx 30rpx;
+  /* padding: 20upx 30upx; */
+  padding-top: 38rpx;
 }
 .introduce-section .title {
-    font-size: 32rpx;
-    color: #303133;
-    height: 50rpx;
-    line-height: 50rpx;
+    font-size: 30rpx;
+    font-family: SourceHanSansCN;
+    font-weight: 500;
+    color: black;
+    padding: 0 20rpx 20rpx;
+}
+.introduce-section .line {
+    height: 10rpx;
+    background: #f2f2f2;
+}
+.introduce-section .share {
+    width: 196rpx;
+    height: 57rpx;
+    background: #00a390;
+    border-radius: 29rpx 0 0 29rpx;
+    padding-right: 10rpx;
+    text-align: right;
+}
+.introduce-section .share image {
+      width: 24rpx;
+      height: 24rpx;
+      vertical-align: middle;
+      margin-right: 2rpx;
+}
+.introduce-section .share ._img {
+      width: 24rpx;
+      height: 24rpx;
+      vertical-align: middle;
+      margin-right: 2rpx;
+}
+.introduce-section .share ._span {
+      font-size: 20rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: white;
 }
 .introduce-section .price-box {
     display: -webkit-box;
@@ -188,7 +256,7 @@ page {
     color: #fa436a;
 }
 .c-list {
-  font-size: 26rpx;
+  font-size: 22rpx;
   color: #606266;
   background: #fff;
 }
@@ -206,21 +274,23 @@ page {
 }
 .c-list .tit {
     width: 140rpx;
+    font-size: 22rpx;
 }
 .c-list .con {
+    font-size: 22rpx;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
         -ms-flex: 1;
             flex: 1;
-    color: #303133;
+    color: #000000;
 }
 .c-list .con .selected-text {
       margin-right: 10rpx;
 }
 .c-list .bz-list {
     height: 40rpx;
-    font-size: 26rpx;
-    color: #303133;
+    font-size: 22rpx;
+    color: #000000;
 }
 .c-list .bz-list text {
       display: inline-block;
@@ -259,7 +329,7 @@ page {
           flex-direction: column;
   padding: 20rpx 30rpx;
   background: #fff;
-  margin-top: 16rpx;
+  border-top: 5px solid #F2F2F2;
 }
 .eva-section .e-header {
     display: -webkit-box;
@@ -275,9 +345,16 @@ page {
     color: #909399;
 }
 .eva-section .e-header .tit {
-      font-size: 30rpx;
-      color: #303133;
-      margin-right: 4rpx;
+      font-size: 26rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      color: #232323;
+}
+.eva-section .e-header .tit1 {
+      font-size: 22rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      color: #ff443f;
 }
 .eva-section .e-header .tip {
       -webkit-box-flex: 1;
@@ -285,9 +362,25 @@ page {
           -ms-flex: 1;
               flex: 1;
       text-align: right;
+      font-size: 22rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      color: #00a390;
 }
 .eva-section .e-header .icon-you {
       margin-left: 10rpx;
+      color: #00a390;
+}
+.line_frame {
+  background: #FFFFFF;
+  width: 100%;
+  height: 1px;
+}
+.line_1 {
+  width: 695rpx;
+  height: 1px;
+  background: #e4e4e4;
+  margin: 0 auto;
 }
 .eva-box {
   display: -webkit-box;
@@ -300,8 +393,8 @@ page {
     -webkit-flex-shrink: 0;
         -ms-flex-negative: 0;
             flex-shrink: 0;
-    width: 80rpx;
-    height: 80rpx;
+    width: 64rpx;
+    height: 64rpx;
     border-radius: 100px;
 }
 .eva-box .right {
@@ -322,9 +415,17 @@ page {
     color: #606266;
     padding-left: 26rpx;
 }
+.eva-box .right .name ._span {
+      font-size: 26rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: #333333;
+}
 .eva-box .right .con {
-      font-size: 28rpx;
-      color: #303133;
+      font-size: 24rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: #666666;
       padding: 20rpx 0;
 }
 .eva-box .right .bot {
@@ -339,10 +440,48 @@ page {
       font-size: 24rpx;
       color: #909399;
 }
+.eva-box .right .floor-list {
+      white-space: nowrap;
+      width: 560rpx;
+}
+.eva-box .right .scoll-wrapper {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
+          -ms-flex-align: start;
+              align-items: flex-start;
+}
+.eva-box .right .floor-item {
+      width: 168rpx;
+      margin-right: 26rpx;
+}
+.eva-box .right .floor-item image {
+        width: 168rpx;
+        height: 168rpx;
+        border-radius: 10rpx;
+}
+.eva-box .right .floor-item ._img {
+        width: 168rpx;
+        height: 168rpx;
+        border-radius: 10rpx;
+}
 /*  详情 */
 .detail-desc {
   background: #fff;
-  margin-top: 16rpx;
+  padding-top: 16rpx;
+}
+.detail-desc .d-header-1 {
+    font-size: 26rpx;
+    font-family: SourceHanSansCN;
+    font-weight: bold;
+    color: #333333;
+    padding: 24rpx 0 24rpx 24rpx;
+}
+.detail-desc .rich-text {
+    padding: 0 24rpx 0 24rpx;
 }
 .detail-desc .d-header {
     display: -webkit-box;
@@ -358,8 +497,9 @@ page {
         -ms-flex-align: center;
             align-items: center;
     height: 80rpx;
-    font-size: 30rpx;
-    color: #303133;
+    font-size: 26rpx;
+    font-weight: bold;
+    color: #333333;
     position: relative;
 }
 .detail-desc .d-header text {
@@ -379,6 +519,45 @@ page {
       height: 0;
       content: '';
       border-bottom: 1px solid #ccc;
+}
+.detail-desc .floor-list {
+    white-space: nowrap;
+    width: 100%;
+}
+.detail-desc .scoll-wrapper {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+}
+.detail-desc .floor-item {
+    width: 317rpx;
+    margin-right: 27rpx;
+}
+.detail-desc .floor-item image {
+      width: 317rpx;
+      height: 297rpx;
+      border-radius: 6px 6px 6px 6px;
+      opacity: 100 !important;
+}
+.detail-desc .floor-item .title {
+      font-size: 20rpx;
+      color: #000000;
+}
+.detail-desc .floor-item .buysum {
+      font-size: 18rpx;
+      font-family: SourceHanSansCN;
+      font-weight: 400;
+      color: #9F9F9F;
+}
+.detail-desc .floor-item .price {
+      font-size: 24rpx;
+      color: #FF443F;
+      font-weight: 500;
 }
 /* 规格选择弹窗 */
 .attr-content {
@@ -606,27 +785,26 @@ page {
 /* 底部操作菜单 */
 .page-bottom {
   position: fixed;
-  left: 30rpx;
-  bottom: 30rpx;
+  bottom: 0;
   z-index: 95;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: 690rpx;
-  height: 100rpx;
-  background: rgba(255, 255, 255, 0.9);
-  -webkit-box-shadow: 0 0 20rpx 0 rgba(0, 0, 0, 0.5);
-          box-shadow: 0 0 20rpx 0 rgba(0, 0, 0, 0.5);
-  border-radius: 16rpx;
+  width: 100%;
+  height: 93rpx;
+  background: #EEEEEE;
+}
+.page-bottom .frame1 {
+    width: 50%;
+    height: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+.page-bottom .p-b-btn:after {
+    border: 0;
 }
 .page-bottom .p-b-btn {
     display: -webkit-box;
@@ -646,18 +824,25 @@ page {
     -webkit-justify-content: center;
         -ms-flex-pack: center;
             justify-content: center;
-    font-size: 24rpx;
+    font-size: 22rpx;
     color: #606266;
-    width: 96rpx;
-    height: 80rpx;
+    width: 100rpx;
+    height: 100%;
+    margin-right: 20rpx;
+    margin-left: 20rpx;
+    background: #EEEEEE;
+    height: 100%;
+    line-height: unset;
+    padding: 0 !important;
+}
+.page-bottom .p-b-btn ._img {
+      width: 48rpx;
+      height: 48rpx;
 }
 .page-bottom .p-b-btn .yticon {
       font-size: 40rpx;
       line-height: 48rpx;
       color: #909399;
-}
-.page-bottom .p-b-btn.active, .page-bottom .p-b-btn.active .yticon {
-      color: #fa436a;
 }
 .page-bottom .p-b-btn .icon-fenxiang2 {
       font-size: 42rpx;
@@ -673,18 +858,10 @@ page {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    height: 76rpx;
-    border-radius: 100px;
+    height: 100%;
     overflow: hidden;
-    -webkit-box-shadow: 0 20rpx 40rpx -16rpx #fa436a;
-            box-shadow: 0 20rpx 40rpx -16rpx #fa436a;
-    -webkit-box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-            box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-    background: -webkit-gradient(linear, left top, right top, from(#ffac30), color-stop(#fa436a), to(#F56C6C));
-    background: -o-linear-gradient(left, #ffac30, #fa436a, #F56C6C);
-    background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
-    margin-left: 20rpx;
-    position: relative;
+    background: #FF443F;
+    margin-right: 0;
 }
 .page-bottom .action-btn-group:after {
       content: '';
@@ -711,7 +888,7 @@ page {
       -webkit-justify-content: center;
           -ms-flex-pack: center;
               justify-content: center;
-      width: 180rpx;
+      width: 50%;
       height: 100%;
       font-size: 28rpx;
       padding: 0;

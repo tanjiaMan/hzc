@@ -35,6 +35,40 @@ const post = (url, data, opt) => {
 	});
 };
 
+const get = (url, opt) => {
+	if(opt.silence != true){
+		uni.showLoading({
+			title: '加载中'
+		});
+	}
+	let token = store.state.token;
+	let header = {
+		'shopId': config.shopId,
+		'content-type': 'application/json',
+		'accept': 'application/json',
+	};
+	if(token != null){
+		header['token'] = token.toString();
+	}
+	
+	return new Promise(resolve => {
+		uni.request({
+			url: url,
+			method: 'GET',
+			header: header,
+			success: (res) => {
+				uni.hideLoading();
+				resolve(res.data);
+			},
+			fail: (res) => {
+				uni.hideLoading();
+				resolve(res);
+			},
+		});
+	});
+};
+
 export default {
-	post
+	post,
+	get
 }

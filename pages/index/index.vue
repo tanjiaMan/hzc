@@ -48,54 +48,11 @@
 					</view>
 					
 					<!-- 中部分类菜单 -->
-					<scroll-view class="cate-section1" scroll-x>
-						<view class="scoll-wrapper">
-							<!-- <view 
-								v-for="(item, index) in 10" :key="index"
-								class="floor-item"
-							>
-								<image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553187020783&di=bac9dd78b36fd984502d404d231011c0&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F26%2F20160926173213_s5adi.jpeg" mode="aspectFill"></image>
-							</view> -->
-							
-							<view class="cate-item" @click="hqmsclick()">
-								<image src="https://pic.youx365.com/c3.png"></image>
-								<text>直播</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c5.png"></image>
-								<text>女装</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c6.png"></image>
-								<text>男装</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c7.png"></image>
-								<text>美妆</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c8.png"></image>
-								<text>家电</text>
-							</view>
-							<view class="cate-item" @click="hqmsclick()">
-								<image src="https://pic.youx365.com/c3.png"></image>
-								<text>直播</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c5.png"></image>
-								<text>女装</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c6.png"></image>
-								<text>男装</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c7.png"></image>
-								<text>美妆</text>
-							</view>
-							<view class="cate-item">
-								<image src="https://pic.youx365.com/c8.png"></image>
-								<text>家电</text>
+					<scroll-view class="cate-section1" scroll-x >
+						<view class="scoll-wrapper" v-if="newsitems[TabCur] && newsitems[TabCur].menu && newsitems[TabCur].menu.length > 0">
+							<view class="cate-item" @click="hqmsclick()" v-for="(item,index) in newsitems[TabCur].menu" :key="index">
+								<image :src="item.picUrl"></image>
+								<text>{{item.name}}</text>
 							</view>
 						</view>
 					</scroll-view>
@@ -115,7 +72,7 @@
 					</view>
 					
 					<!-- 秒杀楼层 -->
-					<view class="seckill-section">
+					<view class="seckill-section" v-if="newsitems[TabCur] && newsitems[TabCur].seckill && newsitems[TabCur].seckill.length > 0">
 						<view class="s-header_1">
 							<img class='s-h-img' src="https://pic.youx365.com/ms_header.png" />
 						</view>
@@ -129,23 +86,23 @@
 						<scroll-view class="floor-list" scroll-x>
 							<view class="scoll-wrapper">
 								<view 
-									v-for="(item, index) in goodsList" :key="index"
+									v-for="(item, index) in newsitems[TabCur].seckill" :key="index"
 									class="floor-item"
 									@click="navToDetailPage(item)"
 								>
-									<image :src="item.image" mode="aspectFill"></image>
-									<text class="title clamp">{{item.title}}</text>
+									<image :src="item.coverPicUrl" mode="aspectFill"></image>
+									<text class="title clamp">{{item.productName}}</text>
 									<view class="uni-flex uni-row">
 										<view class="flex-item">
-											<text class="price">￥{{item.price}}</text>		
+											<text class="price">￥{{item.seckillPrice}}</text>		
 										</view>
 										<view class="flex-item">
-											<text class="price_gray">￥{{item.price}}</text>
+											<text class="price_gray">￥{{item.productPrice}}</text>
 										</view>
 									</view>
 									<view class="goods_rate uni-flex uni-row">
-										<view class='goods_rate_1 flex-item'>已抢235件</view>
-										<view class="goods_rate_2 flex-item">60%</view>
+										<view class='goods_rate_1 flex-item'>已抢{{item.seckillQuantity}}件</view>
+										<view class="goods_rate_2 flex-item">{{item.seckillRate}}%</view>
 									</view>
 								</view>
 							</view>
@@ -153,7 +110,7 @@
 					</view>
 					
 					<!-- start 团购优惠 -->
-					<view class="f-header">
+					<view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
 						<view class="tit-frame">
 							<text class="tit">团购优惠</text>
 							<text class="tit1">|</text>
@@ -164,24 +121,24 @@
 							<text class="tit3">更多</text>
 						</view>
 					</view>
-					<view class="tg-floor">
-						<uni-swiper-dot :info="info" :current="tgCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+					<view class="tg-floor" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
+						<uni-swiper-dot :info="newsitems[TabCur].groupbuy" :current="tgCurrent" mode="long" :dots-styles="dotsStyles" field="content">
 							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
-								<swiper-item v-for="(item, index) in info" :key="index">
+								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in 2" :key="o">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id">
 											<view class="tg-img flex-item">
-												<img src="https://pic.youx365.com/shop1.png" />
+												<img :src="o.coverPicUrl" />
 											</view>
 											<view class="tg-text flex-item">
-												<view class="tit1">白衬衫女短袖夏装2019新款简约V领纯色上衣韩版宽松显瘦休闲衬</view>
+												<view class="tit1">{{o.productName}}</view>
 												<view class="uni-flex uni-row">
-													<view class="flex-item tit2">￥ 14.9</view>
-													<view class="flex-item tit3">已拼1000+件</view>
+													<view class="flex-item tit2">￥ {{o.groupbuyPrice}}</view>
+													<view class="flex-item tit3">已拼{{o.joinOpenedCount}}件</view>
 												</view>
 												<view class="uni-flex uni-row">
 													<view class="flex-item pic1">
-														<view class="cu-avatar round" v-for="(item,index) in avatar" :key="index" :style="[{ backgroundImage:'url(' + avatar[index] + ')' }]"></view>
+														<view class="cu-avatar round" v-for="(item,index) in o.latestJoinedAvatars" :key="index" :style="[{ backgroundImage:'url(' + item + ')' }]"></view>
 													</view>
 													<view class="flex-item tit4">等购买了此商品</view>
 												</view>
@@ -195,7 +152,7 @@
 					<!-- end 团购优惠 -->
 					
 					<!-- start 爆款推荐 -->
-					<view class="f-header">
+					<view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].bkgoods && newsitems[TabCur].bkgoods.length > 0">
 						<view class="tit-frame">
 							<text class="tit">爆款推荐</text>
 							<text class="tit1">|</text>
@@ -206,21 +163,21 @@
 							<text class="tit3">更多</text>
 						</view>
 					</view>
-					<view class="hot-floor">
+					<view class="hot-floor" v-if="newsitems[TabCur] && newsitems[TabCur].bkgoods && newsitems[TabCur].bkgoods.length > 0">
 						<view class="floor-img-box">
 							<image class="floor-img" src="https://pic.youx365.com/5@2x.png" mode="scaleToFill"></image>
 						</view>
-						<uni-swiper-dot :info="bkInfo" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+						<uni-swiper-dot :info="newsitems[TabCur].bkgoods" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
 							<swiper @change="bkSwitch" style="height: 350rpx;">
-								<swiper-item v-for="(item, index) in info" :key="index">
+								<swiper-item v-for="(item, index) in newsitems[TabCur].bkgoods" :key="index">
 									<view class="bk-list">
 										<view class="uni-flex uni-row">
-										    <view class="flex-item bk_frame" v-for="(item,index) in 3" :key="item">
-												<view :class="'bk_index bk_index_' + (index%3) "></view>
-												<text class="bk_index_text">{{index + 1}}</text>
-												<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
-												<text class="title clamp">兰兰女鞋运动鞋</text>
-												<text class="price">￥14.9</text>
+										    <view class="flex-item bk_frame" v-for="o in item" :key="o.id">
+												<view :class="'bk_index bk_index_' + (o.index%3) "></view>
+												<text class="bk_index_text">{{o.index}}</text>
+												<image :src="o.coverPicUrl" mode="aspectFill"></image>
+												<text class="title clamp">{{o.name}}</text>
+												<text class="price">￥{{o.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -231,7 +188,7 @@
 					<!-- end 爆款推荐 -->
 					
 					<!-- 热销单品 -->
-					<view class="rx_header m-t">
+					<view class="rx_header m-t" v-if="newsitems[TabCur] && newsitems[TabCur].rxgoods && newsitems[TabCur].rxgoods.length > 0">
 						<image src="https://pic.youx365.com/rx_img.png"></image>
 						<view class="tit-frame" style="width: 430rpx;">
 							<text class="tit1">|</text>
@@ -241,24 +198,24 @@
 							<text class="tit3">更多</text>
 						</view>
 					</view>
-					<view class="guess-section">
+					<view class="guess-section" v-if="newsitems[TabCur] && newsitems[TabCur].rxgoods && newsitems[TabCur].rxgoods.length > 0">
 						<view 
-							v-for="(item, index) in goodsList" :key="index"
+							v-for="(item, index) in newsitems[TabCur].rxgoods" :key="index"
 							class="guess-item"
 							@click="navToDetailPage(item)"
 						>
 							<view class="image-wrapper">
-								<image :src="item.image" mode="aspectFill"></image>
+								<image :src="item.coverPicUrl" mode="aspectFill"></image>
 							</view>
 							 <view class="uni-flex uni-row" style="width: 100%;">
 							    <view class="flex-item" style="width: 50%;">
 									<text class="price">￥{{item.price}}</text>
 								</view>
 							    <view class="flex-item" style="width: 50%;text-align: right;">
-									<text class="buysum">2563人已付款</text>
+									<text class="buysum">{{item.orderNums}}人已付款</text>
 								</view>
 							 </view>
-							<text class="title clamp">{{item.title}}</text>
+							<text class="title clamp">{{item.name}}</text>
 						</view>
 					</view>
 					<view style="height: 60rpx;"></view>
@@ -273,14 +230,14 @@
 
 	import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue';
-	import {mapState} from 'vuex';  
+	import {mapState,mapMutations} from 'vuex';  
 
 	export default {
 		components: {
 			uniNoticeBar,uniSwiperDot
 		},
 		computed: {
-			...mapState(['hasLogin','userInfo'])
+			...mapState(['hasLogin','userInfo','firstMenu'])
 		},
 		data() {
 			return {
@@ -299,14 +256,7 @@
 				goodsList: [], //
 				
 				//团购
-				info: [{},{},{}],
 				tgCurrent: 0,
-				avatar: [
-					'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-					'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
-					'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-					'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
-				],
 				
 				//爆款
 				bkInfo: [{},{},{}],
@@ -318,41 +268,14 @@
 				TabCur: 0,
 				scrollLeft: 0,
 				newsitems: [], //每页加载的数据
-				tabBars: [{
-					name: '推荐',
-					id: 0
-				}, {
-					name: '女装服饰',
-					id: 1
-				}, {
-					name: '男装服饰',
-					id: 10
-				}, {
-					name: '电脑办公',
-					id: 3
-				}, {
-					name: '财经',
-					id: 4
-				}, {
-					name: '娱乐',
-					id: 5
-				}, {
-					name: '军事',
-					id: 6
-				}, {
-					name: '历史',
-					id: 7
-				}, {
-					name: '本地',
-					id: 8
-				}]
+				tabBars: this.firstMenu,
 			};
 		},
-
 		onLoad() {
 			this.loadData();
 		},
 		methods: {
+			...mapMutations(['setFirstMenu']),
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
@@ -363,6 +286,92 @@
 				
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
+				
+				//加载一级分类
+				this.$request.ModelHome.getCategoryByPid(0).then(result => {
+					if(result != null && result.length > 0){
+						this.setFirstMenu(result);
+						this.tabBars = result;
+						//加载第一个菜单的数据
+						this.loadSubData(result[0].id);
+					}
+				})
+			},
+			async loadSubData(pid){ //pid 一级分类ID
+				let subData = this.newsitems[this.TabCur];
+				if(subData == null){
+					subData = {};
+				}
+				
+				//加载子菜单
+				let menu = await this.$request.ModelHome.getCategoryByPid(pid);
+				subData.menu = menu;
+				
+				//获取秒杀
+				let seckill = await this.$request.ModelHome.getSeckill({classifyPid: pid});
+				if(seckill && seckill.records && seckill.records.length>0){
+					subData.seckill = seckill.records;
+				}
+				
+				//团购优惠
+				let groupbuy = await this.$request.ModelHome.getGroupBuy({classifyPid: pid,pageSize:9});
+				this.tgFrameHeight = 'height: 0rpx !important;'
+				if(groupbuy && groupbuy.records && groupbuy.records.length>0){
+					//高度 3个： 760,2: 520, 1:  140 rpx
+					if(groupbuy.records.length == 1){
+						this.tgFrameHeight = 'height: 260rpx !important;'
+					}else if(groupbuy.records.length == 2){
+						this.tgFrameHeight = 'height: 520rpx !important;'
+					}else{
+						this.tgFrameHeight = 'height: 760rpx !important;'	
+					}
+					let info = [],temp = [];
+					let index = 0;
+					for(var i=0;i<groupbuy.records.length;i++){
+						if(index > 2){
+							info.push(temp);
+							temp = [];index = 0;
+						}
+						temp.push(groupbuy.records[i]);
+						index ++;
+					}
+					if(temp.length != 0){
+						info.push(temp);
+					}
+					subData.groupbuy = info;
+					this.tgCurrent = 0;
+				}
+				
+				//爆款推荐
+				let bkgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:9,orderBySort:true,direction: true});
+				if(bkgoods && bkgoods.records && bkgoods.records.length > 0){
+					let info = [],temp = [];
+					let index = 0;
+					for(var i=0;i<bkgoods.records.length;i++){
+						if(index > 2){
+							info.push(temp);
+							temp = [];index = 0;
+						}
+						bkgoods.records[i].index = i + 1;
+						temp.push(bkgoods.records[i]);
+						index ++;
+					}
+					if(temp.length != 0){
+						info.push(temp);
+					}
+					console.log(info);
+					subData.bkgoods = info;
+					this.tgCurrent = 0;
+				}
+				
+				let rxgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true});
+				if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
+					subData.rxgoods = rxgoods.records;
+				}
+				
+				this.newsitems[this.TabCur] = subData;
+				this.newsitems = Object.assign({}, this.newsitems);
+				console.log('this.newsitems',this.newsitems);
 			},
 			navTo(url){
 				if(!this.hasLogin){
@@ -406,21 +415,13 @@
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
 				this.isClickChange = true;
-				
-				// if(this.newsitems[tabIndex].data.length === 0){ //加载数据
-				// 	this.addData(tabIndex)
-				// }
-			},
-			getnewsMore(){
-				this.$api.msg('get news more');
-				this.navTo('/pages/article/list');
+	
+				let firstCat = this.tabBars[this.TabCur];
+				this.loadSubData(firstCat.id);
 			},
 			async changeTab(e) {
 				let index = e.target.current;
-				
-				// if(this.newsitems[index].data.length === 0){ //加载商品数据数据
-				// 	this.addData(index)
-				// }
+								
 				if (this.isClickChange) {
 					this.TabCur = index;
 					this.isClickChange = false;
@@ -430,6 +431,13 @@
 				this.scrollLeft = (index - 1) * 60;
 				this.isClickChange = false;
 				this.TabCur = index;
+				
+				let firstCat = this.tabBars[index];
+				this.loadSubData(firstCat.id);
+			},
+			getnewsMore(){
+				this.$api.msg('get news more');
+				this.navTo('/pages/article/list');
 			}
 		},
 		// #ifndef MP
