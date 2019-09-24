@@ -8,8 +8,31 @@
 	import Vue from 'vue'
 	
 	export default {
+		data(){
+			return{
+				wxCode: null,
+			}
+		},
 		methods: {
-			...mapMutations(['login'])
+			...mapMutations(['login','setToken']),
+			async loginRequest(userinfo){
+				let value = {code: this.wxCode,nickName: userinfo.nickName,avatarUrl: userinfo.avatarUrl};
+				let result = await this.$request.ModelUser.login(value);
+				if(result.code == 'ok' && result.data){
+					let data = result.data;
+					let userInfoVo = {
+						id: data.userId,
+						mobile: data.mobile,
+						nickname: userinfo.nickName,
+						portrait: userinfo.avatarUrl,
+						token: data.token
+					};
+					this.setToken(data.token);
+					this.login(userInfoVo);
+				}else{
+					this.$api.msg(result.msg);
+				}
+			}
 		},
 		onLaunch: function() {
 			/* =========== start login ======== */
@@ -21,6 +44,23 @@
 					success: (res) => {
 						this.login(res.data);
 					}
+				});
+			}else{
+				var that = this;
+				uni.login({
+				  provider: 'weixin',
+				  success: function (loginRes) {
+					that.wxCode = loginRes.code;
+					
+					uni.getUserInfo({
+					    provider: 'weixin',
+					    success: function (infoRes) {
+					       console.log('用户昵称为：' + infoRes.rawData);
+						   that.loginRequest(infoRes.rawData);
+					    }
+					});
+					
+				  }
 				});
 			}
 			/* =========== end login ========== */
@@ -52,7 +92,7 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
-		},
+		}
 	}
 </script>
 

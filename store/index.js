@@ -13,7 +13,11 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		login(state, provider) {
-			state.hasLogin = true;
+			if(provider.mobile && provider.mobile != '' ){
+				state.hasLogin = true;
+			}else{
+				state.hasLogin = false;
+			}
 			state.userInfo = provider;
 			uni.setStorage({//缓存用户登陆状态
 			    key: 'userInfo',  

@@ -2,10 +2,10 @@
 	<view class="container">
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
-				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
+				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">
 					<view class="image-wrapper">
 						<image
-							:src="item.src" 
+							:src="item" 
 							class="loaded" 
 							mode="aspectFill"
 						></image>
@@ -15,15 +15,18 @@
 		</view>
 		
 		<view class="tg_frame">
-			<span class="tag">团购价</span><span class="now_price">¥ 43.00</span><span class="org_price">¥ 150.00</span>
+			<span class="tag">团购价</span><span class="now_price">¥ {{goods.price}}</span><span class="org_price">¥ {{goods.originPrice}}</span>
 		</view>
 		
 		<view class="introduce-section">
 			<view class="uni-flex uni-row">
-				<view class="flex-item title">恒源祥2019春季长袖白色t恤 新款春装春季长袖白色t恤 新款春装</view>
-				<viw class="flex-item share">
-					<img src="https://pic.youx365.com/share.png" /><span>生成海报</span>
-				</viw>
+				<view class="flex-item title">{{goods.name}}</view>
+				
+				<view class="flex-item share">
+					<button class="p-b-btn" open-type="share">
+						<img src="https://pic.youx365.com/share.png" /><span>分享</span>
+					</button>
+				</view>
 			</view>
 			<view class="line"></view>
 			<!-- <view class="price-box">
@@ -129,8 +132,11 @@
 				<text>商品详情</text>
 			</view>
 			<view class="rich-text">
-				<rich-text :nodes="desc"></rich-text>		
+				<uParse :content="goods.desc"  />
 			</view>
+			<!-- <view class="rich-text">
+				<rich-text :nodes="desc"></rich-text>		
+			</view> -->
 		</view>
 		
 		<view class="detail-desc">
@@ -173,15 +179,11 @@
 					<img src='https://pic.youx365.com/cart.png' />
 					<text>购物车</text>
 				</navigator>
-				<!-- <view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
-					<text class="yticon icon-shoucang"></text>
-					<text>收藏</text>
-				</view> -->
 			</view>
 		    <view class="flex-item" style="width: 50%;">
 				<view class="action-btn-group">
 					<button type="primary" class=" action-btn no-border add-cart-btn" style="background: #00A390;">加入购物车</button>
-					<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
+					<button type="primary" class=" action-btn no-border buy-now-btn" @click="navTo('/pages/order/createOrder?id='+goods.id)">立即购买</button>
 				</view>
 			</view>
 		</view>
@@ -198,10 +200,10 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+					<image :src="goods.coverPicUrl"></image>
 					<view class="right">
-						<text class="price">¥328.00</text>
-						<text class="stock">库存：188件</text>
+						<text class="price">¥{{goods.price}}</text>
+						<text class="stock">库存：{{goods.stock}}{{goods.unit}}</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -231,34 +233,23 @@
 </template>
 
 <script>
+	import uParse from '@/components/uParse/src/wxParse.vue';
+	import {mapState} from 'vuex';  
+	
 	export default{
+		components: {
+			uParse
+		},
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		data() {
 			return {
+				goods:{},
+				
 				specClass: 'none',
 				specSelected:[],
-				
-				goodsList: [],
-				favorite: true,
-				imgList: [
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg'
-					}
-				],
-				desc: `
-					<div style="width:100%">
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
-					</div>
-				`,
+
 				specList: [
 					{
 						id: 1,
@@ -315,16 +306,15 @@
 						pid: 2,
 						name: '草木绿',
 					},
-				]
+				],
+				
+				//推荐商品
+				goodsList: [],
 			};
 		},
 		async onLoad(options){
-			
-			//接收传值,id里面放的是标题，因为测试数据并没写id 
 			let id = options.id;
-			if(id){
-				// this.$api.msg(`点击了${id}`);
-			}
+			this.goods = await this.$request.ModelHome.getGoodsDetail(id);
 			
 			
 			//规格 默认选中第一条
@@ -376,24 +366,24 @@
 						this.specSelected.push(item); 
 					} 
 				})
-				
 			},
-			//分享
-			share(){
-				this.$refs.share.toggleMask();	
-			},
-			//收藏
-			toFavorite(){
-				this.favorite = !this.favorite;
-			},
-			buy(){
-				uni.navigateTo({
-					url: `/pages/order/createOrder`
-				})
+			navTo(url){
+				if(!this.hasLogin){
+					url = '/pages/public/login';
+				}
+				uni.navigateTo({  
+					url
+				})  
 			},
 			stopPrevent(){}
 		},
-
+		onShareAppMessage() { //设置分享
+			console.log('this.userInfo',this.userInfo);
+			return {
+				title: '欢迎来到玺盟优选',
+				path: '/pages/product/product?id='+this.goods.id + '&inviteUserId=' + this.userInfo.id
+			}
+		}
 	}
 </script>
 
@@ -477,6 +467,7 @@
 		padding-top: 38rpx;
 		
 		.title{
+			width: 630rpx;
 			font-size:30rpx;
 			font-family:SourceHanSansCN;
 			font-weight:500;
@@ -488,25 +479,52 @@
 			background:rgba(242,242,242,1);
 		}
 		.share{
-			width: 196rpx;
+			width: 120rpx;
 			height: 57rpx;
 			background:rgba(0,163,144,1);
 			border-radius:29rpx 0 0 29rpx;
-			padding-right:10rpx;
-			text-align:right;
+			text-align:center;
+			position: relative;
+
+			uni-button:after{
+				width: 0 !important;
+				height: 0 !important;
+				border: 0 !important;
+			}
+			
+			button:after{
+				width: 0 !important;
+				height: 0 !important;
+				border: 0 !important;
+			}
+
+			.p-b-btn{
+				position: unset;
+				background-color: unset;
+				padding-left: unset;
+				padding-right: unset;
+				font-size: unset;
+				height: 57rpx;
+				line-height: 57rpx;
+				position:absolute;
+				top:0;
+				left:20rpx;
+			}
 
 			image{
 				width: 24rpx;
 				height: 24rpx;
 				vertical-align: middle;
-				margin-right:2rpx;
+				margin-right:4rpx;
+				margin-left: 6px;
 			}
 			
 			img{
 				width: 24rpx;
 				height: 24rpx;
 				vertical-align: middle;
-				margin-right:2rpx;
+				margin-right:4rpx;
+				margin-left: 6px;
 			}
 			
 			span{

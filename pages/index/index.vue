@@ -19,7 +19,7 @@
 					<text class="lg text-white cuIcon-unfold"></text>
 				</view>
                <view class="flex-item d-nav-notice">
-				   <view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
+				   <view class="uni-flex uni-row" @click="navToLogin('/pages/notice/message')">
 					   <view class="flex-item d-avatar">
 						   <img  src='https://pic.youx365.com/notice.png' />
 						   <view class="cu-tag badge">1</view>
@@ -41,7 +41,7 @@
 						<swiper class="carousel" circular 
 						indicator-dots='true' indicator-active-color="#00A08E" indicator-color="#fff" 
 						autoplay="true" interval="3000" duration="1000">
-							<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+							<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item.id)">
 								<image :src="item.src" />
 							</swiper-item>
 						</swiper>
@@ -50,7 +50,7 @@
 					<!-- 中部分类菜单 -->
 					<scroll-view class="cate-section1" scroll-x >
 						<view class="scoll-wrapper" v-if="newsitems[TabCur] && newsitems[TabCur].menu && newsitems[TabCur].menu.length > 0">
-							<view class="cate-item" @click="hqmsclick()" v-for="(item,index) in newsitems[TabCur].menu" :key="index">
+							<view class="cate-item" @click="navTo('/pages/product/list?id='+item.id)" v-for="(item,index) in newsitems[TabCur].menu" :key="index">
 								<image :src="item.picUrl"></image>
 								<text>{{item.name}}</text>
 							</view>
@@ -88,7 +88,7 @@
 								<view 
 									v-for="(item, index) in newsitems[TabCur].seckill" :key="index"
 									class="floor-item"
-									@click="navToDetailPage(item)"
+									@click="navToDetailPage(item.id)"
 								>
 									<image :src="item.coverPicUrl" mode="aspectFill"></image>
 									<text class="title clamp">{{item.productName}}</text>
@@ -126,7 +126,7 @@
 							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>
@@ -172,7 +172,7 @@
 								<swiper-item v-for="(item, index) in newsitems[TabCur].bkgoods" :key="index">
 									<view class="bk-list">
 										<view class="uni-flex uni-row">
-										    <view class="flex-item bk_frame" v-for="o in item" :key="o.id">
+										    <view class="flex-item bk_frame" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
 												<view :class="'bk_index bk_index_' + (o.index%3) "></view>
 												<text class="bk_index_text">{{o.index}}</text>
 												<image :src="o.coverPicUrl" mode="aspectFill"></image>
@@ -202,7 +202,7 @@
 						<view 
 							v-for="(item, index) in newsitems[TabCur].rxgoods" :key="index"
 							class="guess-item"
-							@click="navToDetailPage(item)"
+							@click="navToDetailPage(item.id)"
 						>
 							<view class="image-wrapper">
 								<image :src="item.coverPicUrl" mode="aspectFill"></image>
@@ -259,7 +259,6 @@
 				tgCurrent: 0,
 				
 				//爆款
-				bkInfo: [{},{},{}],
 				bkCurrent: 0,	
 					
 				
@@ -359,9 +358,8 @@
 					if(temp.length != 0){
 						info.push(temp);
 					}
-					console.log(info);
 					subData.bkgoods = info;
-					this.tgCurrent = 0;
+					this.bkCurrent = 0;
 				}
 				
 				let rxgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true});
@@ -373,7 +371,7 @@
 				this.newsitems = Object.assign({}, this.newsitems);
 				console.log('this.newsitems',this.newsitems);
 			},
-			navTo(url){
+			navToLogin(url){
 				if(!this.hasLogin){
 					url = '/pages/public/login';
 				}
@@ -381,10 +379,13 @@
 					url
 				})  
 			},
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
+			},
 			//详情页
-			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
-				let id = item.title;
+			navToDetailPage(id) {
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
@@ -392,14 +393,6 @@
 			navToCategory(){
 				uni.switchTab({
 					url: `/pages/category/category`
-				})
-			},
-			hqmsclick(){
-				var that = this;
-				uni.showToast({
-				  title: '点击菜单',
-				  icon: 'success',
-				  duration: 2000
 				})
 			},
 			//团购切换
@@ -467,8 +460,8 @@
 		// #endif
 		onShareAppMessage() { //设置分享
 			return {
-				title: '欢迎体验uni-app',
-				path: '/pages/index/index'
+				title: '欢迎来到玺盟优选',
+				path: '/pages/index/index?inviteUserId=' + this.userInfo.id
 			}
 		}
 	}
