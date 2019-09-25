@@ -39,11 +39,11 @@
 			<swiper-item v-for="(item,index) in tabBars" :key="index">
 				<scroll-view class="list" scroll-y>
 					<!-- 头部广告 -->
-					<view class="v-ad">
+					<view class="v-ad" v-if="newsitems[TabCur] && newsitems[TabCur].banner && newsitems[TabCur].banner.length > 0">
 						<swiper class="carousel" circular 
 						indicator-dots='true' indicator-active-color="#00A08E" indicator-color="#fff" 
 						autoplay="true" interval="3000" duration="1000">
-							<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item.id)">
+							<swiper-item v-for="(item, index) in newsitems[TabCur].banner" :key="index" class="carousel-item" @click="navToDetailPage(item.id)">
 								<image :src="item.src" />
 							</swiper-item>
 						</swiper>
@@ -254,9 +254,6 @@
 				//高度 3个： 760,2: 520, 1:  140 rpx
 				tgFrameHeight: 'height: 520rpx !important;',
 				
-				carouselList: [], //头部广告数据
-				goodsList: [], //
-				
 				//团购
 				tgCurrent: 0,
 				
@@ -280,13 +277,7 @@
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
-			async loadData() {
-				let carouselList = await this.$api.json('carouselList');
-				this.carouselList = carouselList;
-				
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
-				
+			async loadData() {				
 				//加载一级分类
 				this.$request.ModelHome.getCategoryByPid(0).then(result => {
 					if(result != null && result.length > 0){
@@ -306,6 +297,10 @@
 				//加载子菜单
 				let menu = await this.$request.ModelHome.getCategoryByPid(pid);
 				subData.menu = menu;
+				
+				//加载banner
+				let banner = await this.$request.ModelHome.getBanner(pid);
+				subData.banner = banner;
 				
 				//获取秒杀
 				let seckill = await this.$request.ModelHome.getSeckill({classifyPid: pid});

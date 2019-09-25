@@ -15,6 +15,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async getBanner(classfyId){
+		let url = config.api + '/h5/index/banner/list?classifyId='+classfyId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	async getSeckill(data){
 		let url = config.api + '/h5/index/goods/seckill';
 		let result = await request.post(url,data,{});
