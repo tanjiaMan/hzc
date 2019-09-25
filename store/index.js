@@ -18,6 +18,9 @@ const store = new Vuex.Store({
 			}else{
 				state.hasLogin = false;
 			}
+			if(provider.token){
+				state.token = provider.token;
+			}
 			state.userInfo = provider;
 			uni.setStorage({//缓存用户登陆状态
 			    key: 'userInfo',  

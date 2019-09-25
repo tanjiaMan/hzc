@@ -1,5 +1,7 @@
 <template>
 	<view class="container uni-tab-bar">
+		<!-- 登陆校验 -->
+		<cu-login></cu-login>
 		<!-- 头部导航 -->
 		<view class="carousel-section">
 			<cu-search bgColor="bg-gradual-header"></cu-search>
@@ -459,6 +461,7 @@
 		},
 		// #endif
 		onShareAppMessage() { //设置分享
+			debugger;
 			return {
 				title: '欢迎来到玺盟优选',
 				path: '/pages/index/index?inviteUserId=' + this.userInfo.id
