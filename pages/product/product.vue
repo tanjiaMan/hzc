@@ -1,5 +1,7 @@
 <template>
 	<view class="container">
+		<!-- 登陆校验 -->
+		<cu-login :inviteUserId = "inviteUserId"></cu-login>
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">
@@ -245,6 +247,7 @@
 		},
 		data() {
 			return {
+				inviteUserId: null,
 				goods:{},
 				
 				specClass: 'none',
@@ -312,26 +315,6 @@
 				goodsList: [],
 			};
 		},
-		async onLoad(options){
-			let id = options.id;
-			this.goods = await this.$request.ModelHome.getGoodsDetail(id);
-			
-			
-			//规格 默认选中第一条
-			this.specList.forEach(item=>{
-				for(let cItem of this.specChildList){
-					if(cItem.pid === item.id){
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
-			})
-			
-			//
-			let goodsList = await this.$api.json('goodsList');
-			this.goodsList = goodsList || [];
-		},
 		methods:{
 			//规格弹窗开关
 			toggleSpec() {
@@ -378,12 +361,32 @@
 			stopPrevent(){}
 		},
 		onShareAppMessage() { //设置分享
-			console.log('this.userInfo',this.userInfo);
 			return {
 				title: '欢迎来到玺盟优选',
 				path: '/pages/product/product?id='+this.goods.id + '&inviteUserId=' + this.userInfo.id
 			}
-		}
+		},
+		async onLoad(options){
+			this.inviteUserId = options.inviteUserId;
+			
+			let id = options.id;
+			this.goods = await this.$request.ModelHome.getGoodsDetail(id);
+			
+			//规格 默认选中第一条
+			this.specList.forEach(item=>{
+				for(let cItem of this.specChildList){
+					if(cItem.pid === item.id){
+						this.$set(cItem, 'selected', true);
+						this.specSelected.push(cItem);
+						break; //forEach不能使用break
+					}
+				}
+			})
+			
+			//
+			let goodsList = await this.$api.json('goodsList');
+			this.goodsList = goodsList || [];
+		},
 	}
 </script>
 

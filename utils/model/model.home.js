@@ -3,6 +3,12 @@ import request from '../Request.js';
 
 export default{
 	
+	async getCategoryAll(pid){
+		let url = config.api + '/h5/index/goods/category/all';
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	async getCategoryByPid(pid){
 		let url = config.api + '/h5/index/goods/category/get?pid=' + pid;
 		let result = await request.get(url,{});

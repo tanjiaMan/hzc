@@ -9,7 +9,7 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
+					<view @click="navToList(titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
 						<image :src="titem.picture"></image>
 						<text>{{titem.name}}</text>
 					</view>
@@ -41,16 +41,22 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await this.$api.json('cateList');
-				list.forEach(item=>{
-					if(!item.pid){
-						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
-					}else if(!item.picture){
-						this.slist.push(item); //没有图的是2级分类
-					}else{
-						this.tlist.push(item); //3级分类
-					}
-				}) 
+				let catall = await this.$request.ModelHome.getCategoryAll();
+				catall.forEach(flist => {
+					//一级分类
+					this.flist.push({id: flist.id,name: flist.name});
+					var index = 1;
+					Object.keys(flist.subItems).forEach(slist => {
+						let slistid = flist.id +'-' + index;
+						this.slist.push({id: slistid,pid: flist.id,name: slist});
+						index ++;
+						
+						flist.subItems[slist].forEach(tlist => {
+							this.tlist.push({id: tlist.id,pid: slistid,ppid: flist.id,name: tlist.name,picture: tlist.picUrl});
+						})
+						
+					});
+				})
 			},
 			//一级分类点击
 			tabtap(item){
@@ -88,9 +94,9 @@
 				})
 				this.sizeCalcState = true;
 			},
-			navToList(sid, tid){
+			navToList(id){
 				uni.navigateTo({
-					url: `/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`
+					url: `/pages/product/list?id=${id}`
 				})
 			}
 		}
