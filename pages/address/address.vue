@@ -4,8 +4,9 @@
 			<view class="wrapper">
 				<view class="address-box">
 					<text v-if="item.default" class="tag">默认</text>
-					<text class="address">{{item.addressName}} {{item.area}}</text>
+					<text class="address">{{item.addressName}}</text>
 				</view>
+				<view class="address1">麓谷企业广场F4栋3楼</view>
 				<view class="u-box">
 					<text class="name">{{item.name}}</text>
 					<text class="mobile">{{item.mobile}}</text>
@@ -13,9 +14,9 @@
 			</view>
 			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
 		</view>
-		<text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">
+		<!-- <text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">
 			重要：添加和修改地址回调仅增加了一条数据做演示，实际开发中将回调改为请求后端接口刷新一下列表即可
-		</text>
+		</text> -->
 		
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
 	</view>
@@ -93,27 +94,39 @@
 		flex-direction: column;
 		flex: 1;
 	}
+	.address1{
+		font-size:36rpx;
+		font-family:SourceHanSansCN;
+		font-weight:500;
+		color:rgba(0,0,0,1);
+		padding: 20rpx 0 16rpx 0;
+	}
 	.address-box{
 		display: flex;
 		align-items: center;
 		.tag{
-			font-size: 24upx;
-			color: $base-color;
-			margin-right: 10upx;
-			background: #fffafb;
-			border: 1px solid #ffb4c7;
-			border-radius: 4upx;
-			padding: 4upx 10upx;
+			margin-right: 10rpx;
+			background: #00A390;
+			padding: 6upx 12upx;
 			line-height: 1;
+			font-size:20rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			border-radius: 40%;
+			color:rgba(255,255,255,1);
 		}
 		.address{
-			font-size: 30upx;
-			color: $font-color-dark;
+			font-size:26rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
 		}
 	}
 	.u-box{
-		font-size: 28upx;
-		color: $font-color-light;
+		font-size:26rpx;
+		font-family:SourceHanSansCN;
+		font-weight:400;
+		color:rgba(0,0,0,1);
 		margin-top: 16upx;
 		.name{
 			margin-right: 30upx;
@@ -141,7 +154,7 @@
 		height: 80upx;
 		font-size: 32upx;
 		color: #fff;
-		background-color: $base-color;
+		background-color: #FF443F;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);		
 	}

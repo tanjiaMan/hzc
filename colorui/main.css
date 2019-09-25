@@ -179,9 +179,6 @@ switch .uni-switch-input {
 }
 
 switch .wx-switch-input:not([class*="bg-"]),
-switch .uni-switch-input:not([class*="bg-"]) {
-	background: #8799a3 !important;
-}
 
 switch .wx-switch-input::after,
 switch .uni-switch-input::after {

@@ -17,25 +17,25 @@ export default{
 	
 	async getBanner(classfyId){
 		let url = config.api + '/h5/index/banner/list?classifyId='+classfyId;
-		let result = await request.get(url,{});
+		let result = await request.get(url,{silence: true});
 		return result && result.data;
 	},
 	
 	async getSeckill(data){
 		let url = config.api + '/h5/index/goods/seckill';
-		let result = await request.post(url,data,{});
+		let result = await request.post(url,data,{silence: true});
 		return result && result.data;
 	},
 	
 	async getGroupBuy(data){
 		let url = config.api + '/h5/index/goods/groupbuy';
-		let result = await request.post(url,data,{});
+		let result = await request.post(url,data,{silence: true});
 		return result && result.data;
 	},
 	
 	async getGoodsList(data){
 		let url = config.api + '/h5/index/goods/list';
-		let result = await request.post(url,data,{});
+		let result = await request.post(url,data,{silence: true});
 		return result && result.data;
 	},
 	

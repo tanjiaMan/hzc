@@ -7,13 +7,12 @@
 		<adventures />
 			
 		<view class="btn-group">
-			<view class="uni-flex uni-row" style="width: 100%;">
-				<view class="flex-item" style="width: 50%;">
-					<navigator url="/pages/order/order?state=0" open-type="redirect" class="mix-btn">查看订单</navigator>
-				</view>
-				<view class="flex-item" style="width: 50%;">
-					<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>		
-				</view>
+			<view>
+				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>		
+			</view>
+			
+			<view class="bt-rule">
+				抽奖规则
 			</view>
 		</view>
 	</view>
@@ -72,6 +71,17 @@
 	.btn-group{
 		padding-top: 40rpx;
 		padding-bottom: 73rpx;
+		
+		.bt-rule{
+			width: 268rpx;
+			height: 84rpx;
+			line-height: 84rpx;
+			text-align: center;
+			font-size:30rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(124,124,124,1);
+		}
 	}
 	.mix-btn {
 		margin-top: 32rpx;

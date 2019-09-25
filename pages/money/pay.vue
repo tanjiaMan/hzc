@@ -4,9 +4,10 @@
 			<text>剩余支付时间 14:59</text>
 			<text class="price">38.88</text>
 		</view>
-
+		<view class="line-bg">
+			
+		</view>
 		<view class="pay-type-list">
-
 			<view class="type-item b-b" @click="changePayType(1)">
 				<img src="https://pic.youx365.com/pay-wx.png" />
 				<view class="con">
@@ -105,9 +106,16 @@
 			}
 		}
 	}
+	
+	.line-bg{
+		width: 750rpx;
+		height: 80rpx;
+		background-image: url('https://pic.youx365.com/pay-bg.png');
+		background-color: #FFFFFF;
+		background-size: cover;
+	}
 
 	.pay-type-list {
-		margin-top: 20rpx;
 		background-color: #fff;
 		padding-left: 30rpx;
 		

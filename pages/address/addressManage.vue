@@ -5,41 +5,52 @@
 			<input class="input" type="text" v-model="addressData.name" placeholder="收货人姓名" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
-			<text class="tit">手机号</text>
+			<text class="tit">手机号码</text>
 			<input class="input" type="number" v-model="addressData.mobile" placeholder="收货人手机号码" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
-			<text class="tit">地址</text>
-			<text @click="chooseLocation" class="input">
+			<text class="tit">所在区域</text>
+			<text @click="chooseAddress" class="input">
 				{{addressData.addressName}}
 			</text>
-			<text class="yticon icon-shouhuodizhi"></text>
 		</view>
+		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault"
+		 @onConfirm="onConfirm"></mpvue-city-picker>
+		
 		<view class="row b-b"> 
-			<text class="tit">门牌号</text>
+			<text class="tit">详细地址</text>
 			<input class="input" type="text" v-model="addressData.area" placeholder="楼号、门牌" placeholder-class="placeholder" />
 		</view>
 		
 		<view class="row default-row">
 			<text class="tit">设为默认</text>
-			<switch :checked="addressData.defaule" color="#fa436a" @change="switchChange" />
+			<switch :checked="addressData.defaule" color="#00A390" @change="switchChange" />
 		</view>
-		<button class="add-btn" @click="confirm">提交</button>
+		<button class="add-btn" @click="confirm">保存</button>
 	</view>
 </template>
 
 <script>
+	
+	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
+	
 	export default {
+		components: {
+			mpvueCityPicker
+		},
 		data() {
 			return {
 				addressData: {
 					name: '',
 					mobile: '',
-					addressName: '在地图选择',
+					addressName: '请选择',
 					address: '',
 					area: '',
-					default: false
-				}
+					default: false,
+				},
+				//城市选择
+				themeColor: '#007AFF',
+				cityPickerValueDefault: [0, 0, 1],
 			}
 		},
 		onLoad(option){
@@ -57,16 +68,6 @@
 		methods: {
 			switchChange(e){
 				this.addressData.default = e.detail;
-			},
-			
-			//地图选择地址
-			chooseLocation(){
-				uni.chooseLocation({
-					success: (data)=> {
-						this.addressData.addressName = data.name;
-						this.addressData.address = data.name;
-					}
-				})
 			},
 			
 			//提交
@@ -96,6 +97,13 @@
 					uni.navigateBack()
 				}, 800)
 			},
+			chooseAddress(){
+				this.$refs.mpvueCityPicker.show()
+			},
+			onConfirm(e) {
+				console.log('onConfirm',e);
+				this.addressData.addressName = e.label;
+			}
 		}
 	}
 </script>
@@ -110,13 +118,13 @@
 		display: flex;
 		align-items: center;
 		position: relative;
-		padding:0 30upx;
+		padding:0 20rpx;
 		height: 110upx;
 		background: #fff;
 		
 		.tit{
 			flex-shrink: 0;
-			width: 120upx;
+			width: 140rpx;
 			font-size: 30upx;
 			color: $font-color-dark;
 		}
@@ -148,7 +156,7 @@
 		margin: 60upx auto;
 		font-size: $font-lg;
 		color: #fff;
-		background-color: $base-color;
+		background-color: #FF443F;
 		border-radius: 10upx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
 	}
