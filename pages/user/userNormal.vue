@@ -30,8 +30,13 @@
 		
 		<!-- 我的订单 -->
 		<view class="my-order">
-			<view class="title">
-				我的订单
+			<view class="uni-flex uni-row">
+				<view class="flex-item title">
+					我的订单
+				</view>
+				<view class="flex-item alltitle" @click="navTo('/pages/order/order')">
+					全部订单
+				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=1')">
@@ -60,9 +65,14 @@
 		<!-- 钱包 -->
 		<view class="user-money">
 			<text class="num">5400</text>
-			<view class="desc" @click="navTo('/pages/user/money')">
-				<img src="https://pic.youx365.com/user_money.png" />
-				我的钱包
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
+					<img src="https://pic.youx365.com/user_money.png" />
+					我的代金券
+				</view>
+				<view style="width: 50%;">
+					<view class="rechargebt">去充值</view>
+				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
@@ -337,6 +347,17 @@
 				font-weight:500;
 				color:rgba(51,51,51,1);
 				padding: 28rpx 32rpx 16rpx 32rpx;
+				width: 50%;
+			}
+			
+			.alltitle{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+				width: 50%;
+				text-align: right;
+				padding: 28rpx 32rpx 16rpx 32rpx;
 			}
 			
 			image{
@@ -386,7 +407,8 @@
 				color:rgba(0,163,144,1);
 				height: 60rpx;
 				line-height: 60rpx;
-				margin-top: -20rpx;
+				padding-right: 10rpx;
+				text-align: right;
 				
 				img{
 					width: 32rpx;
@@ -401,6 +423,18 @@
 					margin-right: 13rpx;
 					vertical-align: middle;
 				}
+			}
+			
+			.rechargebt{
+				background-image: url('https://pic.youx365.com/user_money_bt.png');
+				background-size: cover;
+				width: 144rpx;
+				height: 48rpx;
+				font-size:24rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(117,64,0,1);
+				margin: 6rpx 0 0 10rpx;
 			}
 			
 			.tit1{
