@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 登陆校验 -->
-		<cu-login :inviteUserId = "inviteUserId"></cu-login>
+		<!-- <cu-login :inviteUserId = "inviteUserId"></cu-login> -->
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">
@@ -60,11 +60,14 @@
 		</view> -->
 		
 		<view class="c-list">
-			<view class="c-row b-b" @click="toggleSpec">
+			<view class="c-row b-b" @click="toggleSpec" v-if="goods.config && goods.config.specification && goods.config.specification == true">
 				<text class="tit">已选</text>
 				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
+					<text v-if="specSelected.length > 0" class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 						{{sItem.name}}
+					</text>
+					<text v-if="specSelected.length == 0" class="selected-text">
+						请选择规格
 					</text>
 				</view>
 				<text class="yticon icon-you"></text>
@@ -202,10 +205,12 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image :src="goods.coverPicUrl"></image>
+					<image :src="goodsStockSelectd.picUrlList[0]" v-if="goodsStockSelectd.picUrlList && goodsStockSelectd.picUrlList.length > 0"></image>
+					<image :src="goods.coverPicUrl" v-else></image>
 					<view class="right">
-						<text class="price">¥{{goods.price}}</text>
-						<text class="stock">库存：{{goods.stock}}{{goods.unit}}</text>
+						<text class="price" v-if="goodsStockSelectd.price">¥{{goodsStockSelectd.price}}</text>
+						<text class="stock" v-if="goodsStockSelectd.leftStock">库存：{{goodsStockSelectd.leftStock}}{{goods.unit}}</text>
+						<text v-else>没有库存</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -252,64 +257,11 @@
 				
 				specClass: 'none',
 				specSelected:[],
+				goodsStockSelectd:{},
 
-				specList: [
-					{
-						id: 1,
-						name: '尺寸',
-					},
-					{	
-						id: 2,
-						name: '颜色',
-					},
-				],
-				specChildList: [
-					{
-						id: 1,
-						pid: 1,
-						name: 'XS',
-					},
-					{
-						id: 2,
-						pid: 1,
-						name: 'S',
-					},
-					{
-						id: 3,
-						pid: 1,
-						name: 'M',
-					},
-					{
-						id: 4,
-						pid: 1,
-						name: 'L',
-					},
-					{
-						id: 5,
-						pid: 1,
-						name: 'XL',
-					},
-					{
-						id: 6,
-						pid: 1,
-						name: 'XXL',
-					},
-					{
-						id: 7,
-						pid: 2,
-						name: '白色',
-					},
-					{
-						id: 8,
-						pid: 2,
-						name: '珊瑚粉',
-					},
-					{
-						id: 9,
-						pid: 2,
-						name: '草木绿',
-					},
-				],
+				specList: [],
+				specChildList: [],
+				goodsStock:[],
 				
 				//推荐商品
 				goodsList: [],
@@ -319,6 +271,16 @@
 			//规格弹窗开关
 			toggleSpec() {
 				if(this.specClass === 'show'){
+					//关闭之前选择
+					if(!this.goodsStockSelectd.id){//当前规格没有库存，请重新选择
+						uni.showToast({
+							icon:'none',
+						    title: '当前规格没有库存',
+						    duration: 2000
+						});
+						return;
+					}
+					
 					this.specClass = 'hide';
 					setTimeout(() => {
 						this.specClass = 'none';
@@ -349,6 +311,26 @@
 						this.specSelected.push(item); 
 					} 
 				})
+				this.findGoodsStock();
+				console.log('this.goodsStockSelectd',this.goodsStockSelectd);
+			},
+			findGoodsStock(){
+				let stockSelectd = {};
+				for(var k=0;k<this.goodsStock.length;k++){
+					let item = this.goodsStock[k];
+					let match = true;
+					for(var i=0;i<this.specSelected.length;i++){
+						if(!item.specIdList.includes(this.specSelected[i].id)){
+							match = false;
+							break
+						}
+					}
+					if(match == true){
+						stockSelectd = item;
+						break;
+					}
+				}
+				this.goodsStockSelectd = stockSelectd;
 			},
 			navTo(url){
 				if(!this.hasLogin){
@@ -357,6 +339,39 @@
 				uni.navigateTo({  
 					url
 				})  
+			},
+			async dataLoad(id){
+				//加载商品详情
+				this.goods = await this.$request.ModelHome.getGoodsDetail(id);
+				
+				//加载商品规格
+				let goodsSpe = await this.$request.ModelHome.getGoodsSpecificat(id);
+				goodsSpe.forEach(flist => {
+					this.specList.push({id: flist.id,name: flist.name});
+					flist.childs && flist.childs.forEach(slist => {
+						this.specChildList.push(slist);
+					})
+				});
+				
+				//加载规格库存
+				let goodsStock = await this.$request.ModelHome.getGoodsSellSpecificat(id);
+				this.goodsStock = goodsStock;
+				
+				//规格 默认选中第一条
+				// this.specList.forEach(item=>{
+				// 	for(let cItem of this.specChildList){
+				// 		if(cItem.pid === item.id){
+				// 			this.$set(cItem, 'selected', true);
+				// 			this.specSelected.push(cItem);
+				// 			break; //forEach不能使用break
+				// 		}
+				// 	}
+				// });
+				// this.findGoodsStock();
+				
+				//推荐商品列表
+				let goodsList = await this.$api.json('goodsList');
+				this.goodsList = goodsList || [];
 			},
 			stopPrevent(){}
 		},
@@ -370,22 +385,7 @@
 			this.inviteUserId = options.inviteUserId;
 			
 			let id = options.id;
-			this.goods = await this.$request.ModelHome.getGoodsDetail(id);
-			
-			//规格 默认选中第一条
-			this.specList.forEach(item=>{
-				for(let cItem of this.specChildList){
-					if(cItem.pid === item.id){
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
-			})
-			
-			//
-			let goodsList = await this.$api.json('goodsList');
-			this.goodsList = goodsList || [];
+			this.dataLoad(id);
 		},
 	}
 </script>
