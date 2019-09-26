@@ -66,7 +66,7 @@
 					<text v-if="specSelected.length > 0" class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 						{{sItem.name}}
 					</text>
-					<text v-if="specSelected.length == 0" class="selected-text">
+					<text v-if="specSelected.length == 0" class="selected-text" style="color: #ff443f;">
 						请选择规格
 					</text>
 				</view>
@@ -187,7 +187,7 @@
 			</view>
 		    <view class="flex-item" style="width: 50%;">
 				<view class="action-btn-group">
-					<button type="primary" class=" action-btn no-border add-cart-btn" style="background: #00A390;">加入购物车</button>
+					<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCart" style="background: #00A390;">加入购物车</button>
 					<button type="primary" class=" action-btn no-border buy-now-btn" @click="navTo('/pages/order/createOrder?id='+goods.id)">立即购买</button>
 				</view>
 			</view>
@@ -312,7 +312,6 @@
 					} 
 				})
 				this.findGoodsStock();
-				console.log('this.goodsStockSelectd',this.goodsStockSelectd);
 			},
 			findGoodsStock(){
 				let stockSelectd = {};
@@ -372,6 +371,36 @@
 				//推荐商品列表
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
+			},
+			addCart(){ //加入购物车
+				let goods = this.goods;
+				let productSpecId = null;
+				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
+					if(!this.goodsStockSelectd.id){
+						uni.showToast({
+							icon:'none',
+						    title: '请先选择规格',
+						    duration: 2000
+						});
+						return;
+					}
+					productSpecId = this.goodsStockSelectd.id;
+				}
+				let values = {increaseNum:1,productId:goods.id,productSpecId: productSpecId};
+				this.$request.ModelOrder.addShopCar(values).then(result => {
+					if(result.code == 'ok'){
+						uni.showToast({
+						    title: '加入购物车成功',
+						    duration: 2000
+						});
+					}else{
+						uni.showToast({
+							icon:'none',
+						    title: '加入购物车失败',
+						    duration: 2000
+						});
+					}
+				})
 			},
 			stopPrevent(){}
 		},
