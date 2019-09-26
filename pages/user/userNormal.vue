@@ -430,6 +430,7 @@
 				background-size: cover;
 				width: 144rpx;
 				height: 48rpx;
+				line-height: 48rpx;
 				font-size:24rpx;
 				font-family:Microsoft YaHei;
 				font-weight:400;

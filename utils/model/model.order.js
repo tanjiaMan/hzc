@@ -13,7 +13,7 @@ export default{
 	async getShopCar(){
 		let url = config.api + '/h5/oper/get-shop-car-info';
 		let result = await request.get(url,{});
-		return result;
+		return result && result.data;
 	},
 	
 	async delShopCar(ids){

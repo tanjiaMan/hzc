@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 登陆校验 -->
-		<!-- <cu-login :inviteUserId = "inviteUserId"></cu-login> -->
+		<cu-login :inviteUserId = "inviteUserId"></cu-login>
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">

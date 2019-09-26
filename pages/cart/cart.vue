@@ -1,14 +1,5 @@
 <template>
 	<view class="container">
-		<!-- 未登陆 -->
-		<view v-if="!hasLogin" class="empty">
-			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
-			<view class="empty-tips">
-				空空如也
-				<view class="navigator" @click="navToLogin">去登陆></view>
-			</view>
-		</view>
-		
 		<!-- 空白页 -->
 		<view v-if="empty===true" class="empty">
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
@@ -17,15 +8,16 @@
 				<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
 			</view>
 		</view>
-		<view v-if="hasLogin">
 			<!-- 列表 -->
 			<view class="cart-list">
 				<block v-for="(item, index) in cartList" :key="item.id">
 					<view
 						class="cart-item" 
 						:class="{'b-b': index!==cartList.length-1}"
+						@touchmove.stop.prevent="stopPrevent"
+						@click="navTo('/pages/product/product?id='+item.productId)"
 					>
-						<view class="check-wrapper">
+						<view class="check-wrapper" @click.stop="stopPrevent">
 							<view
 								class="yticon icon-xuanzhong2 checkbox"
 								:class="{checked: item.checked}"
@@ -34,14 +26,13 @@
 						</view>
 						<view class="image-wrapper">
 							<image :src="item.image" 
-								:class="[item.loaded]"
 								mode="aspectFill" 
 								lazy-load 
 								@load="onImageLoad('cartList', index)" 
 								@error="onImageError('cartList', index)"
 							></image>
 						</view>
-						<view class="item-right">
+						<view class="item-right" @click.stop="stopPrevent">
 							<text class="clamp title">{{item.title}}</text>
 							
 							<view class="uni-flex uni-row" style="width: 100%;">
@@ -124,7 +115,6 @@
 				</view>
 				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
 			</view>
-		</view>
 	</view>
 </template>
 
@@ -146,7 +136,7 @@
 				goodsList:[],
 			};
 		},
-		onLoad(){
+		onShow(){
 			this.loadData();
 		},
 		watch:{
@@ -162,14 +152,33 @@
 			...mapState(['hasLogin'])
 		},
 		methods: {
+			stopPrevent(){},
 			//请求数据
 			async loadData(){
-				let list = await this.$api.json('cartList'); 
+				//加载购物车数据
+				let cars = await this.$request.ModelOrder.getShopCar();
+				let list = [];
+				if(cars && cars.records){
+					cars.records.forEach(item => {
+						list.push({
+							id: item.id,
+							productId: item.productId,
+							productSpecId: item.productSpecId,
+							image: item.picUrlList && item.picUrlList.length>0 && item.picUrlList[0],
+							attr_val: item.specNames,
+							stock: 20,
+							title: item.name,
+							price: item.price,
+							number: item.num
+						})
+					})
+				}
 				let cartList = list.map(item=>{
 					item.checked = true;
 					return item;
 				});
 				this.cartList = cartList;
+				console.log('cartList',cartList);
 				this.calcTotal();  //计算总价
 				
 				/* 猜你喜欢 */
@@ -210,14 +219,21 @@
 				this.calcTotal();
 			},
 			//删除
-			deleteCartItem(index){
+			async deleteCartItem(index){
 				let list = this.cartList;
 				let row = list[index];
 				let id = row.id;
 
-				this.cartList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
+				let ids = [];
+				ids.push(id);
+				let result = await this.$request.ModelOrder.delShopCar(JSON.stringify(ids));
+				if(result.code == 'ok'){
+					this.cartList.splice(index, 1);
+					this.calcTotal();
+					uni.hideLoading();
+				}else{
+					this.$api.msg('删除异常，清稍后重试');
+				}
 			},
 			//清空
 			clearCart(){
@@ -268,6 +284,11 @@
 					})}`
 				})
 				this.$api.msg('跳转下一页 sendData');
+			},
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
 			}
 		}
 	}
@@ -278,11 +299,6 @@
 		padding-bottom: 134upx;
 		/* 空白页 */
 		.empty{
-			position:fixed;
-			left: 0;
-			top:0;
-			width: 100%;
-			height: 100vh;
 			padding-bottom:100upx;
 			display:flex;
 			justify-content: center;
@@ -595,7 +611,6 @@
 				image{
 					width: 100%;
 					height: 100%;
-					opacity: 1;
 				}
 			}
 			.title{

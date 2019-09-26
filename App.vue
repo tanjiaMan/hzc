@@ -407,11 +407,11 @@
 			width: 100%;
 			height: 100%;
 			transition: .6s;
-			opacity: 0;
+			/* opacity: 0;
 
 			&.loaded {
 				opacity: 1;
-			}
+			} */
 		}
 	}
 
