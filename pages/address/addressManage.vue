@@ -2,16 +2,19 @@
 	<view class="content">
 		<view class="row b-b">
 			<text class="tit">联系人</text>
-			<input class="input" type="text" v-model="addressData.name" placeholder="收货人姓名" placeholder-class="placeholder" />
+			<input class="input" type="text" v-model="addressData.linkName" placeholder="收货人姓名" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">手机号码</text>
-			<input class="input" type="number" v-model="addressData.mobile" placeholder="收货人手机号码" placeholder-class="placeholder" />
+			<input class="input" type="number" v-model="addressData.linkMobile" placeholder="收货人手机号码" placeholder-class="placeholder" />
 		</view>
 		<view class="row b-b">
 			<text class="tit">所在区域</text>
-			<text @click="chooseAddress" class="input">
-				{{addressData.addressName}}
+			<text @click="chooseAddress" class="input" v-if="addressData.areaName">
+				{{addressData.provinceName}} {{addressData.cityName}} {{addressData.areaName}}
+			</text>
+			<text v-else @click="chooseAddress" class="input" style="color: #FF443F;">
+				请选择所在区域
 			</text>
 		</view>
 		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault"
@@ -19,20 +22,24 @@
 		
 		<view class="row b-b"> 
 			<text class="tit">详细地址</text>
-			<input class="input" type="text" v-model="addressData.area" placeholder="楼号、门牌" placeholder-class="placeholder" />
+			<!-- <input class="input" type="text" v-model="addressData.address" placeholder="楼号、门牌" placeholder-class="placeholder" /> -->
+			 <textarea placeholder="楼号、门牌"  v-model="addressData.address" placeholder-class="placeholder" style="height: 60px;" />
 		</view>
-		
-		<view class="row default-row">
+		<view class="row b-b">
 			<text class="tit">设为默认</text>
-			<switch :checked="addressData.defaule" color="#00A390" @change="switchChange" />
+			<switch :checked="addressData.useDefault == 1" color="#FF443F" @change="switchChange" />
 		</view>
 		<button class="add-btn" @click="confirm">保存</button>
+		<button class="del-btn" @click="confirm">删除</button>
 	</view>
 </template>
 
 <script>
 	
 	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
+	import provinceData from '@/components/mpvue-citypicker/city-data/province.js';
+	import cityData from '@/components/mpvue-citypicker/city-data/city.js';
+	import areaData from '@/components/mpvue-citypicker/city-data/area.js';
 	
 	export default {
 		components: {
@@ -41,68 +48,96 @@
 		data() {
 			return {
 				addressData: {
-					name: '',
-					mobile: '',
-					addressName: '请选择',
+					linkName: '',
+					linkMobile: '',
 					address: '',
-					area: '',
-					default: false,
+					adCode:'',
+					useDefault: 0,
 				},
 				//城市选择
 				themeColor: '#007AFF',
 				cityPickerValueDefault: [0, 0, 1],
 			}
 		},
-		onLoad(option){
+		async onLoad(option){
+			let id = option.id;
 			let title = '新增收货地址';
-			if(option.type==='edit'){
+			if(id){
 				title = '编辑收货地址'
-				
-				this.addressData = JSON.parse(option.data)
+				let address = await this.$request.ModelOrder.infoAddress(id);
+				if(address.id){
+					let data = {
+						id: address.id,
+						linkName: address.linkName,
+						linkMobile: address.linkMobile,
+						address: address.address,
+						adCode:address.adCode,
+						useDefault: address.useDefault,
+						provinceName: address.provinceName,
+						cityName: address.cityName,
+						areaName: address.areaName
+					}
+					
+					this.addressData = data;
+					//查找地区索引
+					let proIndex = provinceData.findIndex(value => value.value == address.provCode/10000);
+					let cityIndex = cityData[proIndex].findIndex(value => value.value == address.cityCode/100);
+					let adIndex = areaData[proIndex][cityIndex].findIndex(value => value.value == address.adCode);
+					this.cityPickerValueDefault = [proIndex,cityIndex,adIndex];
+					console.log(this.cityPickerValueDefault);
+				}else{
+					this.$api.msg('查询地址错误');
+				}
 			}
-			this.manageType = option.type;
 			uni.setNavigationBarTitle({
 				title
 			})
 		},
 		methods: {
 			switchChange(e){
-				this.addressData.default = e.detail;
+				this.addressData.useDefault = e.detail.value == false?0:1;
 			},
-			
+
 			//提交
-			confirm(){
+			async confirm(){
 				let data = this.addressData;
-				if(!data.name){
+				if(!data.linkName){
 					this.$api.msg('请填写收货人姓名');
 					return;
 				}
-				if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)){
+				if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.linkMobile)){
 					this.$api.msg('请输入正确的手机号码');
 					return;
 				}
-				if(!data.address){
-					this.$api.msg('请在地图选择所在位置');
+				if(!data.adCode){
+					this.$api.msg('请选择所在区域');
 					return;
 				}
-				if(!data.area){
+				if(!data.address){
 					this.$api.msg('请填写门牌号信息');
 					return;
 				}
 				
-				//this.$api.prePage()获取上一页实例，可直接调用上页所有数据和方法，在App.vue定义
-				this.$api.prePage().refreshList(data, this.manageType);
-				this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				setTimeout(()=>{
-					uni.navigateBack()
-				}, 800)
+				this.$api.msg(`保存成功`);
+				
+				let result = await this.$request.ModelOrder.addOrUpdateAddress(data);
+				if(result.code == 'ok'){
+					setTimeout(()=>{
+						uni.navigateBack()
+					}, 800)
+				}else{
+					this.$api.msg('保存失败');
+				}
 			},
 			chooseAddress(){
 				this.$refs.mpvueCityPicker.show()
 			},
 			onConfirm(e) {
-				console.log('onConfirm',e);
-				this.addressData.addressName = e.label;
+				this.addressData.adCode = e.cityCode;
+				let addr = e.label.split('-');
+				this.addressData.provinceName = addr[0];
+				this.addressData.cityName = addr[1];
+				this.addressData.areaName = addr[2];
 			}
 		}
 	}
@@ -119,7 +154,7 @@
 		align-items: center;
 		position: relative;
 		padding:0 20rpx;
-		height: 110upx;
+		min-height: 110upx;
 		background: #fff;
 		
 		.tit{
@@ -148,6 +183,20 @@
 		}
 	}
 	.add-btn{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 690upx;
+		height: 80upx;
+		margin: 60upx auto;
+		font-size: $font-lg;
+		color: #fff;
+		background-color: #00A390;
+		border-radius: 10upx;
+		box-shadow: 1px 2px 5px rgba(0, 163, 144, 0.49);
+	}
+	
+	.del-btn{
 		display: flex;
 		align-items: center;
 		justify-content: center;

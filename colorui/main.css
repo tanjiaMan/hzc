@@ -92,43 +92,7 @@ radio {
 	position: relative;
 }
 
-switch::after,
-switch::before {
-	font-family: "cuIcon";
-	content: "\e645";
-	position: absolute;
-	color: #ffffff !important;
-	top: 0%;
-	left: 0upx;
-	font-size: 26upx;
-	line-height: 26px;
-	width: 50%;
-	text-align: center;
-	pointer-events: none;
-	transform: scale(0, 0);
-	transition: all 0.3s ease-in-out 0s;
-	z-index: 9;
-	bottom: 0;
-	height: 26px;
-	margin: auto;
-}
 
-switch::before {
-	content: "\e646";
-	right: 0;
-	transform: scale(1, 1);
-	left: auto;
-}
-
-switch[checked]::after,
-switch.checked::after {
-	transform: scale(1, 1);
-}
-
-switch[checked]::before,
-switch.checked::before {
-	transform: scale(0, 0);
-}
 
 /* #ifndef MP-ALIPAY */
 radio::before,
