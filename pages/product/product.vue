@@ -88,7 +88,10 @@
 			</view> -->
 			<view class="c-row b-b">
 				<text class="tit">说明</text>
-				<view class="bz-list con">
+				<view class="bz-list con" v-if="goods.tagList && goods.tagList.length > 0">
+					<text v-for="(item, index) in goods.tagList" :key="index">{{item}}</text>
+				</view>
+				<view class="bz-list con"  v-else>
 					<text>假一赔十</text>
 					<text>7天可退</text>
 					<text>产地直邮</text>
