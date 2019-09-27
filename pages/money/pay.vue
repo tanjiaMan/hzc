@@ -1,8 +1,8 @@
 <template>
 	<view class="app">
 		<view class="price-box">
-			<text>剩余支付时间 14:59</text>
-			<text class="price">38.88</text>
+			<text>剩余支付时间 {{i}}:{{s}}</text>
+			<text class="price">{{orderInfo.totalPrice}}</text>
 		</view>
 		<view class="line-bg">
 			
@@ -51,16 +51,39 @@
 		data() {
 			return {
 				payType: 1,
-				orderInfo: {}
+				orderInfo: {},
+				orderNum: null,
+				
+				//倒计时
+				timer: null,
+				seconds: 9999, //剩余支付时间
+				d: '00',
+				h: '00',
+				i: '00',
+				s: '00',
 			};
 		},
-		computed: {
-		
-		},
 		onLoad(options) {
-			
+			let orderNum = options.orderNum;
+			this.orderNum = orderNum;
+			this.$request.ModelOrder.infoOder(orderNum).then(result => {
+				this.orderInfo = result;
+			})
 		},
-
+		created: function(e) {
+			this.countDown()
+			this.timer = setInterval(() => {
+				this.seconds--
+				if (this.seconds < 0) {
+					this.timeUp()
+					return
+				}
+				this.countDown()
+			}, 1000)
+		},
+		beforeDestroy() {
+			clearInterval(this.timer)
+		},
 		methods: {
 			//选择支付方式
 			changePayType(type) {
@@ -68,10 +91,71 @@
 			},
 			//确认支付
 			confirm: async function() {
-				uni.redirectTo({
-					url: '/pages/money/paySuccess'
-				})
+				let result = await this.$request.ModelOrder.getPayInfo(this.orderNum);
+				if(result.code != 'ok'){
+					this.$api.msg(result.msg);
+					return;
+				}
+				result = result.data;
+				var that = this;
+				if(result.payStatus && result.payStatus == true){
+					let payinfo = JSON.parse(result.data);
+					uni.requestPayment({
+					    provider: 'wxpay',
+					    timeStamp: payinfo.timeStamp,
+					    nonceStr: payinfo.nonceStr,
+					    package: payinfo.package,
+					    signType: 'MD5',
+					    paySign: payinfo.paySign,
+					    success: function (res) {
+					       uni.redirectTo({
+								url: '/pages/money/paySuccess?orderNum=' + that.orderNum
+					       });
+					    },
+					    fail: function (err) {
+					        that.$api.msg('您已取消支付');
+					    }
+					});
+				}else{
+					this.$api.msg('预支付失败，请稍后重试');
+				}
+				
+				
+				
+				
 			},
+			//定时器
+			timeUp() {
+				clearInterval(this.timer)
+			},
+			countDown() {
+				let seconds = this.seconds
+				let [day, hour, minute, second] = [0, 0, 0, 0]
+				if (seconds > 0) {
+					day = Math.floor(seconds / (60 * 60 * 24))
+					hour = Math.floor(seconds / (60 * 60)) - day * 24
+					minute = Math.floor(seconds / 60) - day * 24 * 60 - hour * 60
+					second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
+				} else {
+					this.timeUp()
+				}
+				if (day < 10) {
+					day = '0' + day
+				}
+				if (hour < 10) {
+					hour = '0' + hour
+				}
+				if (minute < 10) {
+					minute = '0' + minute
+				}
+				if (second < 10) {
+					second = '0' + second
+				}
+				this.d = day
+				this.h = hour
+				this.i = minute
+				this.s = second
+			}
 		}
 	}
 </script>

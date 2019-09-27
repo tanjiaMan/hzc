@@ -69,7 +69,7 @@ export default{
 	async infoOder(ordernum){ //订单详情
 		let url = config.api + `/h5/order/detail?orderNum=${ordernum}`;
 		let result = await request.get(url,{});
-		return result;
+		return result && result.data;
 	},
 	
 	async cancelOrder(ordernum){ //取消订单
@@ -88,5 +88,12 @@ export default{
 		let url = config.api + '/h5/order/coupons-can-use';
 		let result = await request.post(url,data,{});
 		return result && result.data;
+	},
+	
+	//支付相关
+	async getPayInfo(ordernum){ //预支付
+		let url = config.api + '/h5/pay/wxapp?orderNum=' + ordernum;
+		let result = await request.post(url,{},{});
+		return result;
 	},
 }

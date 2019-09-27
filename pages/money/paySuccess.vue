@@ -1,16 +1,17 @@
 <template>
 	<view class="content">
 		<img class="showimg" src="https://pic.youx365.com/pay-success-show.png" />
-		<text class="tit">订单成功支付 199.00元</text>
+		<text class="tit" v-if="orderInfo.payStatus == 20">订单成功支付 {{orderInfo.totalPrice}}元</text>
+		<text class="tit" v-else-if="orderInfo.payStatus == 0">等待支付通知</text>
+		<text class="tit" v-else>支付失败</text>
 		
 		<!-- 大转盘 -->
 		<adventures />
-			
+
 		<view class="btn-group">
 			<view>
 				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>		
 			</view>
-			
 			<view class="bt-rule">
 				抽奖规则
 			</view>
@@ -28,8 +29,15 @@
 		},
 		data() {
 			return {
-				
+				orderInfo:{}
 			}
+		},
+		onLoad(options) {
+			let orderNum = options.orderNum;
+			this.orderNum = orderNum;
+			this.$request.ModelOrder.infoOder(orderNum).then(result => {
+				this.orderInfo = result;
+			})
 		},
 		methods: {
 			

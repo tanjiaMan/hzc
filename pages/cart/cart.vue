@@ -178,7 +178,6 @@
 					return item;
 				});
 				this.cartList = cartList;
-				console.log('cartList',cartList);
 				this.calcTotal();  //计算总价
 				
 				/* 猜你喜欢 */
