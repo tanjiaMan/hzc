@@ -53,4 +53,40 @@ export default{
 		return result && result.data;
 	},
 	
+	//订单
+	async getOrderCaculate(data){ // 计算订单信息
+		let url = config.api + '/h5/order/order-template';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async createOrder(data){ //创建订单
+		let url = config.api + '/h5/order/create';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async infoOder(ordernum){ //订单详情
+		let url = config.api + `/h5/order/detail?orderNum=${ordernum}`;
+		let result = await request.get(url,{});
+		return result;
+	},
+	
+	async cancelOrder(ordernum){ //取消订单
+		let url = config.api + `/h5/order/caculate?orderNum=${ordernum}`;
+		let result = await request.post(url,{},{});
+		return result;
+	},
+	
+	async listOrder(data){ //订单列表
+		let url = config.api + `/h5/order/list`;
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async getOrderCoupons(data){ //优惠券列表
+		let url = config.api + '/h5/order/coupons-can-use';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
 }

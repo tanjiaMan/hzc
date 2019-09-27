@@ -188,7 +188,7 @@
 		    <view class="flex-item" style="width: 50%;">
 				<view class="action-btn-group">
 					<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCart" style="background: #00A390;">加入购物车</button>
-					<button type="primary" class=" action-btn no-border buy-now-btn" @click="navTo('/pages/order/createOrder?id='+goods.id)">立即购买</button>
+					<button type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即购买</button>
 				</view>
 			</view>
 		</view>
@@ -372,16 +372,32 @@
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
 			},
+			async buyNow(){
+				let goods = this.goods;
+				let productSpecId = null;
+				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
+					if(!this.goodsStockSelectd.id){
+						this.$api.msg('请先选择规格');
+						return;
+					}
+					productSpecId = this.goodsStockSelectd.id;
+				}
+				let orderProducts = [];
+				orderProducts.push({
+					productId: goods.id,
+					productSpecId: productSpecId,
+					quantity: 1
+				})
+				uni.redirectTo({
+					url: '/pages/order/createOrder?order=' + JSON.stringify(orderProducts)
+				})
+			},
 			addCart(){ //加入购物车
 				let goods = this.goods;
 				let productSpecId = null;
 				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
 					if(!this.goodsStockSelectd.id){
-						uni.showToast({
-							icon:'none',
-						    title: '请先选择规格',
-						    duration: 2000
-						});
+						this.$api.msg('请先选择规格');
 						return;
 					}
 					productSpecId = this.goodsStockSelectd.id;

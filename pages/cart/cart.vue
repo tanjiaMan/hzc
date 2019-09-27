@@ -268,22 +268,19 @@
 			//创建订单
 			createOrder(){
 				let list = this.cartList;
-				let goodsData = [];
+				let orderProducts = [];
 				list.forEach(item=>{
 					if(item.checked){
-						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.number
+						orderProducts.push({
+							productId: item.productId,
+							productSpecId: item.productSpecId,
+							quantity: item.number
 						})
 					}
 				})
-
-				uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
+				uni.redirectTo({
+					url: '/pages/order/createOrder?order=' + JSON.stringify(orderProducts)
 				})
-				this.$api.msg('跳转下一页 sendData');
 			},
 			navTo(url){
 				uni.navigateTo({  

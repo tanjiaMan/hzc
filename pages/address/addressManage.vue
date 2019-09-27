@@ -130,27 +130,25 @@
 				}
 			},
 			async delAddress(){
+				let id = this.addressData.id;
+				var that = this;
 				uni.showModal({
 				    title: '提示',
 				    content: '确定删除吗？',
 				    success: function (res) {
 				        if (res.confirm) {
-				            console.log('用户点击确定');
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
+							that.$request.ModelOrder.delAddress(id).then(result => {
+								if(result.code == 'ok'){
+									setTimeout(()=>{
+										uni.navigateBack()
+									}, 800)
+								}else{
+									that.$api.msg('保存失败');
+								}
+							})
 				        }
 				    }
 				});
-				
-				// let id = this.addressData.id;
-				// let result = await this.$request.ModelOrder.delAddress(id);
-				// if(result.code == 'ok'){
-				// 	setTimeout(()=>{
-				// 		uni.navigateBack()
-				// 	}, 800)
-				// }else{
-				// 	this.$api.msg('保存失败');
-				// }
 			},
 			chooseAddress(){
 				this.$refs.mpvueCityPicker.show()
