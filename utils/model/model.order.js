@@ -16,9 +16,9 @@ export default{
 		return result && result.data;
 	},
 	
-	async delShopCar(ids){
-		let url = config.api + '/h5/oper/remove-by-ids?ids='+ids;
-		let result = await request.post(url,{},{});
+	async delShopCar(data){
+		let url = config.api + '/h5/oper/remove-by-ids';
+		let result = await request.post(url,data,{});
 		return result;
 	},
 	
