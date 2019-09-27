@@ -177,8 +177,10 @@
 				   <view class="tit2">平台客服</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/user-o-7.png" />
-				   <view class="tit2">地址管理</view>
+				   <view @click="navTo('/pages/address/address')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/user-o-7.png" />
+						<view class="tit2">地址管理</view>
+				   </view>
 				</uni-grid-item>
 				<uni-grid-item>
 					<view @click="navTo('/pages/set/set')" style="line-height: initial;">

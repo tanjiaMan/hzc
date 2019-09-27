@@ -3,6 +3,7 @@ import config from './Config.js';
 
 const post = (url, data, opt) => {
 	if(opt.silence != true){
+		uni.hideLoading();
 		uni.showLoading({
 			title: '加载中'
 		});
@@ -37,6 +38,7 @@ const post = (url, data, opt) => {
 
 const get = (url, opt) => {
 	if(opt.silence != true){
+		uni.hideLoading();
 		uni.showLoading({
 			title: '加载中'
 		});

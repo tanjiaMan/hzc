@@ -30,7 +30,7 @@
 			<switch :checked="addressData.useDefault == 1" color="#FF443F" @change="switchChange" />
 		</view>
 		<button class="add-btn" @click="confirm">保存</button>
-		<button class="del-btn" @click="confirm">删除</button>
+		<button class="del-btn" @click="delAddress" v-if="addressData.id">删除</button>
 	</view>
 </template>
 
@@ -128,6 +128,29 @@
 				}else{
 					this.$api.msg('保存失败');
 				}
+			},
+			async delAddress(){
+				uni.showModal({
+				    title: '提示',
+				    content: '确定删除吗？',
+				    success: function (res) {
+				        if (res.confirm) {
+				            console.log('用户点击确定');
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+				
+				// let id = this.addressData.id;
+				// let result = await this.$request.ModelOrder.delAddress(id);
+				// if(result.code == 'ok'){
+				// 	setTimeout(()=>{
+				// 		uni.navigateBack()
+				// 	}, 800)
+				// }else{
+				// 	this.$api.msg('保存失败');
+				// }
 			},
 			chooseAddress(){
 				this.$refs.mpvueCityPicker.show()
