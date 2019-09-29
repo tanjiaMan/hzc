@@ -9,19 +9,7 @@
 		methods: {
 			...mapMutations(['login']),
 		},
-		onLaunch: function() {
-			/* =========== start login ======== */
-			let userInfo = uni.getStorageSync('userInfo') || '';
-			if(userInfo.id){ //已经登陆过
-				//更新登陆状态
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						this.login(res.data);
-					}
-				});
-			}
-			/* =========== end login ========== */
+		async onLaunch() {
 			uni.getSystemInfo({
 				success: function(e) {
 					// #ifndef MP
@@ -44,6 +32,21 @@
 					// #endif
 				}
 			})
+			/* =========== start login ======== */
+			let userInfo = uni.getStorageSync('userInfo') || '';
+			if(userInfo.id){ //已经登陆过
+				let ck = await this.$request.ModelUser.ckToken(userInfo.token);
+				//更新登陆状态
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						if(ck.code == 'ok' && ck.message == 'true'){
+							this.login(res.data);
+						}
+					}
+				});
+			}
+			/* =========== end login ========== */
 		},
 		onShow: function() {
 			console.log('App Show')

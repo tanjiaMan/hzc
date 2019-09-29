@@ -25,6 +25,9 @@ const post = (url, data, opt) => {
 			method: 'POST',
 			header: header,
 			success: (res) => {
+				if(res.data && res.data.code == '10210008' || res.data.code == '10510010'){
+					store.commit('logout');
+				}
 				uni.hideLoading();
 				resolve(res.data);
 			},
@@ -59,6 +62,9 @@ const get = (url, opt) => {
 			method: 'GET',
 			header: header,
 			success: (res) => {
+				if(res.data && res.data.code == '10210008' || res.data.code == '10510010'){
+					store.commit('logout');
+				}
 				uni.hideLoading();
 				resolve(res.data);
 			},

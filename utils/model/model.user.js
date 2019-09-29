@@ -13,5 +13,11 @@ export default{
 		let url = config.api + '/h5/user/bindMobile';
 		let result = await request.post(url,data,{});
 		return result;
+	},
+	
+	async ckToken(token){
+		let url = config.api + '/h5/auth/user/check-token?token='+token;
+		let result = await request.get(url,{});
+		return result;
 	}
 }

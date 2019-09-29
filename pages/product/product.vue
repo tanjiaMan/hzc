@@ -17,7 +17,9 @@
 		</view>
 		
 		<view class="tg_frame">
-			<span class="tag">团购价</span><span class="now_price">¥ {{goods.price}}</span><span class="org_price">¥ {{goods.originPrice}}</span>
+			<span class="tag">团购价</span>
+			<span class="now_price">¥ {{goods.price}}</span>
+			<!-- <span class="org_price">¥ {{goods.originPrice}}</span> -->
 		</view>
 		
 		<view class="introduce-section">
