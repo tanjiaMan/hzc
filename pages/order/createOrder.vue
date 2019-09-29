@@ -160,6 +160,7 @@
 					this.$api.msg('请选择收货地址');
 					return;
 				}
+				this.productparam.addressId = this.addressData.id;
 				let result = await this.$request.ModelOrder.createOrder(this.productparam);
 				if(result.orderNum){
 					uni.redirectTo({
