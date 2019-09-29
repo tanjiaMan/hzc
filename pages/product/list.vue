@@ -10,15 +10,15 @@
 			<view class="nav-item" :class="{current: filterIndex === 2}" @click="tabClick(2)">
 				<text>价格</text>
 				<view class="p-box">
-					<text :class="{active: direction === true && filterIndex === 2}" class="yticon icon-shang"></text>
-					<text :class="{active: direction === false && filterIndex === 2}" class="yticon icon-shang xia"></text>
+					<text :class="{active: direction === false && filterIndex === 2}" class="yticon icon-shang"></text>
+					<text :class="{active: direction === true && filterIndex === 2}" class="yticon icon-shang xia"></text>
 				</view>
 			</view>
 			<view class="nav-item" :class="{current: filterIndex === 1}" @click="tabClick(1)">
 				销量
 				<view class="p-box">
-					<text :class="{active: direction === true && filterIndex === 1}" class="yticon icon-shang"></text>
-					<text :class="{active: direction === false && filterIndex === 1}" class="yticon icon-shang xia"></text>
+					<text :class="{active: direction === false && filterIndex === 1}" class="yticon icon-shang"></text>
+					<text :class="{active: direction === true && filterIndex === 1}" class="yticon icon-shang xia"></text>
 				</view>
 			</view>
 			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>

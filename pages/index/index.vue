@@ -1010,10 +1010,8 @@
 				width:0;
 				height:0;
 				position:absolute;
-				top:3rpx;
 				z-index:999;
 				border-right:47rpx solid transparent;
-				margin-left:4rpx;
 			}
 			
 			.bk_index_0{
