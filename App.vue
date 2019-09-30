@@ -9,7 +9,7 @@
 		methods: {
 			...mapMutations(['login']),
 		},
-		async onLaunch() {
+		onLaunch() {
 			uni.getSystemInfo({
 				success: function(e) {
 					// #ifndef MP
@@ -34,17 +34,10 @@
 			})
 			/* =========== start login ======== */
 			let userInfo = uni.getStorageSync('userInfo') || '';
+			console.log('userInfo',userInfo);
 			if(userInfo.id){ //已经登陆过
-				let ck = await this.$request.ModelUser.ckToken(userInfo.token);
-				//更新登陆状态
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						if(ck.code == 'ok' && ck.message == 'true'){
-							this.login(res.data);
-						}
-					}
-				});
+				userInfo['firstToken'] = true;
+				this.login(userInfo,new Date());
 			}
 			/* =========== end login ========== */
 		},

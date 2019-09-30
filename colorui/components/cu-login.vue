@@ -31,11 +31,27 @@
 			};
 		},
 		name: 'cu-login',
-		mounted() { //初始化信息
+		async mounted() { //初始化信息
 			if(this.hasLogin){
-				this.state = 3;
-				return;
+				if(this.userInfo.firstToken && this.userInfo.firstToken == true){
+					//校验token
+					let ck = await this.$request.ModelUser.ckToken(this.userInfo.token);
+					console.log('ck token',ck);
+					if(ck.code == 'ok' && ck.message == 'true'){
+						this.userInfo.firstToken = false;
+						this.login(this.userInfo);
+						this.state = 3;
+						return;
+					}else{
+						this.state = 1;
+						return;
+					}
+				}else{
+					this.state = 3;
+					return;
+				}
 			}
+
 			//没登陆
 			var that = this;
 			uni.login({

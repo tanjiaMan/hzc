@@ -81,7 +81,7 @@ export default{
 	async listOrder(data){ //订单列表
 		let url = config.api + `/h5/order/list`;
 		let result = await request.post(url,data,{});
-		return result;
+		return result && result.data;
 	},
 	
 	async getOrderCoupons(data){ //优惠券列表

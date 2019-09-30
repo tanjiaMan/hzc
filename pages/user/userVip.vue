@@ -30,8 +30,13 @@
 		
 		<!-- 我的订单 -->
 		<view class="my-order">
-			<view class="title">
-				我的订单
+			<view class="uni-flex uni-row">
+				<view class="flex-item title">
+					我的订单
+				</view>
+				<view class="flex-item alltitle" @click="navTo('/pages/order/order?state=0')">
+					全部订单
+				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=1')">
@@ -42,11 +47,11 @@
 					<img src="https://pic.youx365.com/user_2.png" />
 					<view class="tit">待发货</view>
 				</view>
-				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=2')" >
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
 					<img src="https://pic.youx365.com/user_3.png" />
 					<view class="tit">待收货</view>
 				</view>
-				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
 					<img src="https://pic.youx365.com/user_4.png" />
 					<view class="tit">评价</view>
 				</view>
@@ -394,6 +399,17 @@
 				font-family:SourceHanSansCN;
 				font-weight:500;
 				color:rgba(51,51,51,1);
+				padding: 28rpx 32rpx 16rpx 32rpx;
+				width: 50%;
+			}
+			
+			.alltitle{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+				width: 50%;
+				text-align: right;
 				padding: 28rpx 32rpx 16rpx 32rpx;
 			}
 			

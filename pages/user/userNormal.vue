@@ -34,7 +34,7 @@
 				<view class="flex-item title">
 					我的订单
 				</view>
-				<view class="flex-item alltitle" @click="navTo('/pages/order/order')">
+				<view class="flex-item alltitle" @click="navTo('/pages/order/order?state=0')">
 					全部订单
 				</view>
 			</view>
@@ -47,11 +47,11 @@
 					<img src="https://pic.youx365.com/user_2.png" />
 					<view class="tit">待发货</view>
 				</view>
-				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=2')" >
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
 					<img src="https://pic.youx365.com/user_3.png" />
 					<view class="tit">待收货</view>
 				</view>
-				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
+				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
 					<img src="https://pic.youx365.com/user_4.png" />
 					<view class="tit">评价</view>
 				</view>

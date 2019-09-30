@@ -4,7 +4,7 @@
 			<view 
 				v-for="(item, index) in navList" :key="index" 
 				class="nav-item" 
-				:class="{current: tabCurrentIndex === index}"
+				:class="{current: tabCurrentIndex == index}"
 				@click="tabClick(index)"
 			>
 				{{item.text}}
@@ -27,51 +27,50 @@
 						class="order-item"
 					>
 						<view class="i-top b-b">
-							<text class="time">{{item.time}}</text>
+							<text class="time">订单编号: {{item.orderNum}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
 							<text 
-								v-if="item.state===9" 
+								v-if="item.payStatus== -10" 
 								class="del-btn yticon icon-iconfontshanchu1"
 								@click="deleteOrder(index)"
 							></text>
 						</view>
 						
-						<scroll-view v-if="item.goodsList.length > 1" class="goods-box" scroll-x @click="navTo('/pages/order/orderDetail')">
+						<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x @click="navTo('/pages/order/orderDetail?id='+ item.id)">
 							<view
-								v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+								v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 								class="goods-item"
 							>
-								<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
+								<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view 
-							v-if="item.goodsList.length === 1" 
+							v-if="item.orderDetails.length == 1" 
 							class="goods-box-single"
-							v-for="(goodsItem, goodsIndex) in item.goodsList" :key="goodsIndex"
+							v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 							@click="navTo('/pages/order/orderDetail')"
 						>
-							<image class="goods-img" :src="goodsItem.image" mode="aspectFill"></image>
+							<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
 							<view class="right">
-								<text class="title clamp">{{goodsItem.title}}</text>
-								<text class="attr-box">{{goodsItem.attr}}  x {{goodsItem.number}}</text>
-								<text class="price">{{goodsItem.price}}</text>
+								<text class="title clamp">{{goodsItem.product.name}}</text>
+								<text class="attr-box">{{goodsItem.product.specificationName != null? goodsItem.product.specificationName:''}}  x {{goodsItem.quantity}}</text>
+								<text class="price">{{goodsItem.productPrice}}</text>
 							</view>
 						</view>
 						
 						<view class="price-box">
 							共
-							<text class="num">7</text>
-							件商品 实付款
-							<text class="price">143.7</text>
+							<text class="num">{{item.totalQuantity}}</text>
+							件商品 合计
+							<text class="price">{{item.totalPrice}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.state != 9">
+						<view class="action-box b-t" v-if="item.payStatus != -10">
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
 							<button class="action-btn recom">立即支付</button>
 						</view>
 					</view>
 					 
 					<uni-load-more :status="tabItem.loadingType"></uni-load-more>
-					
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -94,57 +93,44 @@
 						state: 0,
 						text: '全部',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						payState: null,
 					},
 					{
 						state: 1,
 						text: '待付款',
 						loadingType: 'more',
-						orderList: []
-					},
-					{
-						state: 5,
-						text: '待发货',
-						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						payState: 0,
 					},
 					{
 						state: 2,
-						text: '待收货',
+						text: '待发货',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						payState: 20
 					},
 					{
 						state: 3,
-						text: '待评价',
+						text: '待收货',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						payState: 40
 					},
 					{
 						state: 4,
-						text: '售后',
+						text: '待评价',
 						loadingType: 'more',
-						orderList: []
+						orderList: [],
+						payState: 60
 					}
 				],
 			};
 		},
 		
 		onLoad(options){
-			/**
-			 * 修复app端点击除全部订单外的按钮进入时不加载数据的问题
-			 * 替换onLoad下代码即可
-			 */
-			this.tabCurrentIndex = +options.state;
-			// #ifndef MP
+			this.tabCurrentIndex = options.state;
 			this.loadData()
-			// #endif
-			// #ifdef MP
-			if(options.state == 0){
-				this.loadData()
-			}
-			// #endif
-			
 		},
 		 
 		methods: {
@@ -154,12 +140,13 @@
 				})  
 			},
 			//获取订单列表
-			loadData(source){
+			async loadData(source){
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
-				let state = navItem.state;
-				
+				if(navItem.loadingType == 'noMore'){
+					return;
+				}
 				if(source === 'tabChange' && navItem.loaded === true){
 					//tab切换只有第一次需要加载数据
 					return;
@@ -171,36 +158,40 @@
 				
 				navItem.loadingType = 'loading';
 				
-				setTimeout(()=>{
-					let orderList = Json.orderList.filter(item=>{
-						//添加不同状态下订单的表现形式
-						item = Object.assign(item, this.orderStateExp(item.state));
-						//演示数据所以自己进行状态筛选
-						if(state === 0){
-							//0为全部订单
-							return item;
-						}
-						return item.state === state
-					});
-					orderList.forEach(item=>{
-						navItem.orderList.push(item);
-					})
-					//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
-					this.$set(navItem, 'loaded', true);
-					
-					//判断是否还有数据， 有改为 more， 没有改为noMore 
-					navItem.loadingType = 'more';
-				}, 600);	
+				let values = {needDetail: true};
+				if(navItem.payState != null){
+					values['payStatus'] = navItem.payState;
+				}
+				let orderList = await this.$request.ModelOrder.listOrder(values);
+				
+				orderList.forEach(item=>{
+					item = Object.assign(item, this.orderStateExp(item.payStatus));
+					navItem.orderList.push(item);
+				})
+				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
+				this.$set(navItem, 'loaded', true);
+				
+				//判断是否还有数据， 有改为 more， 没有改为noMore 
+				navItem.loadingType = 'noMore'; //TODO
+				this.navList[index] = navItem;
+				console.log('this.navList[index]',this.navList[index]);
 			}, 
 
 			//swiper 切换
 			changeTab(e){
+				if(this.tabCurrentIndex == e.target.current){
+					return;
+				}
 				this.tabCurrentIndex = e.target.current;
-				this.loadData('tabChange');
+				this.loadData();
 			},
 			//顶部tab点击
 			tabClick(index){
+				if(this.tabCurrentIndex == index){
+					return;
+				}
 				this.tabCurrentIndex = index;
+				this.loadData();
 			},
 			//删除订单
 			deleteOrder(index){
@@ -239,15 +230,20 @@
 				let stateTip = '',
 					stateTipColor = '#fa436a';
 				switch(+state){
-					case 1:
-						stateTip = '待付款'; break;
-					case 2:
-						stateTip = '待发货'; break;
-					case 9:
-						stateTip = '订单已关闭'; 
+					case -10:
+						stateTip = '订单已关闭';
 						stateTipColor = '#909399';
 						break;
-						
+					case 0:
+						stateTip = '待付款';break;
+					case 20:
+						stateTip = '待发货'; break;
+					case 40:
+						stateTip = '待收货'; break;
+					case 60:
+						stateTip = '已收货';break;
+					case 80:
+						stateTip = '待评价';break;
 					//更多自定义
 				}
 				return {stateTip, stateTipColor};
@@ -313,7 +309,10 @@
 		flex-direction: column;
 		padding-left: 30upx;
 		background: #fff;
-		margin-top: 16upx;
+		margin: 16rpx auto 0;
+		width: 710rpx;
+		border-radius: 10rpx;
+		
 		.i-top{
 			display: flex;
 			align-items: center;
