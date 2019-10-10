@@ -427,7 +427,7 @@
 		},
 		onShareAppMessage() { //设置分享
 			return {
-				title: '欢迎来到玺盟优选',
+				title: '欢迎来到社集优选',
 				path: '/pages/product/product?id='+this.goods.id + '&inviteUserId=' + this.userInfo.id
 			}
 		},

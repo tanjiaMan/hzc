@@ -1,9 +1,10 @@
 <template>
-	<view>
+	<view class="login-frame">
 		<uni-popup ref="popup" type="center" :maskClick="false">
-			<view>
-				<button v-if="state == 1" type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">同意授权微信登陆</button>
-				<button v-if="state == 2" type="warn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意绑定手机号</button>
+			<view >
+				<button v-if="state == 1" type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">点击微信授权登陆</button>
+				<button v-if="state == 1" type="warn" style="margin-top: 10px;" @click="cancel">取消登陆</button>
+				<button v-if="state == 2" type="warn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">绑定手机号</button>
 			</view>
 		</uni-popup>
 	</view>
@@ -122,11 +123,14 @@
 				}else{
 					this.$api.msg(result.msg);
 				}
+			},
+			cancel(){
+				this.$refs['popup'].close();
 			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	
 </style>

@@ -3,7 +3,7 @@
 		<view class="cu-custom cu-custom-search" :style="[{height:CustomBar + 'px'}]">
 			<view class="cu-bar fixed" :style="style" :class="[bgImage!=''?'none-bg text-white bg-img':'',bgColor]">
 				<view class="action shop-name">
-					玺盟优选
+					社集优选
 				</view>
 				<view class="input-view">
 					<uni-icon type="search" size="16" color="#fff" style="height: 0px !important;line-height: 30px;" ></uni-icon>

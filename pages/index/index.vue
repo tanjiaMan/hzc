@@ -111,6 +111,48 @@
 						</scroll-view>
 					</view>
 					
+					<!-- start 砍价专区 -->
+					<!-- <view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
+						<view class="tit-frame">
+							<text class="tit">砍价专区</text>
+							<text class="tit1">|</text>
+							<text class="tit2">亲友砍价，免费拿</text>
+						</view>
+						<img src="https://pic.youx365.com/goods.png" />
+						<view class="tit-frame">
+							<text class="tit3">更多</text>
+						</view>
+					</view>
+					<view class="tg-floor" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
+						<uni-swiper-dot :info="newsitems[TabCur].groupbuy" :current="tgCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
+								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
+									<view class="tg-list">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
+											<view class="tg-img flex-item">
+												<img :src="o.coverPicUrl" />
+											</view>
+											<view class="tg-text flex-item">
+												<view class="tit1">{{o.productName}}</view>
+												<view class="uni-flex uni-row">
+													<view class="flex-item tit2">￥ {{o.groupbuyPrice}}</view>
+													<view class="flex-item tit3">已拼{{o.joinOpenedCount}}件</view>
+												</view>
+												<view class="uni-flex uni-row">
+													<view class="flex-item pic1">
+														<view class="cu-avatar round" v-for="(item,index) in o.latestJoinedAvatars" :key="index" :style="[{ backgroundImage:'url(' + item + ')' }]"></view>
+													</view>
+													<view class="flex-item tit4">等购买了此商品</view>
+												</view>
+											</view>
+										</view>
+									</view>
+								</swiper-item>
+							</swiper>
+						</uni-swiper-dot>
+					</view> -->
+					<!-- end 砍价专区 -->
+					
 					<!-- start 团购优惠 -->
 					<view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
 						<view class="tit-frame">
@@ -310,15 +352,32 @@
 				
 				//团购优惠
 				let groupbuy = await this.$request.ModelHome.getGroupBuy({classifyPid: pid,pageSize:9});
-				this.tgFrameHeight = 'height: 0rpx !important;'
+				
+				this.tgFrameHeight = 'height: 0px !important;'
+				
 				if(groupbuy && groupbuy.records && groupbuy.records.length>0){
 					//高度 3个： 760,2: 520, 1:  140 rpx
 					if(groupbuy.records.length == 1){
+						// #ifndef H5
 						this.tgFrameHeight = 'height: 260rpx !important;'
+						// #endif
+						// #ifdef H5
+						this.tgFrameHeight = 'height: 130px !important;'
+						// #endif
 					}else if(groupbuy.records.length == 2){
+						// #ifndef H5
 						this.tgFrameHeight = 'height: 520rpx !important;'
+						// #endif
+						// #ifdef H5
+						this.tgFrameHeight = 'height: 260px !important;'
+						// #endif
 					}else{
-						this.tgFrameHeight = 'height: 760rpx !important;'	
+						// #ifndef H5
+						this.tgFrameHeight = 'height: 760rpx !important;'
+						// #endif
+						// #ifdef H5
+						this.tgFrameHeight = 'height: 380px !important;'
+						// #endif
 					}
 					let info = [],temp = [];
 					let index = 0;
@@ -456,7 +515,7 @@
 		// #endif
 		onShareAppMessage() { //设置分享
 			return {
-				title: '欢迎来到玺盟优选',
+				title: '欢迎来到社集优选',
 				path: '/pages/index/index?inviteUserId=' + this.userInfo.id
 			}
 		},
@@ -698,7 +757,7 @@
 			align-items:center;
 			line-height: 1;
 			position:absolute;
-			margin-top:-76rpx;
+			margin-top:-68rpx;
 			margin-left:96px;
 			
 			>img{

@@ -64,9 +64,19 @@
 							件商品 合计
 							<text class="price">{{item.totalPrice}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.payStatus != -10">
+						<view class="action-box b-t" v-if="item.payStatus == 0"> <!-- 待付款  -->
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
 							<button class="action-btn recom">立即支付</button>
+						</view>
+						<view class="action-box b-t" v-if="item.payStatus == 20"> <!-- 待发货  -->
+							
+						</view>
+						<view class="action-box b-t" v-if="item.payStatus == 40"> <!-- 待收货  -->
+							<button class="action-btn">查看物流</button>
+							<button class="action-btn recom">确认收货</button>
+						</view>
+						<view class="action-box b-t" v-if="item.payStatus == 60"> <!-- 待评价  -->
+							<button class="action-btn recom">去评价</button>
 						</view>
 					</view>
 					 
@@ -95,6 +105,8 @@
 						loadingType: 'more',
 						orderList: [],
 						payState: null,
+						pageSize: 10,
+						pageIndex: 1
 					},
 					{
 						state: 1,
@@ -102,27 +114,35 @@
 						loadingType: 'more',
 						orderList: [],
 						payState: 0,
+						pageSize: 10,
+						pageIndex: 1
 					},
 					{
 						state: 2,
 						text: '待发货',
 						loadingType: 'more',
 						orderList: [],
-						payState: 20
+						payState: 20,
+						pageSize: 10,
+						pageIndex: 1
 					},
 					{
 						state: 3,
 						text: '待收货',
 						loadingType: 'more',
 						orderList: [],
-						payState: 40
+						payState: 40,
+						pageSize: 10,
+						pageIndex: 1
 					},
 					{
 						state: 4,
 						text: '待评价',
 						loadingType: 'more',
 						orderList: [],
-						payState: 60
+						payState: 60,
+						pageSize: 10,
+						pageIndex: 1
 					}
 				],
 			};
@@ -158,12 +178,12 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {needDetail: true};
+				let values = {needDetail: true,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
 				if(navItem.payState != null){
 					values['payStatus'] = navItem.payState;
 				}
-				let orderList = await this.$request.ModelOrder.listOrder(values);
-				
+				let result = await this.$request.ModelOrder.listOrder(values);
+				let orderList = result.records;
 				orderList.forEach(item=>{
 					item = Object.assign(item, this.orderStateExp(item.payStatus));
 					navItem.orderList.push(item);
@@ -172,7 +192,13 @@
 				this.$set(navItem, 'loaded', true);
 				
 				//判断是否还有数据， 有改为 more， 没有改为noMore 
-				navItem.loadingType = 'noMore'; //TODO
+				if(orderList.length < navItem.pageSize){
+					navItem.loadingType = 'noMore';
+				}else{
+					navItem.loadingType = 'more'; 
+				}
+				
+				navItem.pageIndex = navItem.pageIndex + 1;
 				this.navList[index] = navItem;
 				console.log('this.navList[index]',this.navList[index]);
 			}, 
