@@ -14,6 +14,11 @@
 					</view>
 					<text class="mobile">13659847589</text>
 				</view>
+				<view class="flex-item d_4">
+					<view class="shopper">
+						申请店主
+					</view>
+				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
 						<view class="flex-item d-avatar">
@@ -40,23 +45,23 @@
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=1')">
-					<img src="https://pic.youx365.com/user_1.png" />
+					<img src="https://pic.youx365.com/user_vip_1.png" />
 					<view class="tit">待付款</view>
 				</view>
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=2')" >
-					<img src="https://pic.youx365.com/user_2.png" />
+					<img src="https://pic.youx365.com/user_vip_2.png" />
 					<view class="tit">待发货</view>
 				</view>
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=3')" >
-					<img src="https://pic.youx365.com/user_3.png" />
+					<img src="https://pic.youx365.com/user_vip_3.png" />
 					<view class="tit">待收货</view>
 				</view>
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
-					<img src="https://pic.youx365.com/user_4.png" />
+					<img src="https://pic.youx365.com/user_vip_4.png" />
 					<view class="tit">评价</view>
 				</view>
 				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
-					<img src="https://pic.youx365.com/user_5.png" />
+					<img src="https://pic.youx365.com/user_vip_5.png" />
 					<view class="tit">售后</view>
 				</view>
 			</view>
@@ -65,18 +70,33 @@
 		<!-- 钱包 -->
 		<view class="user-money">
 			<text class="num">5400</text>
-			<view class="desc" @click="navTo('/pages/user/money')">
-				<img src="https://pic.youx365.com/user_money.png" />
-				我的钱包
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
+					<img src="https://pic.youx365.com/user_vip_money.png" />
+					我的代金券
+				</view>
+				<view style="width: 50%;">
+					<view class="rechargebt">去充值</view>
+				</view>
+			</view>
+			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
+				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
+					<view class="tit1">可提现收益</view>
+					<view class="tit2">￥85260.00</view>
+				</view>
+				<view class="flex-item" style="width: 50%;">
+					<view class="tit1">即将到账</view>
+					<view class="tit2">￥15860.00</view>
+				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
 					<view class="tit1">今日收入</view>
-					<view class="tit2">860.00</view>
+					<view class="tit2">￥8160.00</view>
 				</view>
 				<view class="flex-item" style="width: 50%;">
 					<view class="tit1">本月收入</view>
-					<view class="tit2">1860.00</view>
+					<view class="tit2">￥111860.00</view>
 				</view>
 			</view>
 		</view>
@@ -147,33 +167,39 @@
 			<uni-grid :column="4" :square="false" :show-border="false" :highlight="false" >
 			    <uni-grid-item>
 					<button class="contract-btn" open-type="contact" @contact="handleContact" style="line-height: initial;">
-						<img class="tit1" src="https://pic.youx365.com/usr_o_1.png" />
+						<img class="tit1" src="https://pic.youx365.com/uvip_o_1.png" />
 						<view class="tit2">公司客服</view>
 					</button>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/usr_o_2.png" />
+			       <img class="tit1" src="https://pic.youx365.com/uvip_o_2.png" />
 			       <view class="tit2">关于我们</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/usr_o_3.png" />
+			       <img class="tit1" src="https://pic.youx365.com/uvip_o_3.png" />
 			       <view class="tit2">帮助中心</view>
 			    </uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_4.png" />
+				   <img class="tit1" src="https://pic.youx365.com/uvip_o_4.png" />
 				   <view class="tit2">意见反馈</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_5.png" />
+				   <img class="tit1" src="https://pic.youx365.com/uvip_o_5.png" />
 				   <view class="tit2">邀请好友</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_6.png" />
+				   <img class="tit1" src="https://pic.youx365.com/uvip_o_6.png" />
 				   <view class="tit2">平台客服</view>
 				</uni-grid-item>
 				<uni-grid-item>
+				   <view @click="navTo('/pages/address/address')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/uvip_o_7.png" />
+						<view class="tit2">地址管理</view>
+				   </view>
+				</uni-grid-item>
+				<uni-grid-item>
 					<view @click="navTo('/pages/set/set')" style="line-height: initial;">
-						<img class="tit1" src="https://pic.youx365.com/usr_o_7.png" />
+						<img class="tit1" src="https://pic.youx365.com/uvip_o_8.png" />
 						<view class="tit2">设置</view>
 					</view>
 				</uni-grid-item>
@@ -212,30 +238,30 @@
 			<view class="line"></view>
 			<uni-grid :column="4" :square="false" :show-border="false" :highlight="false" >
 			    <uni-grid-item>
-					<img class="tit1" src="https://pic.youx365.com/user_m_1.png" />
+					<img class="tit1" src="https://pic.youx365.com/uvip_m_1.png" />
 					<view class="tit2">分类管理</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/user_m_2.png" />
+			       <img class="tit1" src="https://pic.youx365.com/uvip_m_2.png" />
 			       <view class="tit2">商品管理</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/user_m_3.png" />
+			       <img class="tit1" src="https://pic.youx365.com/uvip_m_3.png" />
 			       <view class="tit2">订单管理</view>
 			    </uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/user_m_4.png" />
+				   <img class="tit1" src="https://pic.youx365.com/uvip_m_4.png" />
 				   <view class="tit2">评价管理</view>
 				</uni-grid-item>
 				<uni-grid-item>
 					<view @click="navTo('/pages/money/moneymsg')" style="line-height: initial;text-align: center;">
-						<img class="tit1" src="https://pic.youx365.com/user_m_5.png" />
+						<img class="tit1" src="https://pic.youx365.com/uvip_m_5.png" />
 						<view class="tit2">资金管理</view>
 					</view>
 				</uni-grid-item>
 				<uni-grid-item>
 					<view @click="navTo('/pages/user/statement')" style="line-height: initial;text-align: center;">
-						<img class="tit1" src="https://pic.youx365.com/user_m_6.png" />
+						<img class="tit1" src="https://pic.youx365.com/uvip_m_6.png" />
 						<view class="tit2">统计报表</view>
 					</view>
 				</uni-grid-item>
@@ -285,7 +311,7 @@
 		.user-header{
 			width: 100%;
 			height: 301rpx;
-			background-color: #00A390;
+			background-color: #1B1416;
 			
 			.d_1{
 				width: 178rpx;
@@ -301,7 +327,7 @@
 			}
 			
 			.d_2{
-				width: 450rpx;
+				width: 250rpx;
 				height: 198rpx;
 				padding-top: 44rpx;
 				
@@ -309,14 +335,14 @@
 					font-size:32rpx;
 					font-family:SourceHanSansCN;
 					font-weight:500;
-					color:rgba(255,255,255,1);
+					color:rgba(233,211,175,1);
 				}
 				
 				.mobile{
 					font-size:24rpx;
 					font-family:SourceHanSansCN;
 					font-weight:400;
-					color:rgba(255,255,255,1);
+					color:rgba(233,211,175,1);
 				}
 				
 				.user-vip{
@@ -328,7 +354,7 @@
 					font-size:18rpx;
 					font-family:SourceHanSansCN;
 					font-weight:400;
-					color:rgba(255,210,0,1);
+					color:rgba(233,211,175,1);
 					margin-left: 22rpx;
 					padding:0 9rpx 0 9rpx;
 
@@ -337,6 +363,24 @@
 						height: 16rpx;
 						margin-right:5rpx;
 					}
+				}
+			}
+			
+			.d_4{
+				width: 200rpx;
+				padding-top: 50rpx;
+				
+				.shopper{
+					width: 120rpx;
+					height: 58rpx;
+					line-height: 58rpx;
+					background-image: url('https://pic.youx365.com/user_vip_bt.png');
+					font-size:18rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(50,49,52,1);
+					background-size: cover;
+					text-align: center;
 				}
 			}
 			
@@ -387,18 +431,18 @@
 			width: 711rpx;
 			height: 279rpx;
 			margin: -103rpx auto 0;
-			background-color: #fff;
-			border-radius:10rpx;
 			font-size:24rpx;
 			font-family:SourceHanSansCN;
 			font-weight:500;
 			color:rgba(0,0,0,1);
+			background-image: url('https://pic.youx365.com/user_vip_order_bg.png');
+			background-size: cover;
 			
 			.title{
 				font-size:28rpx !important;
 				font-family:SourceHanSansCN;
 				font-weight:500;
-				color:rgba(51,51,51,1);
+				color:rgba(97,64,25,1);
 				padding: 28rpx 32rpx 16rpx 32rpx;
 				width: 50%;
 			}
@@ -407,7 +451,7 @@
 				font-size:24rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(51,51,51,1);
+				color:rgba(97,64,25,1);
 				width: 50%;
 				text-align: right;
 				padding: 28rpx 32rpx 16rpx 32rpx;
@@ -428,7 +472,7 @@
 				font-size:24rpx;
 				font-family:SourceHanSansCN;
 				font-weight:500;
-				color:rgba(0,0,0,1);
+				color:rgba(97,64,25,1);
 			}
 			
 			.d_4{
@@ -439,7 +483,7 @@
 	
 		.user-money{
 			width:711rpx;
-			height:311rpx;
+			height:453rpx;
 			background:rgba(255,255,255,1);
 			border-radius:10rpx;
 			margin: 15rpx auto 0;
@@ -450,17 +494,18 @@
 				font-size:50rpx;
 				font-family:SourceHanSansCN;
 				font-weight:bold;
-				color:rgba(0,0,0,1);
+				color:rgba(97,64,25,1);
 			}
 			
 			.desc{
 				font-size:22rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(0,163,144,1);
+				color:rgba(139,91,30,1);
 				height: 60rpx;
 				line-height: 60rpx;
-				margin-top: -20rpx;
+				padding-right: 10rpx;
+				text-align: right;
 				
 				img{
 					width: 32rpx;
@@ -477,18 +522,31 @@
 				}
 			}
 			
+			.rechargebt{
+				background-image: url('https://pic.youx365.com/user_money_bt.png');
+				background-size: cover;
+				width: 144rpx;
+				height: 48rpx;
+				line-height: 48rpx;
+				font-size:24rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(117,64,0,1);
+				margin: 6rpx 0 0 10rpx;
+			}
+			
 			.tit1{
 				font-size:22rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(102,102,102,1);
+				color:rgba(51,51,51,1);
 			}
 			
 			.tit2{
 				font-size:36rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(0,163,144,1);
+				color:rgba(97,64,25,1);
 				margin-top: -10rpx;
 			}
 		}
@@ -496,9 +554,9 @@
 		.user-coupon{
 			width:711rpx;
 			height:149rpx;
-			background:rgba(255,255,255,1);
-			border-radius:10rpx;
 			margin: 15rpx auto 0;
+			background-image: url('https://pic.youx365.com/user_vip_bg.png');
+			background-size: cover;
 			
 			.d_1{
 				width: 25%;
@@ -510,14 +568,14 @@
 				font-size:22rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(102,102,102,1);
+				color:rgba(97,64,25,1);
 			}
 			
 			.tit2{
 				font-size:36rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(0,0,0,1);
+				color:rgba(97,64,25,1);
 			}
 			
 			.tit3{
@@ -525,12 +583,12 @@
 				width: 128rpx;
 				height: 128rpx;
 				line-height: 128rpx;
-				background-image: url('https://pic.youx365.com/user_sign.png');
+				background-image: url('https://pic.youx365.com/user_vip_sign.png');
 				background-size: cover;
 				font-size:30rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(255,255,255,1);
+				color:rgba(117,64,0,1);
 			}
 		}
 		
@@ -545,7 +603,7 @@
 				font-size:28rpx;
 				font-family:SourceHanSansCN;
 				font-weight:500;
-				color:rgba(0,163,144,1);
+				color:rgba(51,51,51,1);
 				line-height: 80rpx;
 				height: 80rpx;
 				padding-left: 27rpx;
@@ -582,7 +640,7 @@
 				font-size:28rpx;
 				font-family:SourceHanSansCN;
 				font-weight:500;
-				color:rgba(0,163,144,1);
+				color:rgba(51,51,51,1);
 				line-height: 80rpx;
 				height: 80rpx;
 				padding-left: 27rpx;
@@ -682,7 +740,7 @@
 				font-size:28rpx;
 				font-family:SourceHanSansCN;
 				font-weight:500;
-				color:rgba(0,163,144,1);
+				color:rgba(51,51,51,1);
 				line-height: 80rpx;
 				height: 80rpx;
 				padding-left: 27rpx;

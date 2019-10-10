@@ -77,11 +77,11 @@
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
 					<view class="tit1">今日收入</view>
-					<view class="tit2">860.00</view>
+					<view class="tit2">￥860.00</view>
 				</view>
 				<view class="flex-item" style="width: 50%;">
 					<view class="tit1">本月收入</view>
-					<view class="tit2">1860.00</view>
+					<view class="tit2">￥1860.00</view>
 				</view>
 			</view>
 		</view>
