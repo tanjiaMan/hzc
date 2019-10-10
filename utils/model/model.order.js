@@ -73,7 +73,7 @@ export default{
 	},
 	
 	async cancelOrder(ordernum){ //取消订单
-		let url = config.api + `/h5/order/caculate?orderNum=${ordernum}`;
+		let url = config.api + `/h5/order/close?orderNum=${ordernum}`;
 		let result = await request.post(url,{},{});
 		return result;
 	},

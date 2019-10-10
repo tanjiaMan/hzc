@@ -29,14 +29,14 @@
 						<view class="i-top b-b">
 							<text class="time">订单编号: {{item.orderNum}}</text>
 							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
-							<text 
+							<!-- <text 
 								v-if="item.payStatus== -10" 
 								class="del-btn yticon icon-iconfontshanchu1"
 								@click="deleteOrder(index)"
-							></text>
+							></text> -->
 						</view>
 						
-						<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x @click="navTo('/pages/order/orderDetail?id='+ item.id)">
+						<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x @click="navTo('/pages/order/orderDetail?orderNum='+item.orderNum)">
 							<view
 								v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 								class="goods-item"
@@ -48,7 +48,7 @@
 							v-if="item.orderDetails.length == 1" 
 							class="goods-box-single"
 							v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
-							@click="navTo('/pages/order/orderDetail')"
+							@click="navTo('/pages/order/orderDetail?orderNum='+item.orderNum)"
 						>
 							<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
 							<view class="right">
@@ -66,14 +66,14 @@
 						</view>
 						<view class="action-box b-t" v-if="item.payStatus == 0"> <!-- 待付款  -->
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-							<button class="action-btn recom">立即支付</button>
+							<button class="action-btn recom" @click="payOrder(item)">立即支付</button>
 						</view>
 						<view class="action-box b-t" v-if="item.payStatus == 20"> <!-- 待发货  -->
 							
 						</view>
 						<view class="action-box b-t" v-if="item.payStatus == 40"> <!-- 待收货  -->
-							<button class="action-btn">查看物流</button>
-							<button class="action-btn recom">确认收货</button>
+							<button class="action-btn" @click="logistOrder(item)">查看物流</button>
+							<button class="action-btn recom" @click="sureOrder(item)">确认收货</button>
 						</view>
 						<view class="action-box b-t" v-if="item.payStatus == 60"> <!-- 待评价  -->
 							<button class="action-btn recom">去评价</button>
@@ -90,7 +90,7 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import empty from "@/components/empty";
-	import Json from '@/Json';
+	
 	export default {
 		components: {
 			uniLoadMore,
@@ -164,15 +164,19 @@
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];
-				if(navItem.loadingType == 'noMore'){
-					return;
-				}
-				if(source === 'tabChange' && navItem.loaded === true){
-					//tab切换只有第一次需要加载数据
-					return;
-				}
+				
 				if(navItem.loadingType === 'loading'){
 					//防止重复加载
+					return;
+				}
+				
+				if(source === 'tabChange'){ //切换重新刷新
+					navItem.pageIndex = 1;
+					navItem.orderList = [];
+					navItem.loadingType = 'more';
+				}
+				
+				if(navItem.loadingType == 'noMore'){
 					return;
 				}
 				
@@ -209,7 +213,7 @@
 					return;
 				}
 				this.tabCurrentIndex = e.target.current;
-				this.loadData();
+				this.loadData('tabChange');
 			},
 			//顶部tab点击
 			tabClick(index){
@@ -217,40 +221,45 @@
 					return;
 				}
 				this.tabCurrentIndex = index;
-				this.loadData();
+				this.loadData('tabChange');
 			},
-			//删除订单
-			deleteOrder(index){
+			
+			async deleteOrder(index){ //删除订单
 				uni.showLoading({
 					title: '请稍后'
 				})
-				setTimeout(()=>{
-					this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
-					uni.hideLoading();
-				}, 600)
+				let orderItem = this.navList[this.tabCurrentIndex].orderList[index];
+				
+				// await this.$request.ModelOrder
+				
+				this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
+				console.log('delete order',orderItem);
+				uni.hideLoading();
 			},
-			//取消订单
-			cancelOrder(item){
-				uni.showLoading({
-					title: '请稍后'
+			cancelOrder(item){//取消订单
+				var that = this;
+				uni.showModal({
+				    title: '确定取消订单?',
+				    success: function (res) {
+				        if (res.confirm) {
+							that.$request.ModelOrder.cancelOrder(item.orderNum).then(result => {
+								that.loadData('tabChange');
+							});
+				        }
+				    }
+				});
+			},
+			payOrder(item){ //支付订单
+				uni.navigateTo({
+					url: '/pages/money/pay?orderNum='+item.orderNum
 				})
-				setTimeout(()=>{
-					let {stateTip, stateTipColor} = this.orderStateExp(9);
-					item = Object.assign(item, {
-						state: 9,
-						stateTip, 
-						stateTipColor
-					})
-					
-					//取消订单后删除待付款中该项
-					let list = this.navList[1].orderList;
-					let index = list.findIndex(val=>val.id === item.id);
-					index !== -1 && list.splice(index, 1);
-					
-					uni.hideLoading();
-				}, 600)
 			},
-
+			logistOrder(item){ //查看物流
+				
+			},
+			sureOrder(item){ //确认收货
+				
+			},
 			//订单状态文字和颜色
 			orderStateExp(state){
 				let stateTip = '',

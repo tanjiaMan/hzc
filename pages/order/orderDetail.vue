@@ -31,7 +31,6 @@
 		<!-- 商品详情 -->
 		<view class="goods-detail">
 			<view class="goods-list" v-for="item in 3" :key="item">
-				<view class="price">￥29.8</view>
 				<view class="uni-flex uni-row">
 					<view class="flex-item">
 						<image class="img" src="https://pic.youx365.com/wazi2.JPG" mode="aspectFill" />
@@ -40,6 +39,7 @@
 						<view class="name">联想 310S-15 i5-7200U</view>
 						<view class="num">数量：1</view>
 					</view>
+					<view class="flex-item price">￥29.8</view>
 				</view>
 			</view>
 			<view class="line2"></view>
@@ -54,7 +54,7 @@
 			</view>
 			<view class="line2"></view>
 			<view class="d_2">
-				<text class="tit3">已优惠 ￥25</text> <text class="tit4">合计￥199.00</text>
+				<text class="tit3">共 25 件</text> <text class="tit3">已优惠 ￥25</text> <text class="tit4">合计￥199.00</text>
 			</view>
 		</view>
 		<view class="line1"></view>
