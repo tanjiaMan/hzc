@@ -66,7 +66,7 @@
 			</view>
 			
 			<!-- 猜你喜欢 -->
-			<view class="guess-like">
+			<view class="guess-like" v-if="goodsList.length > 0">
 				<view class="header">
 					<img src="https://pic.youx365.com/split-1.png" />
 					<text>猜你喜欢</text>
@@ -76,20 +76,20 @@
 					<view 
 						v-for="(item, index) in goodsList" :key="index"
 						class="guess-item"
-						@click="navToDetailPage(item)"
+						@click="navToDetailPage(item.id)"
 					>
 						<view class="image-wrapper">
-							<image :src="item.image" mode="aspectFill"></image>
+							<image :src="item.coverPicUrl" mode="aspectFill"></image>
 						</view>
 						 <view class="uni-flex uni-row" style="width: 100%;">
 						    <view class="flex-item" style="width: 50%;">
 								<text class="price">￥{{item.price}}</text>
 							</view>
 						    <view class="flex-item" style="width: 50%;text-align: right;">
-								<text class="buysum">2563人已付款</text>
+								<text class="buysum">{{item.orderNums}}人已付款</text>
 							</view>
 						 </view>
-						<text class="title clamp">{{item.title}}</text>
+						<text class="title clamp">{{item.name}}</text>
 					</view>
 				</view>
 			</view>
@@ -181,9 +181,8 @@
 				this.calcTotal();  //计算总价
 				
 				/* 猜你喜欢 */
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
-				
+				let goodsList = await this.$request.ModelHome.getGoodsRecommend();
+				this.goodsList = goodsList.records || [];
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -192,6 +191,12 @@
 			//监听image加载失败
 			onImageError(key, index) {
 				this[key][index].image = '/static/errorImage.jpg';
+			},
+			//详情页
+			navToDetailPage(id) {
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
 			},
 			navToLogin(){
 				uni.navigateTo({

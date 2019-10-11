@@ -171,6 +171,11 @@
             "style" : {
 				"navigationBarTitleText": "短视频"
 			}
+        },{
+            "path" : "pages/user/shopcert",
+            "style" : {
+				"navigationBarTitleText": "店铺认证"
+			}
         }
     ],
 	"globalStyle": {

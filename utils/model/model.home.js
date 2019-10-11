@@ -57,5 +57,11 @@ export default{
 		let url = config.api + '/h5/product/specification-list?productId='+id;
 		let result = await request.get(url,{});
 		return result && result.data;
-	}
+	},
+	
+	async getGoodsRecommend(){ //获取推荐商品
+		let url = config.api + '/h5/index/goods/recommend';
+		let result = await request.post(url,{},{});
+		return result && result.data;
+	},
 }

@@ -90,7 +90,7 @@
 								<view 
 									v-for="(item, index) in newsitems[TabCur].seckill" :key="index"
 									class="floor-item"
-									@click="navToDetailPage(item.id)"
+									@click="navToDetailPage(item.productId)"
 								>
 									<image :src="item.coverPicUrl" mode="aspectFill"></image>
 									<text class="title clamp">{{item.productName}}</text>
@@ -170,7 +170,7 @@
 							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId)">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>

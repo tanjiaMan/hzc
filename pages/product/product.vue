@@ -159,19 +159,20 @@
 						<view
 								v-for="(item, index) in goodsList" :key="index"
 								class="floor-item"
+								@click="navToDetailPage(item.id)"
 							>
 								<view class="image-wrapper">
-									<image :src="item.image" lazy-load=true mode="aspectFill"></image>
+									<image :src="item.coverPicUrl" lazy-load=true mode="aspectFill"></image>
 								</view>
 								 <view class="uni-flex uni-row" style="width: 100%;">
 								    <view class="flex-item" style="width: 50%;">
 										<text class="price">￥{{item.price}}</text>
 									</view>
 								    <view class="flex-item" style="width: 50%;text-align: right;">
-										<text class="buysum">2563人已付款</text>
+										<text class="buysum">{{item.orderNums}}人已付款</text>
 									</view>
 								</view>
-								<text class="title clamp">{{item.title}}</text>
+								<text class="title clamp">{{item.name}}</text>
 						</view>
 					</view>
 				</scroll-view>
@@ -344,6 +345,12 @@
 					url
 				})  
 			},
+			//详情页
+			navToDetailPage(id) {
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
+			},
 			async dataLoad(id){
 				//加载商品详情
 				this.goods = await this.$request.ModelHome.getGoodsDetail(id);
@@ -374,8 +381,8 @@
 				// this.findGoodsStock();
 				
 				//推荐商品列表
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
+				let goodsList = await this.$request.ModelHome.getGoodsRecommend();
+				this.goodsList = goodsList.records || [];
 			},
 			async buyNow(){
 				let goods = this.goods;
