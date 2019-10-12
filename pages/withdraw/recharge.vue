@@ -2,10 +2,7 @@
 	<view class="container">
 		<view class="uni-flex uni-row" style="width: 100%;">
 			<view class="flex-item titmy">
-				可提现金额 <text style="color: #FF443F;">￥20000.00</text> 元
-			</view>
-			<view class="flex-item tit1">
-				全部提现
+				充值金额
 			</view>
 		</view>
 		<view class="uni-flex uni-row d_1">
@@ -13,24 +10,39 @@
 				<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
 			</view>
 			<view class="flex-item d_3">
-				<input value="" class="input" type="number" placeholder="请输入提现金额" placeholder-style="color:#CACACA;font-size:13px;" />
+				<input value="" class="input" type="number" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
 			</view>
 			<view class="flex-item d_4">
 				元
 			</view>
 		</view>
-		<view class="tit2">
-			提现须知：
-		</view>
-		<view class="tit3">
-			本次提现金额将直接从账户余额扣除，提现的金额方式为微信零钱转账，提现申请成功后工作人员将会在1-7个工作日内进行审核操作，请耐心等待。
+		
+		<view class="pay-type-list">
+			<view class="type-item b-b" @click="changePayType(1)">
+				<img src="https://pic.youx365.com/pay-wx.png" />
+				<view class="con">
+					<text class="tit">微信支付</text>
+					<text>亿万用户的选择，更快更安全</text>
+				</view>
+				<view
+					class="yticon icon-xuanzhong2 checkbox"
+					:class="payType == 1? 'checked':''"
+				></view>
+			</view>
+			<!-- <view class="type-item" @click="changePayType(3)">
+				<img src="https://pic.youx365.com/pay-yue.png" />
+				<view class="con">
+					<text class="tit">余额支付（¥198.5）</text>
+				</view>
+				<view
+					class="yticon icon-xuanzhong2 checkbox"
+					:class="payType == 3? 'checked':''"
+				></view>
+			</view> -->
 		</view>
 		
 		<view class="bt1">
-			立即提现
-		</view>
-		<view class="bt2" @click="navTo('/pages/withdraw/record')">
-			提现记录
+			立即充值
 		</view>
 	</view>
 </template>
@@ -40,7 +52,7 @@
 	export default {
 		data() {
 			return {
-				
+				payType: 1,
 			};
 		},
 		methods:{
@@ -48,7 +60,11 @@
 				uni.navigateTo({  
 					url
 				})  
-			}, 
+			},
+			//选择支付方式
+			changePayType(type) {
+				this.payType = type;
+			}
 		}
 	}
 </script>
@@ -158,7 +174,7 @@
 			background-image: url('https://pic.youx365.com/withdraw_bt.png');
 			background-size: cover;
 			text-align: center;
-			margin: 90rpx auto 20rpx;
+			margin: 140rpx auto 20rpx;
 		}
 		
 		.bt2{
@@ -171,6 +187,72 @@
 			line-height: 100rpx;
 			text-align: center;
 			margin: 0 auto;
+		}
+	}
+	
+	.pay-type-list {
+		background-color: #fff;
+		padding-left: 30rpx;
+		margin-top: 104rpx;
+		
+		.type-item{
+			height: 120upx;
+			padding: 20upx 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-right: 60upx;
+			position:relative;
+			font-size:32rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			
+			img{
+				height: 60rpx;
+				width: 60rpx;
+				margin-right: 19rpx;
+			}
+		}
+		
+		.icon{
+			width: 100upx;
+			font-size: 52upx;
+		}
+		.icon-erjiye-yucunkuan {
+			color: #fe8e2e;
+		}
+		.icon-weixinzhifu {
+			color: #36cb59;
+		}
+		.icon-alipay {
+			color: #01aaef;
+		}
+		.tit{
+			font-size:26rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(51,51,51,1);
+		}
+		.con{
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			font-size:20rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(130,130,130,1);
+		}
+		
+		.checkbox{
+			font-size: 56rpx;
+			color: $font-color-disabled;
+			background:#fff;
+			border-radius: 50px;
+			height: 100%;
+		}
+		.checkbox.checked{
+			color: #00A390;
 		}
 	}
 </style>

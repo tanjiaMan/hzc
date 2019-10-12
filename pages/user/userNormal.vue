@@ -71,7 +71,7 @@
 					我的代金券
 				</view>
 				<view style="width: 50%;">
-					<view class="rechargebt">去充值</view>
+					<view class="rechargebt" @click="navTo('/pages/withdraw/recharge')">去充值</view>
 				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">

@@ -128,11 +128,15 @@
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "商品列表"
 			}
-        }
-		,{
+        },{
 		    "path" : "pages/withdraw/withdraw",
 		    "style" : {
 				"navigationBarTitleText": "申请提现"
+			}
+		},{
+		    "path" : "pages/withdraw/recharge",
+		    "style" : {
+				"navigationBarTitleText": "代金券充值"
 			}
 		}
 		,{
