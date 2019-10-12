@@ -12,7 +12,7 @@
 				历史转增列表
 			</view>
 			<view class="v-cotent">
-				<uni-swipe-action class="v-item" :options="options1" @click="bindClick(index)" v-for="(item,index) in 4" :key="index">
+				<uni-swipe-action :options="options1" @click="bindClick(index)" v-for="(item,index) in 4" :key="index">
 					<view class="uni-flex uni-row">
 						<view class="flex-item d-img">
 							<img class="img" src="https://pic.youx365.com/withdraw_money.png"  />
@@ -88,7 +88,13 @@
 		width: 690rpx;
 		margin: 0 auto;
 		
-		.v-item{
+		/deep/ .uni-swipe-action{
+			margin-top: 20rpx;
+			padding-bottom: 20rpx;
+			border-bottom: solid 1px #E5E5E5;
+		}
+		
+		.uni-swipe-action{
 			margin-top: 20rpx;
 			padding-bottom: 20rpx;
 			border-bottom: solid 1px #E5E5E5;

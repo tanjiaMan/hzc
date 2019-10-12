@@ -4,12 +4,22 @@
 			<view class="tit1">5400.00</view>
 			<view class="tit2">
 				<img src="https://pic.youx365.com/money_logo.png" />
-				<text>账户余额</text>
+				<text>代金券</text>
 			</view>
-			<view class="tit3" @click="navTo('/pages/withdraw/withdraw')">去提现</view>
+		</view>
+		<view class="button uni-flex uni-row">
+			<view class="flex-item" style="width: 33%;">
+				<view class="bt bt1">转账</view>
+			</view>
+			<view class="flex-item" style="width: 33%;">
+				<view class="bt bt2" @click="navTo('/pages/withdraw/recharge')">充值</view>
+			</view>
+			<view class="flex-item" style="width: 33%;">
+				<view class="bt bt3" @click="navTo('/pages/withdraw/withdraw')">提现</view>
+			</view>
 		</view>
 		<view class="tab_title">
-			余额明细
+			代金券明细
 		</view>
 		<view class="tab_detail">
 			<view class="tab_item uni-flex uni-row" v-for="item in 10" :key="item">
@@ -125,6 +135,40 @@
 		
 	}
 	
+	.button{
+		position: fixed;
+		margin-top: 200rpx;
+		background-color: #fff;
+		z-index: 1;
+		height: 128rpx;
+		width: 100%;
+		
+		.bt{
+			width: 212rpx;
+			height: 68rpx;
+			line-height: 68rpx;
+			text-align: center;
+			border-radius: 10rpx;
+			font-size:26rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,255,255,1);
+			margin: 30rpx auto 0;
+		}
+		
+		.bt1{
+			background-color: #7D6EFF;
+		}
+		
+		.bt2{
+			background-color: #FE9637;
+		}
+		
+		.bt3{
+			background-color: #FF443F;
+		}
+	}
+	
 	.tab_title{
 		font-size:28rpx;
 		font-family:SourceHanSansCN;
@@ -132,14 +176,14 @@
 		color:rgba(51,51,51,1);
 		padding-left: 23rpx;
 		position: fixed;
-		margin-top: 260rpx;
+		margin-top: 328rpx;
 		width: 100%;
 		background-color: #fff;
 		z-index: 1;
 	}
 	
 	.tab_detail{
-		padding: 320rpx 28rpx 28rpx 28rpx;;
+		padding: 388rpx 28rpx 28rpx 28rpx;;
 		
 		.tab_item{
 			width: 100%;

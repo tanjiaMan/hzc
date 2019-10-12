@@ -9,60 +9,65 @@
 			</view>
 		</view>
 			<!-- 列表 -->
+			 <view class="cart-header uni-flex uni-row" v-if="empty != true">
+				 <view class="flex-item d-1">
+					<view class="tit1">购物车</view>
+					<view class="tit2">共{{cartList.length}}件宝贝</view>
+				 </view>
+				 <view class="flex-item d-2">
+				 	<view class="bt" @click="deleteAll">删除</view>		 
+				 </view>
+			 </view>
 			<view class="cart-list">
-				<block v-for="(item, index) in cartList" :key="item.id">
-					<view
-						class="cart-item" 
-						:class="{'b-b': index!==cartList.length-1}"
-						@touchmove.stop.prevent="stopPrevent"
-						@click="navTo('/pages/product/product?id='+item.productId)"
-					>
-						<view class="check-wrapper" @click.stop="stopPrevent">
-							<view
-								class="yticon icon-xuanzhong2 checkbox"
-								:class="{checked: item.checked}"
-								@click="check('item', index)"
-							></view>
-						</view>
-						<view class="image-wrapper">
-							<image :src="item.image" 
-								mode="aspectFill" 
-								lazy-load 
-								@load="onImageLoad('cartList', index)" 
-								@error="onImageError('cartList', index)"
-							></image>
-						</view>
-						<view class="item-right" @click.stop="stopPrevent">
-							<text class="clamp title">{{item.title}}</text>
-							
-							<view class="uni-flex uni-row" style="width: 100%;">
-								<view class="flex-item" style="width: 80%;">
+				<uni-swipe-action :options="options1" @click="deleteCartItem(index)" v-for="(item, index) in cartList" :key="index">
+					<block>
+						<view
+							class="cart-item" 
+							:class="{'b-b': index!==cartList.length-1}"
+							@click="navTo('/pages/product/product?id='+item.productId)"
+						>
+							<view class="check-wrapper" @click.stop="stopPrevent">
+								<view
+									class="yticon icon-xuanzhong2 checkbox"
+									:class="{checked: item.checked}"
+									@click="check('item', index)"
+								></view>
+							</view>
+							<view class="image-wrapper">
+								<image :src="item.image" 
+									mode="aspectFill" 
+									lazy-load 
+									@load="onImageLoad('cartList', index)" 
+									@error="onImageError('cartList', index)"
+								></image>
+							</view>
+							<view class="item-right" @click.stop="stopPrevent">
+								<text class="clamp title">{{item.title}}</text>
+								
+								<view class="uni-flex uni-row" style="width: 100%;margin-top: 10px;">
 									<text class="attr">{{item.attr_val}}</text>
 								</view>
-								<view class="flex-item del-log" style="width: 20%;">
-									<img src="https://pic.youx365.com/del.png" @click="deleteCartItem(index)" />
-								</view>
-							</view>
-							<view class="uni-flex uni-row" style="width: 100%;">
-								<view class="flex-item" style="width: 40%;">
-									<text class="price">¥{{item.price}}</text>
-								</view>
-								<view class="flex-item" style="width: 60%;">
-									<uni-number-box
-										class="step"
-										:min="1" 
-										:max="item.stock"
-										:value="item.number>item.stock?item.stock:item.number"
-										:isMax="item.number>=item.stock?true:false"
-										:isMin="item.number===1"
-										:index="index"
-										@eventChange="numberChange"
-									></uni-number-box>
+								<view class="uni-flex uni-row" style="width: 100%;">
+									<view class="flex-item" style="width: 40%;">
+										<text class="price">¥{{item.price}}</text>
+									</view>
+									<view class="flex-item" style="width: 60%;">
+										<uni-number-box
+											class="step"
+											:min="1" 
+											:max="item.stock"
+											:value="item.number>item.stock?item.stock:item.number"
+											:isMax="item.number>=item.stock?true:false"
+											:isMin="item.number===1"
+											:index="index"
+											@eventChange="numberChange"
+										></uni-number-box>
+									</view>
 								</view>
 							</view>
 						</view>
-					</view>
-				</block>
+					</block>
+				</uni-swipe-action>	
 			</view>
 			
 			<!-- 猜你喜欢 -->
@@ -119,13 +124,14 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex';
+	
+	import {mapState} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
+	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
+	
 	export default {
 		components: {
-			uniNumberBox
+			uniNumberBox,uniSwipeAction
 		},
 		data() {
 			return {
@@ -134,6 +140,13 @@
 				empty: false, //空白页现实  true|false
 				cartList: [],
 				goodsList:[],
+				
+				options1: [{
+					text: '删除',
+					style: {
+						backgroundColor: 'rgb(255,58,49)'
+					}
+				}],
 			};
 		},
 		onShow(){
@@ -239,6 +252,34 @@
 					this.$api.msg('删除异常，清稍后重试');
 				}
 			},
+			async deleteAll(){
+				var that = this;
+				let list = that.cartList;
+				let ids = [];
+				list.forEach(item=>{
+					if(item.checked){
+						ids.push(item.id);
+					}
+				})
+				if(ids.length == 0){
+					return;
+				}
+				uni.showModal({
+				    title: '提示',
+					content: '确定删除吗?',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelOrder.delShopCar(JSON.stringify(ids)).then(result => {
+								if(result.code == 'ok'){
+									that.loadData();
+								}else{
+									that.$api.msg('删除异常，清稍后重试');
+								}
+							});
+				        }
+				    }
+				});
+			},
 			//清空
 			clearCart(){
 				uni.showModal({
@@ -300,7 +341,7 @@
 		padding-bottom: 134upx;
 		/* 空白页 */
 		.empty{
-			padding-bottom:100upx;
+			padding-bottom:150rpx;
 			display:flex;
 			justify-content: center;
 			flex-direction: column;
@@ -323,25 +364,89 @@
 		}
 	}
 	
+	.cart-header{
+		width: 100%;
+		height: 284rpx;
+		background-color: #00A390;
+		
+		.d-1{
+			width: 50%;
+			padding-left: 40rpx;
+		}
+		
+		.d-2{
+			width: 50%;
+		}
+		
+		.tit1{
+			font-size:34rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,255,255,1);
+			margin-top: 35rpx;
+		}
+		
+		.tit2{
+			font-size:24rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+		}
+		
+		.bt{
+			width: 92rpx;
+			height: 40rpx;
+			line-height: 40rpx;
+			text-align: center;
+			font-size:26rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,163,144,1);
+			background-color: #FFFFFF;
+			border-radius: 40rpx;
+			float: right;
+			margin-top: 35rpx;
+			margin-right: 21rpx;
+		}
+	}
+	
 	.cart-list{
-		background: #FFFFFF;
+		margin-top: -142rpx;
+		
+		/deep/ .uni-swipe-action{
+			width: 712rpx;
+			margin: 20rpx auto 0;
+			border-radius:10rpx;
+			background: #FFFFFF;
+		}
+		
+		.uni-swipe-action{
+			width: 712rpx;
+			margin: 20rpx auto 0;
+			border-radius:10rpx;
+			background: #FFFFFF;
+		}
 	}
 	
 	/* 购物车列表项 */
 	.cart-item{
 		display:flex;
 		position:relative;
-		padding:30rpx 40rpx 30rpx 0;
+		/* width: 712rpx;
+		margin: 20rpx auto 0;
+		border-radius:10rpx; */
+		height: 236rpx;
 		
 		.check-wrapper{
-			height: 181rpx;
+			height: 236rpx;
 			width: 119rpx;
 			text-align: center;
 		}
 		
 		.image-wrapper{
-			width: 237rpx;
-			height: 181rpx;
+			margin-top: 38rpx;
+			width: 215rpx;
+			height: 165rpx;
 			flex-shrink: 0;
 			position:relative;
 			image{
@@ -350,13 +455,11 @@
 		}
 		.checkbox{
 			font-size: 44upx;
-			line-height: 181rpx;
-			padding: 4upx;
+			line-height: 236rpx;
 			color: $font-color-disabled;
-			background:#fff;
-			border-radius: 50px;
 		}
 		.item-right{
+			padding-top: 38rpx;
 			display:flex;
 			flex-direction: column;
 			flex: 1;
