@@ -141,12 +141,11 @@
 			<view class="d-header-1">
 				<text>商品详情</text>
 			</view>
-			<view class="rich-text">
-				<uParse :content="goods.desc"  />
+			<view class="rich-text1">
+				<!-- <uParse :content="goods.desc"  /> -->
+				<image v-for="(item,index) in goods.desc" :key="index" class="img" mode="widthFix" 
+				:src="item" />
 			</view>
-			<!-- <view class="rich-text">
-				<rich-text :nodes="desc"></rich-text>		
-			</view> -->
 		</view>
 		
 		<view class="detail-desc">
@@ -353,7 +352,9 @@
 			},
 			async dataLoad(id){
 				//加载商品详情
-				this.goods = await this.$request.ModelHome.getGoodsDetail(id);
+				let goods = await this.$request.ModelHome.getGoodsDetail(id);
+				goods.desc = JSON.parse(goods.desc);
+				this.goods = goods;
 				
 				//加载商品规格
 				let goodsSpe = await this.$request.ModelHome.getGoodsSpecificat(id);
@@ -863,6 +864,15 @@
 			font-weight:bold;
 			color:rgba(51,51,51,1);
 			padding: 24rpx 0 24rpx 24rpx;
+		}
+		
+		.rich-text1{
+			padding: 0 24rpx 0 24rpx;
+			line-height: 0;
+			
+			.img{
+				width: 700rpx;
+			}
 		}
 		
 		.rich-text{
