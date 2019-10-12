@@ -176,6 +176,16 @@
             "style" : {
 				"navigationBarTitleText": "店铺认证"
 			}
+        },{
+            "path" : "pages/money/redPackage",
+            "style" : {
+				"navigationBarTitleText": "我的红包"
+			}
+        },{
+            "path" : "pages/money/redPackagetrans",
+            "style" : {
+				"navigationBarTitleText": "红包转账"
+			}
         }
     ],
 	"globalStyle": {

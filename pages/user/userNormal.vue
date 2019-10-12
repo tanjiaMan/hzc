@@ -93,7 +93,7 @@
 					<view class="tit1">我的优惠券</view>
 					<view class="tit2">7</view>
 				</view>
-				<view class="flex-item d_1">
+				<view class="flex-item d_1" @click="navTo('/pages/money/redPackage')">
 					<view class="tit1">我的红包</view>
 					<view class="tit2">6</view>
 				</view>
