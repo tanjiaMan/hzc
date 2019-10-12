@@ -115,6 +115,7 @@
 			.input{
 				line-height: 118rpx;
 				height: 118rpx;
+				font-size: 60rpx;
 			}
 		}
 		

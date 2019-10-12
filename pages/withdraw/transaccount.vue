@@ -18,7 +18,11 @@
 							<img class="img" src="https://pic.youx365.com/withdraw_money.png"  />
 						</view>
 						<view class="flex-item" style="margin-left: 15px;">
-							<view class="tit1">主打也有春天</view>
+							<view class="uni-flex uni-row">
+								<view class="flex-item tit1">主打也有春天</view>
+								<view class="flex-item tag1">普通会员</view>
+								<view class="flex-item tag2">上级</view>
+							</view>
 							<view class="tit2">15266254352</view>
 						</view>
 					</view>
@@ -50,6 +54,9 @@
 			confirm(){
 				console.log('confirm');
 				this.$api.msg(this.phone);
+				uni.navigateTo({
+					url: `/pages/withdraw/transconfirm`
+				})
 			},
 			bindClick(index){
 				console.log(index);
@@ -117,6 +124,32 @@
 			font-family:SourceHanSansCN;
 			font-weight:500;
 			color:rgba(51,51,51,1);
+		}
+		
+		.tag1{
+			font-size:20rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,255,255,1);
+			background:rgba(255,68,63,1);
+			border-radius:4rpx;
+			height: 35rpx;
+			line-height: 35rpx;
+			padding: 0 10rpx 0 10rpx;
+			margin-left: 20rpx;
+		}
+		
+		.tag2{
+			font-size:20rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,68,63,1);
+			height: 35rpx;
+			line-height: 35rpx;
+			border:1px solid rgba(255,68,63,1);
+			border-radius:4px;
+			padding: 0 10rpx 0 10rpx;
+			margin-left: 20rpx;
 		}
 		
 		.tit2{

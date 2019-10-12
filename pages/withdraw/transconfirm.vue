@@ -1,19 +1,31 @@
 <template>
 	<view class="container">
-		<view class="uni-flex uni-row" style="width: 100%;">
-			<view class="flex-item titmy">
-				充值金额
+		<view class="header">
+			<img class="img" src="https://pic.youx365.com/0/239d0f9cd14d6c4b2a6138ec34b63310.jpg" />
+			<view class="header-tit1">
+				李四
+			</view>
+			<view class="header-tit2">
+				13055225889
 			</view>
 		</view>
-		<view class="uni-flex uni-row d_1">
-			<view class="flex-item d_2">
-				<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
+		
+		<view class="d-money">
+			<view class="uni-flex uni-row" style="width: 100%;">
+				<view class="flex-item titmy">
+					转账代金券
+				</view>
 			</view>
-			<view class="flex-item d_3">
-				<input value="" class="input" type="number" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
-			</view>
-			<view class="flex-item d_4">
-				元
+			<view class="uni-flex uni-row d_1">
+				<view class="flex-item d_2">
+					<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
+				</view>
+				<view class="flex-item d_3">
+					<input value="" class="input" type="number" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
+				</view>
+				<view class="flex-item d_4">
+					元
+				</view>
 			</view>
 		</view>
 		
@@ -29,20 +41,21 @@
 					:class="payType == 1? 'checked':''"
 				></view>
 			</view>
-			<!-- <view class="type-item" @click="changePayType(3)">
-				<img src="https://pic.youx365.com/pay-yue.png" />
+			<view class="type-item" @click="changePayType(3)">
+				<img class="img-xj" src="https://pic.youx365.com/xj-pay.png" />
 				<view class="con">
-					<text class="tit">余额支付（¥198.5）</text>
+					<text class="tit">代金券支付</text>
+					<text>代金券支付，为靠谱买单</text>
 				</view>
 				<view
 					class="yticon icon-xuanzhong2 checkbox"
 					:class="payType == 3? 'checked':''"
 				></view>
-			</view> -->
+			</view>
 		</view>
 		
 		<view class="bt1">
-			立即充值
+			去支付
 		</view>
 	</view>
 </template>
@@ -74,20 +87,52 @@
 		background: $page-color-base;
 	}
 	
+	.header{
+		text-align: center;
+		padding-top: 40rpx;
+		
+		.img{
+			width: 140rpx;
+			height: 140rpx;
+			border-radius: 50%;
+		}
+		
+		.header-tit1{
+			font-size:34rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(51,51,51,1);
+		}
+		
+		.header-tit2{
+			font-size:24rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(119,119,119,1);
+		}
+	}
+	
+	.d-money{
+		width: 651rpx;
+		height: 169rpx;
+		background:rgba(238,238,238,1);
+		border-radius:20rpx;
+		margin: 63rpx auto 0;
+	}
+	
 	.container{
-		width: 700rpx;
-		height: 941rpx;
-		margin: 51rpx auto 0;
+		width: 100%;
+		height: 100vh;
 		background-color: #FFFFFF;
 		
 		.titmy{
-			width: 50%;
+			width: 100%;
 			font-size:26rpx;
 			font-family:SourceHanSansCN;
 			font-weight:400;
 			color:rgba(51,51,51,1);
 			line-height: 70rpx;
-			padding-left: 44rpx;
+			text-align: center;
 		}
 		
 		.tit1{
@@ -102,16 +147,15 @@
 		}
 		
 		.d_1{
-			width: 624rpx;
-			margin: 0 auto;
-			border-bottom: 1px solid #DCDCDC;
+			width: 360rpx;
+			margin: -20rpx auto 0;
 			height: 118rpx;
 			line-height: 118rpx;
 		}
 		
 		.d_2{
 			vertical-align: middle;
-			width: 100rpx;
+			width: 60rpx;
 			line-height: 118rpx;
 			height: 118rpx;
 			
@@ -124,7 +168,7 @@
 		
 		.d_3{
 			vertical-align: middle;
-			width: 424rpx;
+			width: 240rpx;
 			line-height: 118rpx;
 			height: 118rpx;
 			
@@ -137,7 +181,7 @@
 		
 		.d_4{
 			text-align: center;
-			width: 100rpx;
+			width: 60rpx;
 			line-height: 118rpx;
 			height: 118rpx;
 			font-size:26rpx;
@@ -197,7 +241,7 @@
 		margin-top: 104rpx;
 		
 		.type-item{
-			height: 120upx;
+			height: 146rpx;
 			padding: 20upx 0;
 			display: flex;
 			justify-content: space-between;
@@ -213,6 +257,11 @@
 				height: 56rpx;
 				width: 64rpx;
 				margin-right: 33rpx;
+			}
+			
+			.img-xj{
+				width: 68rpx;
+				height: 68rpx;
 			}
 		}
 		

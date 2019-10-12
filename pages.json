@@ -134,6 +134,16 @@
 				"navigationBarTitleText": "申请提现"
 			}
 		},{
+		    "path" : "pages/withdraw/transaccount",
+		    "style" : {
+				"navigationBarTitleText": "代金券转账"
+			}
+		},{
+		    "path" : "pages/withdraw/transconfirm",
+		    "style" : {
+				"navigationBarTitleText": "转账确认"
+			}
+		},{
 		    "path" : "pages/withdraw/recharge",
 		    "style" : {
 				"navigationBarTitleText": "代金券充值"

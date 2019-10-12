@@ -9,7 +9,7 @@
 		</view>
 		<view class="button uni-flex uni-row">
 			<view class="flex-item" style="width: 33%;">
-				<view class="bt bt1">转账</view>
+				<view class="bt bt1" @click="navTo('/pages/withdraw/transaccount')">转账</view>
 			</view>
 			<view class="flex-item" style="width: 33%;">
 				<view class="bt bt2" @click="navTo('/pages/withdraw/recharge')">充值</view>
