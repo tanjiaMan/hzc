@@ -15,7 +15,7 @@
 					<text class="mobile">13659847589</text>
 				</view>
 				<view class="flex-item d_4">
-					<view class="shopper">
+					<view class="shopper" @click="navTo('/pages/user/shopcert')">
 						申请店主
 					</view>
 				</view>

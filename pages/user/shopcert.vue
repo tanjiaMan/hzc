@@ -16,7 +16,7 @@
 				<text class="t1">手机号码</text>
 			</view>
 			<view class="d-3">
-				<input class="inputclass" placeholder="请输入手机号码" placeholder-class="placeholder" />
+				<input class="inputclass" type="number" placeholder="请输入手机号码" placeholder-class="placeholder" />
 			</view>
 		</view>
 		
@@ -40,6 +40,46 @@
 			</view>
 		</view>
 		
+		<view class="d-1">
+			<view class="d-2">
+				<img src="https://pic.youx365.com/shop-cert-3.png" />
+				<text class="t1">上传身份证</text>
+			</view>
+			<view class="d-3">
+				<input class="inputclass" type="idcard" placeholder="请输入身份证号码" placeholder-class="placeholder" />
+			</view>
+			<view class="d-3 uni-flex uni-row">
+				<view class="flex-item">
+					<img src='https://pic.youx365.com/shop-cert-5.png' class="id-img" />
+				</view>
+				<view class="flex-item">
+					<img src='https://pic.youx365.com/shop-cert-5.png'  class="id-img" />
+				</view>
+			</view>
+		</view>
+		
+		<view class="d-1">
+			<view class="d-2">
+				<img src="https://pic.youx365.com/shop-cert-4.png" />
+				<text class="t1">营业执照上传</text>
+			</view>
+			<view class="d-3">
+				<img src='https://pic.youx365.com/shop-cert-7.png' class="shopper-img" />
+			</view>
+		</view>
+		
+		<view class="d-1">
+			<checkbox-group>
+			    <label>
+			        <checkbox class="ck3" value="cb" checked="true" /><text class="tit3">请勾选同意</text><text class="tit4">《开店协议》</text>
+			    </label>
+			</checkbox-group>
+		</view>
+		
+		
+		<view class="bt">
+			提交申请
+		</view>
 		
 	</view>  
 </template>  
@@ -133,6 +173,17 @@
 		border-radius:10rpx;
 	}
 	
+	.id-img{
+		width: 340rpx;
+		margin-top: 20rpx;
+		height: 270rpx;
+	}
+	
+	.shopper-img{
+		width: 168rpx;
+		height: 168rpx;
+	}
+	
 	.container{
 		background-color: #FFFFFF;
 		padding-bottom: 50rpx;
@@ -140,11 +191,12 @@
 		.d-1{
 			width: 680rpx;
 			margin: 0 auto;
+			padding-top: 40rpx;
 			
 			.d-2{
 				height: 80rpx;
 				line-height: 80rpx;
-				padding-left: 20px;
+				padding-left: 20rpx;
 				
 				img{
 					width: 38rpx;
@@ -170,6 +222,39 @@
 			.d-3{
 				
 			}
+			
+			.tit3{
+				font-size:22rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(136,136,136,1);
+				margin-left: 19rpx;
+			}
+			
+			.tit4{
+				font-size:22rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:#FF443F;
+			}
+			
+			.ck3{
+			  transform: scale(0.6,0.6);
+			}
+		}
+		
+		.bt{
+			width:668rpx;
+			height:88rpx;
+			line-height: 88rpx;
+			margin: 40rpx auto;
+			background-color: #FF443F;
+			text-align: center;
+			font-size:30rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+			border-radius: 6rpx;
 		}
 	}
 	

@@ -19,16 +19,6 @@
 					:class="payType == 1? 'checked':''"
 				></view>
 			</view>
-			<!-- <view class="type-item b-b" @click="changePayType(2)">
-				<text class="icon yticon icon-alipay"></text>
-				<view class="con">
-					<text class="tit">支付宝支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 2' />
-					</radio>
-				</label>
-			</view> -->
 			<view class="type-item" @click="changePayType(3)">
 				<img src="https://pic.youx365.com/pay-yue.png" />
 				<view class="con">
@@ -42,12 +32,33 @@
 		</view>
 		
 		<text class="mix-btn" @click="confirm">确认支付</text>
+		
+		<uni-popup ref="popup" type="bottom" class="zfmm">
+			<view class="close">
+				<img class="img" src="https://pic.youx365.com/close.png" @click="zfclose" />
+			</view>
+			<view class="tit1">
+				请输入支付密码
+			</view>
+			<view class="input-row">
+				<view :class="['item',{'item-active':codeLength==index}]" v-for="(k,index) in length" :key="index">
+					{{code.charAt(index)}}
+				</view>
+			</view>
+			<view class="bt" @click="mmpay">确认支付</view>
+			<DigitalKeyboard @change="contToggle" :keyBoardSwitch="true" :decimalPoint="false"></DigitalKeyboard>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
-
+	import DigitalKeyboard from '@/components/digital-keyboard/digital-keyboard.vue';
+	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	
 	export default {
+		components:{
+			DigitalKeyboard,uniPopup
+		},
 		data() {
 			return {
 				payType: 1,
@@ -61,13 +72,18 @@
 				h: '00',
 				i: '00',
 				s: '00',
+				
+				//支付密码
+				code:'',
+				codeLength: 0,
+				length:6,
 			};
 		},
 		onLoad(options) {
 			let orderNum = options.orderNum;
 			this.orderNum = orderNum;
 			this.$request.ModelOrder.infoOder(orderNum).then(result => {
-				this.orderInfo = result;
+				this.orderInfo = result || {};
 			})
 		},
 		created: function(e) {
@@ -90,7 +106,14 @@
 				this.payType = type;
 			},
 			//确认支付
-			confirm: async function() {
+			confirm() {
+				if(this.payType == 1){ //微信支付
+					this.wxPay()
+				}else{
+					this.zfshow();
+				}
+			},
+			async wxPay(){
 				let result = await this.$request.ModelOrder.getPayInfo(this.orderNum);
 				if(result.code != 'ok'){
 					this.$api.msg(result.msg);
@@ -119,10 +142,6 @@
 				}else{
 					this.$api.msg('预支付失败，请稍后重试');
 				}
-				
-				
-				
-				
 			},
 			//定时器
 			timeUp() {
@@ -155,6 +174,39 @@
 				this.h = hour
 				this.i = minute
 				this.s = second
+			},
+			//支付密码
+			zfshow(){
+				this.code = '';
+				this.codeLength = 0;
+				this.$refs.popup.open();
+			},
+			zfclose(){
+				this.$refs.popup.close();
+			},
+			mmpay(){
+				if(this.codeLength != this.length){
+					return;
+				}
+				
+				console.log(this.code);
+				this.$refs.popup.close();
+			},
+			contToggle(k){
+				let len = this.code.length;
+				if(k===''){
+					this.code = this.code.substring(0,len-1);
+					this.codeLength = this.code.length;
+					return;
+				}
+				if(len >= this.length){
+					return;
+				}
+				this.codeLength = len + 1;
+				this.code += k.toString();
+				if(this.length===len+1){
+					return;
+				}
 			}
 		}
 	}
@@ -278,5 +330,72 @@
 	}
 	.checkbox.checked{
 		color: #00A390;
+	}
+	
+	/* 输入密码 */
+	.input-row{
+		width: 626rpx;
+		margin: 0 auto;
+		padding: 30rpx 0;
+		box-sizing: border-box;
+		font-size: 24px;
+		text-align: center;
+		.item{
+			float: left;
+			width: 84rpx;
+			height: 84rpx;
+			line-height: 84rpx;
+			border-radius: 4rpx;
+			margin:0 10rpx;
+			border: 1px solid rgba(210,210,210,1);
+			background: #fff;
+			box-sizing: border-box;
+		}
+		.item-active{
+			position: relative;
+			border: 1px solid #f4000a;
+			transform: scale(1.2);
+			--webkit-transform: scale(1.2);
+		}
+	}
+	
+	.zfmm{
+		/deep/ .uni-popup__wrapper-box{
+			padding: 0 !important;
+		}
+		
+		.close{
+			width: 100%;
+			text-align: right;
+			padding: 26rpx 26rpx 0 0;
+			
+			.img{
+				width: 56rpx;
+				height: 56rpx;
+			}
+		}
+		
+		.tit1{
+			font-size:30rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			margin-left: 63rpx;
+		}
+		
+		.bt{
+			width: 432rpx;
+			height: 72rpx;
+			line-height: 72rpx;
+			margin: 0 auto;
+			background-color: #FF443F;
+			border-radius: 40rpx;
+			font-size:30rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+			text-align: center;
+			margin-top: 84rpx;
+		}
 	}
 </style>

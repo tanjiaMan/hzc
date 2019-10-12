@@ -1,7 +1,12 @@
 <template>
 	<view class="container">
-		<view class="tit1">
-			全部提现
+		<view class="uni-flex uni-row" style="width: 100%;">
+			<view class="flex-item titmy">
+				可提现金额 <text style="color: #FF443F;">￥20000.00</text> 元
+			</view>
+			<view class="flex-item tit1">
+				全部提现
+			</view>
 		</view>
 		<view class="uni-flex uni-row d_1">
 			<view class="flex-item d_2">
@@ -59,13 +64,23 @@
 		margin: 51rpx auto 0;
 		background-color: #FFFFFF;
 		
-		.tit1{
-			width: 100%;
-			text-align: right;
+		.titmy{
+			width: 50%;
 			font-size:26rpx;
 			font-family:SourceHanSansCN;
 			font-weight:400;
 			color:rgba(51,51,51,1);
+			line-height: 70rpx;
+			padding-left: 44rpx;
+		}
+		
+		.tit1{
+			width: 50%;
+			text-align: right;
+			font-size:26rpx;
+			font-family:SourceHanSansCN;
+			font-weight:400;
+			color:#00A390;
 			line-height: 70rpx;
 			padding-right: 45rpx;
 		}
