@@ -19,7 +19,7 @@
 		
 		<view class="pay-type-list">
 			<view class="type-item b-b" @click="changePayType(1)">
-				<img src="https://pic.youx365.com/pay-wx.png" />
+				<img src="https://pic.youx365.com/wx-pay.png" />
 				<view class="con">
 					<text class="tit">微信支付</text>
 					<text>亿万用户的选择，更快更安全</text>
@@ -209,9 +209,9 @@
 			color:rgba(0,0,0,1);
 			
 			img{
-				height: 60rpx;
-				width: 60rpx;
-				margin-right: 19rpx;
+				height: 56rpx;
+				width: 64rpx;
+				margin-right: 33rpx;
 			}
 		}
 		
