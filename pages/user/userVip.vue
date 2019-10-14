@@ -220,13 +220,10 @@
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_3">
-					<img class="img" src="https://pic.youx365.com/user_s_1.png" />
+					<img class="img" src="https://pic.youx365.com/user_s_4.png" />
 				</view>
 				<view class="flex-item d_3">
-					<img class="img" src="https://pic.youx365.com/user_s_2.png" />
-				</view>
-				<view class="flex-item d_3">
-					<img class="img" src="https://pic.youx365.com/user_s_3.png" />
+					<img class="img" src="https://pic.youx365.com/user_s_5.png" />
 				</view>
 			</view>
 		</view>
@@ -718,13 +715,13 @@
 			}
 			
 			.d_3{
-				width: 33.33%;
+				width: 50%;
 				text-align: center;
 				margin-top: 20rpx;
 				
 				.img{
-					width: 214rpx;
-					height: 95rpx;
+					width: 344rpx;
+					height: 120rpx;
 				}
 			}
 		}

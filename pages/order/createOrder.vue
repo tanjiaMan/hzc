@@ -142,7 +142,7 @@
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
 				if(result.productInfos){
 					this.productInfos = result.productInfos;
-					this.addressData = result.addressInfo;
+					this.addressData = result.addressInfo || {};
 					this.data = result.priceInfo;
 				}
 			},

@@ -4,12 +4,13 @@
 			<view class="d-nav-tab flex-item">
 				<scroll-view class="nav" scroll-with-animation>
 					<view class="cu-item" v-for="(item,index) in tabBars" 
-						:class="index == tabCur ? 'text-white cur':''" @tap="tabSelect" :key="item.id" :id="item.id" :data-id="index">
+						:class="index == tabCur ? ('text-white '+ (index == 0?'cur1':'cur2')):'' " @tap="tabSelect" :key="item.id" :id="item.id" :data-id="index">
 							{{item.name}}
 					</view>
 				</scroll-view>
 			</view>
-			<view class="d-count uni-flex uni-row">
+		
+			<view class="d-count uni-flex uni-row" v-if="tabCur == 0">
 				<view class="flex-item d-1">
 					<view class="tit1">88866.24</view>
 					<view class="tit2">总收入</view>
@@ -25,6 +26,23 @@
 					<view class="tit2">代理进货</view>
 				</view>
 			</view>
+			<view class="d-count uni-flex uni-row" v-else>
+				<view class="flex-item d-1">
+					<view class="tit1">88866.24</view>
+					<view class="tit2">总收入</view>
+				</view>
+				<view class="flex-item line1"></view>
+				<view class="flex-item d-1">
+					<view class="tit1">15248</view>
+					<view class="tit2">补货</view>
+				</view>
+				<view class="flex-item line1"></view>
+				<view class="flex-item d-1">
+					<view class="tit1">63215</view>
+					<view class="tit2">进货</view>
+				</view>
+			</view>
+			
 			<view class="day-nav-tab flex-item">
 				<scroll-view class="nav" scroll-with-animation>
 					<view class="cu-item" v-for="(item,index) in dayTabBars" 
@@ -156,7 +174,7 @@
 	
 	.d-nav-tab{
 		width:100%;
-		height: 100rpx;
+		height: 96rpx;
 		
 		.nav{
 			height: 100%;
@@ -183,8 +201,20 @@
 			font-family:SourceHanSansCN;
 			font-weight:400;
 			color:rgba(0,163,144,1);
-			background:rgba(255,255,255,1) !important;
-		}	
+			/* background:rgba(255,255,255,1) !important; */
+		}
+			
+		.cur1{
+			background-image: url('https://pic.youx365.com/mmsg-bg1.png');
+			background-size: cover;
+			width: 390rpx !important;
+		}
+		
+		.cur2{
+			background-image: url('https://pic.youx365.com/mmsg-bg2.png');
+			background-size: cover;
+			width: 390rpx !important;
+		}
 	}
 
 	.d-count{
