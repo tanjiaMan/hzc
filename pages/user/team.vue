@@ -4,15 +4,26 @@
 			<view class="flex-item d-1">
 				<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
 			</view>
-			<view class="flex-item d-2">
-				<view class="tit1">{{userInfo.nickname || '游客'}}</view>
-				<view class="tit2">团队人数：862</view>
-				<view class="tit2">手 机 号：13012341234</view>
-				<view class="tit2">推 荐 人：李四</view>
-				<view class="tit2">上 级：李四</view>
-			</view>
-			<view class="flex-item d-3">
-				<view class="bt1">代理商 V2</view>
+			<view class="flex-item">
+				<view class="d-4 uni-flex uni-row">
+					<view class="flex-item d-2">
+						<view class="tit1">{{userInfo.nickname || '游客'}}</view>
+					</view>
+					<view class="flex-item d-3">
+						<view class="tit2">团队人数</view>
+						<view class="tit2">862</view>
+					</view>
+				</view>
+				<view class="d-5">
+					<view class="uni-flex uni-row">
+						<view class="tit2 flex-item d-6">等级：2</view>
+						<view class="tit2 flex-item d-6">推 荐 人：李四</view>
+					</view>
+					<view class="uni-flex uni-row">
+						<view class="tit2 flex-item d-6">手 机 号：13012341234</view>
+						<view class="tit2 flex-item d-6">上 级：李四</view>
+					</view>
+				</view>
 			</view>
 		</view>
 		
@@ -26,19 +37,21 @@
 		</view>
 		
 		<view class="swiper-box">
-			<view class="tab_item uni-flex uni-row" v-for="record in 10" :key="record">
+			<view class="tab_item uni-flex uni-row" v-for="record in 10" :key="record" @click="navTo('/pages/user/userHome')">
 				<view class="flex-item d_1">
 					<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg"  />
 				</view>
 				<view class="flex-item d_2">
 					<view class="uni-flex uni-row">
 						<view class="tit1">陈小明{{record}}</view>
-						<view class="tit3">普通会员</view>
+						<view class="tit4">普通会员</view>
+						<view class="tit3">升级</view>
 					</view>
 					<view class="tit2">2019-08-10 09:02:01</view>
 				</view>
 				<view class="flex-item d_3">
-					已推2人<text class="yticon icon-you"></text>
+					<view>已推2人<text class="yticon icon-you"></text></view>
+					<view class="bt3">发消息</view>
 				</view>
 			</view>
 			
@@ -49,7 +62,7 @@
 </template>  
 <script>
 
-    import {mapState} from 'vuex';  
+	import {mapState} from 'vuex';
 	
     export default {
 		data(){
@@ -93,7 +106,12 @@
 			//菜单切换
 			async tabSelect(e) {
 				this.tabCur = e.currentTarget.dataset.id;
-			}
+			},
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
+			},
         }  
     }  
 </script>  
@@ -103,6 +121,8 @@
 	}
 	
 	.container{
+		background-color: #FFFFFF;
+		
 		.team-header{
 			width: 100%;
 			height: 319rpx;
@@ -111,6 +131,13 @@
 			padding-top: 62rpx;
 			position: fixed;
 			z-index: 1;
+			
+			.tit2{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+			}
 			
 			.d-1{
 				width: 147rpx;
@@ -124,7 +151,7 @@
 			}
 			
 			.d-2{
-				width: 427rpx;
+				width: 400rpx;
 				
 				.tit1{
 					font-size:34rpx;
@@ -133,17 +160,12 @@
 					font-style:italic;
 					color:rgba(255,255,255,1);
 				}
-				
-				.tit2{
-					font-size:22rpx;
-					font-family:SourceHanSansCN;
-					font-weight:400;
-					color:rgba(255,255,255,1);
-				}
 			}
 			
 			.d-3{
-				width: 176rpx;
+				width: 203rpx;
+				border-left: solid 1px white;
+				padding-left: 8px;
 				
 				.bt1{
 					width:147rpx;
@@ -158,6 +180,18 @@
 					font-weight:400;
 					color:rgba(255,255,255,1);
 				}
+			}
+			
+			.d-4{
+				width: 603rpx;
+			}
+			
+			.d-5{
+				padding-top: 30rpx;
+			}
+			
+			.d-6{
+				width: 50%;
 			}
 		}
 	
@@ -227,7 +261,6 @@
 				}
 				
 				.tit3{
-					width:110rpx;
 					height:30rpx;
 					line-height: 30rpx;
 					background:rgba(255,68,63,1);
@@ -238,19 +271,50 @@
 					color:rgba(254,254,254,1);
 					text-align: center;
 					margin: 32rpx 0px 0px 20rpx;
+					padding: 0 10rpx 0 10rpx;
+				}
+				
+				.tit4{
+					height:30rpx;
+					line-height: 30rpx;
+					border:1px solid rgba(255,68,63,1);
+					border-radius:3px;
+					font-size:20rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:#FF443F;
+					text-align: center;
+					margin: 32rpx 0px 0px 20rpx;
+					padding: 0 10rpx 0 10rpx;
 				}
 			}
 			
-			.d_3{
-				font-size:26rpx;
+			.bt3{
+				height:35rpx;
+				line-height:35rpx;
+				border:1px solid rgba(0,163,144,1);
+				border-radius:18rpx;
+				text-align: center;
+				font-size:22rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(144,144,144,1);
+				color:rgba(0,163,144,1);
+				width: fit-content;
+				padding: 0 10rpx 0 10rpx;
+				margin: 14rpx auto 0;
+			}
+			
+			.d_3{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(182,182,182,1);
 				width: 146rpx;
 				height: 151rpx;
 				line-height: 151rpx;
 				text-align: center;
 				border-bottom: 1px solid #E7E7E7;
+				padding-top: 20rpx;
 				
 				.yticon{
 					font-size:30rpx;

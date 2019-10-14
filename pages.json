@@ -53,9 +53,14 @@
 				"navigationBarTitleText": "我的团队"
 			}
 		},{
+			"path": "pages/user/userHome",
+			"style": {
+				"navigationBarTitleText": "个人主页"
+			}
+		},{
 			"path": "pages/user/money",
 			"style": {
-				"navigationBarTitleText": "我的钱包"
+				"navigationBarTitleText": "我的代金劵"
 			}
 		},{
 			"path": "pages/order/order",

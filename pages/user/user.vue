@@ -1,7 +1,7 @@
 <template>  
     <view>
-		<user-normal></user-normal>
-		<!-- <user-vip></user-vip> -->
+		<!-- <user-normal></user-normal> -->
+		<user-vip></user-vip>
 	</view>  
 </template>  
 <script>
