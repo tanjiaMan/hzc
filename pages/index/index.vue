@@ -1,7 +1,5 @@
 <template>
 	<view class="container uni-tab-bar">
-		<!-- 登陆校验 -->
-		<cu-login :inviteUserId = "inviteUserId"></cu-login>
 		<!-- 头部导航 -->
 		<view class="carousel-section">
 			<cu-search bgColor="bg-gradual-header"></cu-search>
@@ -309,8 +307,6 @@
 				scrollLeft: 0,
 				newsitems: [], //每页加载的数据
 				tabBars: this.firstMenu,
-				
-				inviteUserId:null,
 			};
 		},
 		methods: {
@@ -519,8 +515,13 @@
 				path: '/pages/index/index?inviteUserId=' + this.userInfo.id
 			}
 		},
-		onLoad(options){
-			this.inviteUserId = options.inviteUserId;
+		onLoad(options){ //进入首页设置邀请ID
+			if(options.inviteUserId){
+				uni.setStorage({//缓存用户登陆状态
+				    key: 'inviteUserId',  
+				    data: options.inviteUserId  
+				})
+			}
 			this.loadData();
 		},
 	}

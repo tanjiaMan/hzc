@@ -1,13 +1,24 @@
 <template>
 	<view class="container">
 		<!-- 空白页 -->
-		<view v-if="empty===true" class="empty">
+		<view v-if="!hasLogin" class="empty1">
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view class="empty-tips">
 				空空如也
-				<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+				<view class="navigator" @click="navToLogin">去登陆></view>
 			</view>
 		</view>
+		
+		<view v-else>
+			<!-- 空白页 -->
+			<view v-if="empty===true" class="empty">
+				<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
+				<view class="empty-tips">
+					空空如也
+					<navigator class="navigator" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+				</view>
+			</view>
+			
 			<!-- 列表 -->
 			 <view class="cart-header uni-flex uni-row" v-if="empty != true">
 				 <view class="flex-item d-1">
@@ -15,7 +26,7 @@
 					<view class="tit2">共{{cartList.length}}件宝贝</view>
 				 </view>
 				 <view class="flex-item d-2">
-				 	<view class="bt" @click="deleteAll">删除</view>		 
+					<view class="bt" @click="deleteAll">删除</view>		 
 				 </view>
 			 </view>
 			<view class="cart-list">
@@ -87,10 +98,10 @@
 							<image :src="item.coverPicUrl" mode="aspectFill"></image>
 						</view>
 						 <view class="uni-flex uni-row" style="width: 100%;">
-						    <view class="flex-item" style="width: 50%;">
+							<view class="flex-item" style="width: 50%;">
 								<text class="price">￥{{item.price}}</text>
 							</view>
-						    <view class="flex-item" style="width: 50%;text-align: right;">
+							<view class="flex-item" style="width: 50%;text-align: right;">
 								<text class="buysum">{{item.orderNums}}人已付款</text>
 							</view>
 						 </view>
@@ -101,25 +112,26 @@
 			
 			<!-- 底部菜单栏 -->
 			<view class="action-section">
-				<view class="check-wrapper">
-					<view
-						class="yticon icon-xuanzhong2 checkbox"
-						:class="{checked: allChecked}"
-						@click="check('all')"
-						style="font-size: 60rpx;height: auto;"
-					></view>
-				</view>
-				<view class="qx">全选</view>
-				<view class="total-box">
-					<text class="price">总计：¥{{total}}</text>
-					<!-- <text class="coupon">
-						已优惠
-						<text>74.35</text>
-						元
-					</text> -->
-				</view>
-				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
+			<view class="check-wrapper">
+				<view
+					class="yticon icon-xuanzhong2 checkbox"
+					:class="{checked: allChecked}"
+					@click="check('all')"
+					style="font-size: 60rpx;height: auto;"
+				></view>
 			</view>
+			<view class="qx">全选</view>
+			<view class="total-box">
+				<text class="price">总计：¥{{total}}</text>
+				<!-- <text class="coupon">
+					已优惠
+					<text>74.35</text>
+					元
+				</text> -->
+			</view>
+			<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
+		</view>
+		</view>
 	</view>
 </template>
 
@@ -150,7 +162,9 @@
 			};
 		},
 		onShow(){
-			this.loadData();
+			if(this.hasLogin){
+				this.loadData();
+			}
 		},
 		watch:{
 			//显示空白页
@@ -354,6 +368,32 @@
 		padding-bottom: 134upx;
 		/* 空白页 */
 		.empty{
+			padding-bottom:150rpx;
+			display:flex;
+			justify-content: center;
+			flex-direction: column;
+			align-items:center;
+			background: #fff;
+			image{
+				width: 240upx;
+				height: 160upx;
+				margin-bottom:30upx;
+			}
+			.empty-tips{
+				display:flex;
+				font-size: $font-sm+2upx;
+				color: $font-color-disabled;
+				.navigator{
+					color: $uni-color-primary;
+					margin-left: 16upx;
+				}
+			}
+		}
+		
+		.empty1{
+			position: fixed;
+			width: 100%;
+			height: 100%;
 			padding-bottom:150rpx;
 			display:flex;
 			justify-content: center;

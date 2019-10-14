@@ -1,7 +1,5 @@
 <template>
 	<view class="container">
-		<!-- 登陆校验 -->
-		<cu-login :inviteUserId = "inviteUserId"></cu-login>
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">
@@ -158,7 +156,7 @@
 						<view
 								v-for="(item, index) in goodsList" :key="index"
 								class="floor-item"
-								@click="navToDetailPage(item.id)"
+								@click="navTo('/pages/product/product?id='+item.id)"
 							>
 								<view class="image-wrapper">
 									<image :src="item.coverPicUrl" lazy-load=true mode="aspectFill"></image>
@@ -257,7 +255,6 @@
 		},
 		data() {
 			return {
-				inviteUserId: null,
 				goods:{},
 				
 				specClass: 'none',
@@ -344,11 +341,15 @@
 					url
 				})  
 			},
-			//详情页
-			navToDetailPage(id) {
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
+			navToLogin(){
+				if(!this.hasLogin){
+					let url = '/pages/public/login';
+					uni.navigateTo({
+						url
+					})
+					return true;
+				}
+				return false;
 			},
 			async dataLoad(id){
 				//加载商品详情
@@ -386,6 +387,7 @@
 				this.goodsList = goodsList.records || [];
 			},
 			async buyNow(){
+				if(this.navToLogin()){return};
 				let goods = this.goods;
 				let productSpecId = null;
 				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
@@ -406,6 +408,7 @@
 				})
 			},
 			addCart(){ //加入购物车
+				if(this.navToLogin()){return};
 				let goods = this.goods;
 				let productSpecId = null;
 				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
@@ -440,7 +443,12 @@
 			}
 		},
 		async onLoad(options){
-			this.inviteUserId = options.inviteUserId;
+			if(options.inviteUserId){
+				uni.setStorage({//缓存用户登陆状态
+				    key: 'inviteUserId',  
+				    data: options.inviteUserId  
+				})
+			}
 			
 			let id = options.id;
 			this.dataLoad(id);

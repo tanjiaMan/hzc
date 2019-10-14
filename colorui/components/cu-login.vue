@@ -24,9 +24,6 @@
 		computed: {
 			...mapState(['hasLogin','userInfo'])
 		},
-		props: {
-			inviteUserId:null,
-		},
 		data() {
 			return {
 				state: 1,//1:没登陆，2:没绑定手机号, 3:已登陆
@@ -101,8 +98,9 @@
 				});
 			},
 			async loginRequest(res){
-				let userInfo = res.userInfo
-				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: this.inviteUserId};
+				let userInfo = res.userInfo;
+				let inviteUserId = uni.getStorageSync('inviteUserId');
+				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: inviteUserId};
 				let result = await this.$request.ModelUser.login(value);
 				if(result.code == 'ok' && result.data){
 					let data = result.data;

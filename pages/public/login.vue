@@ -102,8 +102,9 @@
 				});
 			},
 			async loginRequest(res){
-				let userInfo = res.userInfo
-				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: this.inviteUserId};
+				let userInfo = res.userInfo;
+				let inviteUserId = uni.getStorageSync('inviteUserId');
+				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: inviteUserId};
 				let result = await this.$request.ModelUser.login(value);
 				if(result.code == 'ok' && result.data){
 					let data = result.data;

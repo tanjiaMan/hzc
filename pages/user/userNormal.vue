@@ -13,6 +13,7 @@
 						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
 					</view>
 					<text class="mobile">{{userInfo.mobile}}</text>
+					<view v-if="!hasLogin" class="loginbt" @click="navToLogin">注册/登陆</view>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
@@ -226,6 +227,11 @@
 					url
 				})  
 			},
+			navToLogin(){
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+			},
         }  
     }  
 </script>  
@@ -266,6 +272,17 @@
 					font-family:SourceHanSansCN;
 					font-weight:400;
 					color:rgba(255,255,255,1);
+				}
+				
+				.loginbt{
+					font-size:24rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(255,255,255,1);
+					border: solid 1px white;
+					width: max-content;
+					border-radius: 100rpx;
+					padding: 0px 10rpx 0 10rpx;
 				}
 				
 				.user-vip{
