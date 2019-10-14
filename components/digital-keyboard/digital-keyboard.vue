@@ -53,9 +53,27 @@
 			border-left:1px solid #D2D2D2;
 			border-bottom: 1px solid #D2D2D2;
 			background: #fff;
-			&:nth-child(3n){
-				border-right: 1px solid #D2D2D2;
+			
+			&:nth-child(1){
+				border-left: none;
 			}
+			&:nth-child(4){
+				border-left: none;
+			}
+			&:nth-child(7){
+				border-left: none;
+			}
+			&:nth-child(10){
+				border-left: none;
+				border-bottom: none;
+			}
+			&:nth-child(11){
+				border-bottom: none;
+			}
+			&:nth-child(12){
+				border-bottom: none;
+			}
+			
 			&:last-child{
 				position: relative;
 				&:before{
@@ -71,6 +89,7 @@
 				}
 			}
 		}
+	
 		.key-hove{
 			font-size: 30px;
 		}

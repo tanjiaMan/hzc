@@ -41,7 +41,7 @@
 				请输入支付密码
 			</view>
 			<view class="input-row">
-				<view :class="['item',{'item-active':codeLength==index}]" v-for="(k,index) in length" :key="index">
+				<view :class="['item',{'item-active':codeLength==index}]" v-for="(k,index) in lengthArr" :key="index">
 					{{code.charAt(index)}}
 				</view>
 			</view>
@@ -76,6 +76,7 @@
 				//支付密码
 				code:'',
 				codeLength: 0,
+				lengthArr:[{},{},{},{},{},{}],
 				length:6,
 			};
 		},
