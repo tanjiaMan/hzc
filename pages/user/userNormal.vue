@@ -12,7 +12,7 @@
 						{{userInfo.nickname || '游客'}}
 						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
 					</view>
-					<text class="mobile">13659847589</text>
+					<text class="mobile">{{userInfo.mobile}}</text>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">

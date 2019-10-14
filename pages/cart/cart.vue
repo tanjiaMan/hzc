@@ -232,8 +232,21 @@
 			},
 			//数量
 			numberChange(data){
-				this.cartList[data.index].number = data.number;
-				this.calcTotal();
+				let cartItem = this.cartList[data.index];
+				
+				let values = {updateNum:data.number,productId:cartItem.productId,productSpecId: cartItem.productSpecId};
+				this.$request.ModelOrder.addShopCar(values).then(result => {
+					if(result.code == 'ok'){
+						this.cartList[data.index].number = data.number;
+						this.calcTotal();
+					}else{
+						uni.showToast({
+							icon:'none',
+						    title: '操作失败',
+						    duration: 2000
+						});
+					}
+				})
 			},
 			//删除
 			async deleteCartItem(index){
@@ -673,6 +686,7 @@
 	
 	.guess-like{
 		margin-top: 49rpx;
+		background-color: #fff;
 		
 		.header{
 			text-align: center;

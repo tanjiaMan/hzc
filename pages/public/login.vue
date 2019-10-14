@@ -6,35 +6,50 @@
 		<view class="wrapper">
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">
-				欢迎回来！
+				社集优选欢迎您！
 			</view>
-			<button v-if="needLogin == true" type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">授权登录</button>
-			<button v-if="needGetMobile == true" type="primary" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意绑定手机号码</button>
+			<button v-if="state == 1" type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">点击微信授权登陆</button>
+			<button v-if="state == 1" type="warn" style="margin-top: 10px;" @click="cancel">取消登陆</button>
+			<button v-if="state == 2" type="warn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意绑定手机号码</button>
 		</view>
 	</view>
 </template>
 
 <script>
-	import {  
-        mapMutations  
-    } from 'vuex';
+	import {mapMutations,mapState} from 'vuex';
 	
 	export default{
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		data(){
 			return {
-				mobile: '',
-				password: '',
-				logining: false,
-				
-				//微信登陆
-				wxCode: null,
-				userInfo:{},
-				needLogin:true,
-				needGetMobile:false,
+				state: 1,//1:没登陆，2:没绑定手机号, 3:已登陆
+				cacelLogin: false,
+				wxCode: null,//授权code
 			}
 		},
-		onLoad(){
-			// 获取微信code 并且请求链接
+		async onLoad(){
+			if(this.hasLogin){
+				if(this.userInfo.firstToken && this.userInfo.firstToken == true){
+					//校验token
+					let ck = await this.$request.ModelUser.ckToken(this.userInfo.token);
+					if(ck.code == 'ok' && ck.message == 'true'){
+						this.userInfo.firstToken = false;
+						this.login(this.userInfo);
+						this.state = 3;
+						return;
+					}else{
+						this.state = 1;
+						return;
+					}
+				}else{
+					this.state = 3;
+					return;
+				}
+			}
+			
+			//没登陆
 			var that = this;
 			uni.login({
 			  provider: 'weixin',
@@ -42,14 +57,18 @@
 				that.wxCode = loginRes.code;
 			  }
 			});
+			if(this.userInfo.id){
+				this.state = 2;
+			}else{
+				this.state = 1;
+			}
 		},
 		methods: {
 			...mapMutations(['login','setToken']),
-			inputChange(e){
-				const key = e.currentTarget.dataset.key;
-				this[key] = e.detail.value;
-			},
 			navBack(){
+				uni.navigateBack();
+			},
+			cancel(){
 				uni.navigateBack();
 			},
 			bindGetUserInfo(e){
@@ -87,7 +106,6 @@
 				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: this.inviteUserId};
 				let result = await this.$request.ModelUser.login(value);
 				if(result.code == 'ok' && result.data){
-					this.needLogin = false;
 					let data = result.data;
 					let userInfoVo = {
 						id: data.userId,
@@ -96,20 +114,17 @@
 						portrait: userInfo.avatarUrl,
 						token: data.token
 					};
-					this.userInfo = userInfoVo;
 					this.setToken(data.token);
+					this.login(userInfoVo);
 					if(data.mobile && data.mobile != '' ){
-						this.login(userInfoVo);
 						uni.navigateBack();  
 					}else{
-						this.needGetMobile = true;
+						this.state = 2;
 					}
 				}else{
-					this.needLogin = true;
 					this.$api.msg(result.msg);
-					this.logining = false;
 				}
-			}
+			},
 		},
 	}
 </script>
