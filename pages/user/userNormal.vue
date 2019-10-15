@@ -56,7 +56,7 @@
 					<img src="https://pic.youx365.com/user_4.png" />
 					<view class="tit">评价</view>
 				</view>
-				<view class="flex-item d_4" @click="navTo('/pages/order/order?state=4')" >
+				<view class="flex-item d_4" @click="navTo('/pages/order/orderSvs')" >
 					<img src="https://pic.youx365.com/user_5.png" />
 					<view class="tit">售后</view>
 				</view>

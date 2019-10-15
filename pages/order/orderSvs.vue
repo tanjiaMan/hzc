@@ -1,90 +1,63 @@
 <template>
 	<view class="content">
-		<view class="navbar">
+		<scroll-view
+			class="list-scroll-content" 
+			scroll-y
+			@scrolltolower="loadData"
+		>
+			<!-- 空白页 -->
+			<empty v-if="loaded === true && orderList.length === 0"></empty>
+			
+			<!-- 订单列表 -->
 			<view 
-				v-for="(item, index) in navList" :key="index" 
-				class="nav-item" 
-				:class="{current: tabCurrentIndex == index}"
-				@click="tabClick(index)"
+				v-for="(item,index) in orderList" :key="index"
+				class="order-item"
+				@click="navTo('/pages/order/orderSvsDetail?orderNum='+item.orderNum)"
 			>
-				{{item.text}}
-			</view>
-		</view>
-
-		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab">
-			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
-				<scroll-view 
-					class="list-scroll-content" 
-					scroll-y
-					@scrolltolower="loadData"
-				>
-					<!-- 空白页 -->
-					<empty v-if="tabItem.loaded === true && tabItem.orderList.length === 0"></empty>
-					
-					<!-- 订单列表 -->
-					<view 
-						v-for="(item,index) in tabItem.orderList" :key="index"
-						class="order-item"
-						@click="navTo('/pages/order/orderDetail?orderNum='+item.orderNum)"
+				<view class="i-top b-b">
+					<text class="time">{{item.createTime}}</text>
+					<text class="state" style="color: '#FF443F'">退款完成</text>
+					<text
+						@click.stop="stopPrevent"
+						class="del-btn yticon icon-iconfontshanchu1"
+						@click="deleteOrder(index)"
+					></text>
+				</view>
+				
+				<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x>
+					<view
+						v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
+						class="goods-item"
 					>
-						<view class="i-top b-b">
-							<text class="time">订单编号: {{item.orderNum}}</text>
-							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
-							<!-- <text 
-								@click.stop="stopPrevent"
-								v-if="item.payStatus== -10" 
-								class="del-btn yticon icon-iconfontshanchu1"
-								@click="deleteOrder(index)"
-							></text> -->
-						</view>
-						
-						<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x>
-							<view
-								v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
-								class="goods-item"
-							>
-								<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
-							</view>
-						</scroll-view>
-						<view 
-							v-if="item.orderDetails.length == 1" 
-							class="goods-box-single"
-							v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
-						>
-							<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
-							<view class="right">
-								<text class="title clamp">{{goodsItem.product.name}}</text>
-								<text class="attr-box">{{goodsItem.product.specificationName != null? goodsItem.product.specificationName:''}}  x {{goodsItem.quantity}}</text>
-								<text class="price">{{goodsItem.productPrice}}</text>
-							</view>
-						</view>
-						
-						<view class="price-box">
-							共
-							<text class="num">{{item.totalQuantity}}</text>
-							件商品 合计
-							<text class="price">{{item.totalPrice}}</text>
-						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 0" @click.stop="stopPrevent"> <!-- 待付款  -->
-							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-							<button class="action-btn recom" @click="payOrder(item)">立即支付</button>
-						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 20" @click.stop="stopPrevent"> <!-- 待发货  -->
-							
-						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 40" @click.stop="stopPrevent"> <!-- 待收货  -->
-							<button class="action-btn" @click="logistOrder(item)">查看物流</button>
-							<button class="action-btn recom" @click="sureOrder(item)">确认收货</button>
-						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 60" @click.stop="stopPrevent"> <!-- 待评价  -->
-							<button class="action-btn recom" @click="navTo('/pages/order/comment')">去评价</button>
-						</view>
+						<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
 					</view>
-					 
-					<uni-load-more :status="tabItem.loadingType"></uni-load-more>
 				</scroll-view>
-			</swiper-item>
-		</swiper>
+				<view 
+					v-if="item.orderDetails.length == 1" 
+					class="goods-box-single"
+					v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
+				>
+					<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
+					<view class="right">
+						<text class="title clamp">{{goodsItem.product.name}}</text>
+						<text class="attr-box">{{goodsItem.product.specificationName != null? goodsItem.product.specificationName:''}}  x {{goodsItem.quantity}}</text>
+						<text class="price">{{goodsItem.productPrice}}</text>
+					</view>
+				</view>
+				
+				<view class="price-box">
+					共
+					<text class="num">{{item.totalQuantity}}</text>
+					件商品 合计
+					<text class="price">{{item.totalPrice}}</text>
+				</view>
+				<view class="action-box b-t" @click.stop="stopPrevent">
+					<button class="action-btn recom">申请售后</button>
+				</view>
+			</view>
+			 
+			<uni-load-more :status="loadingType"></uni-load-more>
+		</scroll-view>
 	</view>
 </template> 
 
@@ -99,58 +72,15 @@
 		},
 		data() {
 			return {
-				tabCurrentIndex: 0,
-				navList: [{
-						state: 0,
-						text: '全部',
-						loadingType: 'more',
-						orderList: [],
-						payState: null,
-						pageSize: 10,
-						pageIndex: 1
-					},
-					{
-						state: 1,
-						text: '待付款',
-						loadingType: 'more',
-						orderList: [],
-						payState: 0,
-						pageSize: 10,
-						pageIndex: 1
-					},
-					{
-						state: 2,
-						text: '待发货',
-						loadingType: 'more',
-						orderList: [],
-						payState: 20,
-						pageSize: 10,
-						pageIndex: 1
-					},
-					{
-						state: 3,
-						text: '待收货',
-						loadingType: 'more',
-						orderList: [],
-						payState: 40,
-						pageSize: 10,
-						pageIndex: 1
-					},
-					{
-						state: 4,
-						text: '待评价',
-						loadingType: 'more',
-						orderList: [],
-						payState: 60,
-						pageSize: 10,
-						pageIndex: 1
-					}
-				],
+				loadingType: 'more',
+				orderList: [],
+				payState: null,
+				pageSize: 10,
+				pageIndex: 1
 			};
 		},
 		
 		onLoad(options){
-			this.tabCurrentIndex = options.state;
 			this.loadData()
 		},
 		 
@@ -163,69 +93,43 @@
 			},
 			//获取订单列表
 			async loadData(source){
-				//这里是将订单挂载到tab列表下
-				let index = this.tabCurrentIndex;
-				let navItem = this.navList[index];
 				
-				if(navItem.loadingType === 'loading'){
+				if(this.loadingType === 'loading'){
 					//防止重复加载
 					return;
 				}
 				
 				if(source === 'tabChange'){ //切换重新刷新
-					navItem.pageIndex = 1;
-					navItem.orderList = [];
-					navItem.loadingType = 'more';
+					this.pageIndex = 1;
+					this.orderList = [];
+					this.loadingType = 'more';
 				}
 				
-				if(navItem.loadingType == 'noMore'){
+				if(this.loadingType == 'noMore'){
 					return;
 				}
 				
-				navItem.loadingType = 'loading';
+				this.loadingType = 'loading';
 				
-				let values = {needDetail: true,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				if(navItem.payState != null){
-					values['payStatus'] = navItem.payState;
-				}
+				let values = {needDetail: true,pageIndex: this.pageIndex,pageSize: this.pageSize};
 				let result = await this.$request.ModelOrder.listOrder(values);
 				let orderList = result.records;
 				orderList.forEach(item=>{
-					item = Object.assign(item, this.orderStateExp(item.payStatus));
-					navItem.orderList.push(item);
+					// item = Object.assign(item, this.orderStateExp(item.payStatus));
+					this.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
-				this.$set(navItem, 'loaded', true);
+				this.loaded = true;
 				
 				//判断是否还有数据， 有改为 more， 没有改为noMore 
-				if(orderList.length < navItem.pageSize){
-					navItem.loadingType = 'noMore';
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
 				}else{
-					navItem.loadingType = 'more'; 
+					this.loadingType = 'more'; 
 				}
 				
-				navItem.pageIndex = navItem.pageIndex + 1;
-				this.navList[index] = navItem;
-				console.log('this.navList[index]',this.navList[index]);
-			}, 
-
-			//swiper 切换
-			changeTab(e){
-				if(this.tabCurrentIndex == e.target.current){
-					return;
-				}
-				this.tabCurrentIndex = e.target.current;
-				this.loadData('tabChange');
+				this.pageIndex = this.pageIndex + 1;
 			},
-			//顶部tab点击
-			tabClick(index){
-				if(this.tabCurrentIndex == index){
-					return;
-				}
-				this.tabCurrentIndex = index;
-				this.loadData('tabChange');
-			},
-			
 			async deleteOrder(index){ //删除订单
 				uni.showLoading({
 					title: '请稍后'
@@ -237,53 +141,6 @@
 				this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
 				console.log('delete order',orderItem);
 				uni.hideLoading();
-			},
-			cancelOrder(item){//取消订单
-				var that = this;
-				uni.showModal({
-				    title: '确定取消订单?',
-				    success: function (res) {
-				        if (res.confirm) {
-							that.$request.ModelOrder.cancelOrder(item.orderNum).then(result => {
-								that.loadData('tabChange');
-							});
-				        }
-				    }
-				});
-			},
-			payOrder(item){ //支付订单
-				uni.navigateTo({
-					url: '/pages/money/pay?orderNum='+item.orderNum
-				})
-			},
-			logistOrder(item){ //查看物流
-				
-			},
-			sureOrder(item){ //确认收货
-				
-			},
-			//订单状态文字和颜色
-			orderStateExp(state){
-				let stateTip = '',
-					stateTipColor = '#fa436a';
-				switch(+state){
-					case -10:
-						stateTip = '订单已关闭';
-						stateTipColor = '#909399';
-						break;
-					case 0:
-						stateTip = '待付款';break;
-					case 20:
-						stateTip = '待发货'; break;
-					case 40:
-						stateTip = '待收货'; break;
-					case 60:
-						stateTip = '已收货';break;
-					case 80:
-						stateTip = '待评价';break;
-					//更多自定义
-				}
-				return {stateTip, stateTipColor};
 			}
 		},
 	}
@@ -293,10 +150,6 @@
 	page, .content{
 		background: $page-color-base;
 		height: 100%;
-	}
-	
-	.swiper-box{
-		height: calc(100% - 40px);
 	}
 	.list-scroll-content{
 		height: 100%;

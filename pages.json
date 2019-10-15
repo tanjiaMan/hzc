@@ -76,6 +76,16 @@
 				}
 			}
 		},{
+			"path": "pages/order/orderSvs",
+			"style": {
+				"navigationBarTitleText": "退款售后"
+			}
+		},{
+			"path": "pages/order/orderSvsDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},{
 			"path": "pages/money/money",
 			"style": {}
 		},{
