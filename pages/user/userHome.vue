@@ -43,7 +43,7 @@
 				</view>
 			</view>
 			
-			<view class="btzy">
+			<view class="btzy" @click="navTo('/pages/user/userTrans')">
 				转移记录 >
 			</view>
 		</view>
@@ -62,7 +62,11 @@
 			}
 		},
 		methods: {
-			
+			navTo(url){
+				uni.navigateTo({  
+					url
+				})  
+			},
 		}
 	}
 </script>

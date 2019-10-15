@@ -58,6 +58,11 @@
 				"navigationBarTitleText": "个人主页"
 			}
 		},{
+			"path": "pages/user/userTrans",
+			"style": {
+				"navigationBarTitleText": "转账记录"
+			}
+		},{
 			"path": "pages/user/money",
 			"style": {
 				"navigationBarTitleText": "我的代金劵"
