@@ -252,6 +252,7 @@
 						font-family:SourceHanSansCN;
 						font-weight:400;
 						color:rgba(255,255,255,1);
+						line-height: 1;
 					}
 					
 					.tit1_2{
