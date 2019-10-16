@@ -113,7 +113,7 @@
 			<view class="uni-flex uni-row d-header">
 				<view class="flex-item tit1">商品销量</view>
 				<view class="flex-item tit2">销量</view>
-				<view class="flex-item tit3">查看排行<text class="yticon icon-you"></text></view>
+				<view class="flex-item tit3" @click="navTo('/pages/user/statementlist')">查看排行<text class="yticon icon-you"></text></view>
 			</view>
 			<view class="d-header-body">
 				<text class="tit1">总销量：</text><text class="tit2">1908</text>
