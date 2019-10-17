@@ -73,7 +73,7 @@
 					
 					<!-- 秒杀楼层 -->
 					<view class="seckill-section" v-if="newsitems[TabCur] && newsitems[TabCur].seckill && newsitems[TabCur].seckill.length > 0">
-						<view class="s-header_1">
+						<view class="s-header_1" @click="navTo('/pages/index/sekilllist')">
 							<img class='s-h-img' src="https://pic.youx365.com/ms_header.png" />
 						</view>
 						<view class="s-header">

@@ -6,6 +6,11 @@
 				"navigationBarTitleText": "社集优选",
 				"navigationStyle": "custom"
 			}
+		},{
+			"path": "pages/index/sekilllist",
+			"style": {
+				"navigationBarTitleText": "限时秒杀"
+			}
 		},
 		{
 			"path": "pages/product/product",

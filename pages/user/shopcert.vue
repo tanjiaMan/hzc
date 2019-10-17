@@ -50,10 +50,10 @@
 			</view>
 			<view class="d-3 uni-flex uni-row">
 				<view class="flex-item">
-					<img src='https://pic.youx365.com/shop-cert-5.png' class="id-img" />
+					<img src='https://pic.youx365.com/shop-cert-11.png' class="id-img" />
 				</view>
 				<view class="flex-item">
-					<img src='https://pic.youx365.com/shop-cert-5.png'  class="id-img" />
+					<img src='https://pic.youx365.com/shop-cert-10.png'  class="id-img" />
 				</view>
 			</view>
 		</view>
@@ -174,9 +174,10 @@
 	}
 	
 	.id-img{
-		width: 340rpx;
+		width: 308rpx;
 		margin-top: 20rpx;
-		height: 270rpx;
+		height: 250rpx;
+		margin-left: 20rpx;
 	}
 	
 	.shopper-img{
