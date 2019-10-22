@@ -22,7 +22,9 @@
 				   <view class="uni-flex uni-row" @click="navToLogin('/pages/notice/message')">
 					   <view class="flex-item d-avatar">
 						   <img  src='https://pic.youx365.com/notice.png' />
-						   <view class="cu-tag badge">1</view>
+						   <view class="cu-tag badge" v-if="newsitems[TabCur] && newsitems[TabCur].config && newsitems[TabCur].config.unReadMsgCount>0">
+								{{newsitems[TabCur].config.unReadMsgCount}}
+						   </view>
 					   </view>
 					   <view class="flex-item d_title">
 						   消息
@@ -110,7 +112,7 @@
 					</view>
 					
 					<!-- start 砍价专区 -->
-					<!-- <view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
+					<view class="f-header" v-if="newsitems[TabCur] && newsitems[TabCur].bargin && newsitems[TabCur].bargin.length > 0">
 						<view class="tit-frame">
 							<text class="tit">砍价专区</text>
 							<text class="tit1">|</text>
@@ -118,13 +120,13 @@
 						</view>
 						<img src="https://pic.youx365.com/goods.png" />
 						<view class="tit-frame">
-							<text class="tit3">更多</text>
+							<text class="tit3" @click="navToLogin('/pages/index/kjlist')">更多</text>
 						</view>
 					</view>
-					<view class="tg-floor" v-if="newsitems[TabCur] && newsitems[TabCur].groupbuy && newsitems[TabCur].groupbuy.length > 0">
-						<uni-swiper-dot :info="newsitems[TabCur].groupbuy" :current="tgCurrent" mode="long" :dots-styles="dotsStyles" field="content">
-							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
-								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
+					<view class="tg-floor" v-if="newsitems[TabCur] && newsitems[TabCur].bargin && newsitems[TabCur].bargin.length > 0">
+						<uni-swiper-dot :info="newsitems[TabCur].bargin" :current="kjCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+							<swiper :style="kjFrameHeight" class="swiper-box-tg" @change="kjSwitch">
+								<swiper-item v-for="(item, index) in newsitems[TabCur].bargin" :key="index">
 									<view class="tg-list">
 										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
 											<view class="tg-img flex-item">
@@ -132,15 +134,11 @@
 											</view>
 											<view class="tg-text flex-item">
 												<view class="tit1">{{o.productName}}</view>
-												<view class="uni-flex uni-row">
-													<view class="flex-item tit2">￥ {{o.groupbuyPrice}}</view>
-													<view class="flex-item tit3">已拼{{o.joinOpenedCount}}件</view>
-												</view>
-												<view class="uni-flex uni-row">
-													<view class="flex-item pic1">
-														<view class="cu-avatar round" v-for="(item,index) in o.latestJoinedAvatars" :key="index" :style="[{ backgroundImage:'url(' + item + ')' }]"></view>
+												<view class="uni-flex uni-row d-kj">
+													<view class="flex-item" style="width: 50%;"><text class="kj1">￥</text><text class="kj2">{{o.bargainPrice}}</text></view>
+													<view class="flex-item" style="width: 50%;">
+														<view class="kjbt">我要砍价</view>
 													</view>
-													<view class="flex-item tit4">等购买了此商品</view>
 												</view>
 											</view>
 										</view>
@@ -148,7 +146,7 @@
 								</swiper-item>
 							</swiper>
 						</uni-swiper-dot>
-					</view> -->
+					</view>
 					<!-- end 砍价专区 -->
 					
 					<!-- start 团购优惠 -->
@@ -293,9 +291,11 @@
 				
 				//高度 3个： 760,2: 520, 1:  140 rpx
 				tgFrameHeight: 'height: 520rpx !important;',
+				kjFrameHeight: 'height: 520rpx !important;',
 				
 				//团购
 				tgCurrent: 0,
+				kjCurrent: 0,
 				
 				//爆款
 				bkCurrent: 0,	
@@ -331,6 +331,9 @@
 				if(subData == null){
 					subData = {};
 				}
+				// 加载配置项
+				let config = await this.$request.ModelHome.getConfig(pid);
+				subData.config = config;
 				
 				//加载子菜单
 				let menu = await this.$request.ModelHome.getCategoryByPid(pid);
@@ -344,6 +347,43 @@
 				let seckill = await this.$request.ModelHome.getSeckill({classifyPid: pid});
 				if(seckill && seckill.records && seckill.records.length>0){
 					subData.seckill = seckill.records;
+				}
+				
+				//获取砍价
+				let bargin = await this.$request.ModelHome.getBargin({classifyPid: pid,pageSize: 6});
+				this.kjFrameHeight = 'height: 0px !important;'
+				if(bargin && bargin.records && bargin.records.length>0){
+					//高度 3个： 760,2: 520, 1:  140 rpx
+					if(bargin.records.length == 1){
+						// #ifndef H5
+						this.kjFrameHeight = 'height: 260rpx !important;'
+						// #endif
+						// #ifdef H5
+						this.kjFrameHeight = 'height: 130px !important;'
+						// #endif
+					}else{
+						// #ifndef H5
+						this.kjFrameHeight = 'height: 520rpx !important;'
+						// #endif
+						// #ifdef H5
+						this.kjFrameHeight = 'height: 260px !important;'
+						// #endif
+					}
+					let info = [],temp = [];
+					let index = 0;
+					for(var i=0;i<bargin.records.length;i++){
+						if(index > 2){
+							info.push(temp);
+							temp = [];index = 0;
+						}
+						temp.push(bargin.records[i]);
+						index ++;
+					}
+					if(temp.length != 0){
+						info.push(temp);
+					}
+					subData.bargin = info;
+					this.kjCurrent = 0;
 				}
 				
 				//团购优惠
@@ -450,6 +490,9 @@
 			//团购切换
 			async tgSwitch(e){
 				this.tgCurrent = e.detail.current
+			},
+			async kjSwitch(e){
+				this.kjCurrent = e.detail.current
 			},
 			//爆款
 			async bkSwitch(e){
@@ -970,6 +1013,41 @@
 		margin:-57rpx auto 0;
 		border-radius:0rpx 0 16rpx 16rpx;
 		
+		.d-kj{
+			display: flex;
+			align-items: center;
+			height: 120rpx;
+			line-height: 120rpx;
+			
+			.kj1{
+				font-size:26rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(255,68,63,1);
+			}
+			
+			.kj2{
+				font-size:34rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(255,68,63,1);
+			}
+			
+			.kjbt{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+				width:118rpx;
+				height:49rpx;
+				line-height:49rpx;
+				background:rgba(0,163,144,1);
+				border-radius:4rpx;
+				text-align: center;
+				float: right;
+				margin-right: 20rpx;
+			}
+		}
 	}
 	
 	.tg-list{
@@ -1241,7 +1319,7 @@
 			
 			.d_title{
 				font-size:26rpx;
-				margin-left: 15rpx;
+				margin-left: 8rpx;
 			}
 			
 			.d-avatar{

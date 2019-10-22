@@ -16,6 +16,12 @@ export default{
 	},
 	
 	//首页
+	async getConfig(classfyId){
+		let url = config.api + '/h5/index/config-facade?classifyId='+classfyId;
+		let result = await request.get(url,{silence: true});
+		return result && result.data;
+	},
+	
 	async getBanner(classfyId){
 		let url = config.api + '/h5/index/banner/list?classifyId='+classfyId;
 		let result = await request.get(url,{silence: true});
@@ -30,6 +36,12 @@ export default{
 	
 	async getGroupBuy(data){
 		let url = config.api + '/h5/index/goods/groupbuy';
+		let result = await request.post(url,data,{silence: true});
+		return result && result.data;
+	},
+	
+	async getBargin(data){
+		let url = config.api + '/h5/index/goods/bargain';
 		let result = await request.post(url,data,{silence: true});
 		return result && result.data;
 	},
