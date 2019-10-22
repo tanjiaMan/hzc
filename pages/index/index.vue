@@ -413,6 +413,7 @@
 					this.bkCurrent = 0;
 				}
 				
+				//热销
 				let rxgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true});
 				if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
 					subData.rxgoods = rxgoods.records;

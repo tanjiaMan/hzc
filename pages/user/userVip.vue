@@ -11,13 +11,9 @@
 					<view class="username">
 						{{userInfo.nickname || '游客'}}
 						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
+						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
 					</view>
 					<text class="mobile">{{userInfo.mobile}}</text>
-				</view>
-				<view class="flex-item d_4">
-					<view class="shopper" @click="navTo('/pages/user/shopcert')">
-						申请店主
-					</view>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
@@ -324,7 +320,7 @@
 			}
 			
 			.d_2{
-				width: 250rpx;
+				width: 450rpx;
 				height: 198rpx;
 				padding-top: 44rpx;
 				
@@ -361,16 +357,10 @@
 						margin-right:5rpx;
 					}
 				}
-			}
-			
-			.d_4{
-				width: 200rpx;
-				padding-top: 50rpx;
 				
 				.shopper{
-					width: 120rpx;
-					height: 58rpx;
-					line-height: 58rpx;
+					height: 64rpx;
+					line-height: 64rpx;
 					background-image: url('https://pic.youx365.com/user_vip_bt.png');
 					font-size:18rpx;
 					font-family:SourceHanSansCN;
@@ -378,6 +368,7 @@
 					color:rgba(50,49,52,1);
 					background-size: cover;
 					text-align: center;
+					padding: 10rpx;
 				}
 			}
 			

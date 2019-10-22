@@ -11,6 +11,21 @@
 			"style": {
 				"navigationBarTitleText": "限时秒杀"
 			}
+		},{
+			"path": "pages/index/kjlist",
+			"style": {
+				"navigationBarTitleText": "砍价专区"
+			}
+		},{
+			"path": "pages/index/kjdetail",
+			"style": {
+				"navigationBarTitleText": "点击砍价"
+			}
+		},{
+			"path": "pages/index/kjsuccess",
+			"style": {
+				"navigationBarTitleText": "邀请砍价"
+			}
 		},
 		{
 			"path": "pages/product/product",
