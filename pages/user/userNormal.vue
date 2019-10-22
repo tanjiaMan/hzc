@@ -19,7 +19,7 @@
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
 						<view class="flex-item d-avatar">
 							<img  src='https://pic.youx365.com/notice.png' />
-							<view class="cu-tag badge">1</view>
+							<view class="cu-tag badge" v-if="unreadmsg>0">{{unreadmsg}}</view>
 						</view>
 						<view class="flex-item d_title">
 								消息
@@ -65,7 +65,7 @@
     
 		<!-- 钱包 -->
 		<view class="user-money">
-			<text class="num">5400</text>
+			<text class="num">{{userAmount.userBalance || 0}}</text>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
 					<img src="https://pic.youx365.com/user_money.png" />
@@ -207,18 +207,35 @@
 		components: {
 			uniGrid,uniGridItem
 		},
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		name: 'userNormal',
 		data(){
 			return {
-				
+				userAmount:{}, //账户金额
+				unreadmsg:0,//未读消息
 			}
 		},
-		onLoad(){
-		},
-        computed: {
-			...mapState(['hasLogin','userInfo'])
-		},
         methods: {
+			show(){
+				if(!this.hasLogin){
+					return;
+				}
+				//账户金额
+				this.$request.ModelUser.getAmount().then(result => {
+					this.userAmount = result || {};
+				});
+				//未读消息
+				this.$request.ModelHome.getConfig(0).then(result => {
+					if(result.unReadMsgCount && result.unReadMsgCount>0){
+						this.unreadmsg = result.unReadMsgCount;
+					}
+				})
+			},
+			load(){
+				console.log('child onLoad')
+			},
 			navTo(url){
 				if(!this.hasLogin){
 					url = '/pages/public/login';

@@ -19,5 +19,13 @@ export default{
 		let url = config.api + '/h5/auth/user/check-token?token='+token;
 		let result = await request.get(url,{});
 		return result;
-	}
+	},
+	
+	//用户资金情况
+	async getAmount(){
+		let url = config.api + '/h5/user/account';
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 }

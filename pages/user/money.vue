@@ -1,7 +1,7 @@
 <template>  
     <view class="container">
 		<view class="header">
-			<view class="tit1">5400.00</view>
+			<view class="tit1">{{userAmount.userBalance || 0}}</view>
 			<view class="tit2">
 				<img src="https://pic.youx365.com/money_logo.png" />
 				<text>代金券</text>
@@ -49,7 +49,14 @@
 		data(){
 			return {
 				loadingType: 'more',
+				userAmount:{}, //账户金额
 			}
+		},
+		onShow(){
+			//账户金额
+			this.$request.ModelUser.getAmount().then(result => {
+				this.userAmount = result || {};
+			});
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移

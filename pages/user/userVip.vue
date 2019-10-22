@@ -14,12 +14,13 @@
 						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
 					</view>
 					<text class="mobile">{{userInfo.mobile}}</text>
+					<view v-if="!hasLogin" class="loginbt" @click="navToLogin">注册/登陆</view>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
 						<view class="flex-item d-avatar">
 							<img  src='https://pic.youx365.com/notice.png' />
-							<view class="cu-tag badge">1</view>
+							<view class="cu-tag badge" v-if="unreadmsg>0">{{unreadmsg}}</view>
 						</view>
 						<view class="flex-item d_title">
 								消息
@@ -65,7 +66,7 @@
     
 		<!-- 钱包 -->
 		<view class="user-money">
-			<text class="num">5400</text>
+			<text class="num">{{userAmount.userBalance || 0}}</text>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
 					<img src="https://pic.youx365.com/user_vip_money.png" />
@@ -276,18 +277,36 @@
 		components: {
 			uniGrid,uniGridItem
 		},
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		name: 'userVip',
 		data(){
 			return {
-				
+				userAmount:{},
+				unreadmsg:0,//未读消息
 			}
 		},
-		onLoad(){
-		},
-        computed: {
-			...mapState(['hasLogin','userInfo'])
-		},
         methods: {
+			show(){
+				console.log('child onshow')
+				if(!this.hasLogin){
+					return;
+				}
+				//账户金额
+				this.$request.ModelUser.getAmount().then(result => {
+					this.userAmount = result || {};
+				});
+				//未读消息
+				this.$request.ModelHome.getConfig(0).then(result => {
+					if(result.unReadMsgCount && result.unReadMsgCount>0){
+						this.unreadmsg = result.unReadMsgCount;
+					}
+				})
+			},
+			load(){
+				console.log('child onLoad')
+			},
 			navTo(url){
 				if(!this.hasLogin){
 					url = '/pages/public/login';
@@ -295,6 +314,11 @@
 				uni.navigateTo({  
 					url
 				})  
+			},
+			navToLogin(){
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
 			},
         }  
     }  
@@ -336,6 +360,17 @@
 					font-family:SourceHanSansCN;
 					font-weight:400;
 					color:rgba(233,211,175,1);
+				}
+				
+				.loginbt{
+					font-size:24rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:rgba(255,255,255,1);
+					border: solid 1px white;
+					width: max-content;
+					border-radius: 100rpx;
+					padding: 0px 10rpx 0 10rpx;
 				}
 				
 				.user-vip{

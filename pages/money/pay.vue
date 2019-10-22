@@ -22,7 +22,7 @@
 			<view class="type-item" @click="changePayType(3)">
 				<img src="https://pic.youx365.com/pay-yue.png" />
 				<view class="con">
-					<text class="tit">余额支付（¥198.5）</text>
+					<text class="tit">余额支付（¥{{amount}}）</text>
 				</view>
 				<view
 					class="yticon icon-xuanzhong2 checkbox"
@@ -64,10 +64,11 @@
 				payType: 1,
 				orderInfo: {},
 				orderNum: null,
+				amount: 0,
 				
 				//倒计时
 				timer: null,
-				seconds: 9999, //剩余支付时间
+				seconds: 0, //剩余支付时间
 				d: '00',
 				h: '00',
 				i: '00',
@@ -85,6 +86,14 @@
 			this.orderNum = orderNum;
 			this.$request.ModelOrder.infoOder(orderNum).then(result => {
 				this.orderInfo = result || {};
+				if(result && result.leftPaySeconds && result.leftPaySeconds>0){
+					this.seconds = result.leftPaySeconds;
+				}
+			})
+			this.$request.ModelUser.getAmount().then(result => {
+				if(result && result.userBalance){
+					this.amount = result.userBalance;
+				}
 			})
 		},
 		created: function(e) {
