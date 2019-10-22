@@ -96,4 +96,18 @@ export default{
 		let result = await request.post(url,{},{});
 		return result;
 	},
+	
+	// 现金券支付
+	async payBalance(ordernum){
+		let url = config.api + '/h5/pay/balance-pay?orderNum=' + ordernum;
+		let result = await request.post(url,{},{});
+		return result;
+	},
+	
+	//微信支付入金
+	async wxDeposit(amount){ //预支付
+		let url = config.api + '/h5/pay/wx-deposit?amount=' + amount;
+		let result = await request.post(url,{},{});
+		return result;
+	},
 }

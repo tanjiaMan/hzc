@@ -185,13 +185,21 @@
 			zfclose(){
 				this.$refs.popup.close();
 			},
-			mmpay(){
+			async mmpay(){
 				if(this.codeLength != this.length){
 					return;
 				}
+				console.log(this.code); //TODO code校验
 				
-				console.log(this.code);
-				this.$refs.popup.close();
+				let result = await this.$request.ModelOrder.payBalance(this.orderNum);
+				if(result.code == 'ok'){
+					this.$refs.popup.close();
+					uni.redirectTo({
+						url: '/pages/money/paySuccess?orderNum=' + this.orderNum
+					});
+				}else{
+				    this.$api.msg(result.msg);	
+				}
 			},
 			contToggle(k){
 				let len = this.code.length;

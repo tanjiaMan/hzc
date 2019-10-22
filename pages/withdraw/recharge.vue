@@ -10,7 +10,7 @@
 				<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
 			</view>
 			<view class="flex-item d_3">
-				<input value="" class="input" type="number" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
+				<input v-model="amount" class="input" type="digit" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
 			</view>
 			<view class="flex-item d_4">
 				元
@@ -41,7 +41,7 @@
 			</view> -->
 		</view>
 		
-		<view class="bt1">
+		<view class="bt1" @click="recharge">
 			立即充值
 		</view>
 	</view>
@@ -53,6 +53,7 @@
 		data() {
 			return {
 				payType: 1,
+				amount: null,
 			};
 		},
 		methods:{
@@ -64,6 +65,39 @@
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
+			},
+			recharge(){
+				if(this.amount == null || this.amount < 0){
+					this.$api.msg('请输入正确的金额');
+					return;
+				}
+				this.$request.ModelOrder.wxDeposit(this.amount).then(result => {
+					if(result.code != 'ok'){
+						this.$api.msg(result.msg);
+						return;
+					}
+					result = result.data;
+					var that = this;
+					if(result.payStatus && result.payStatus == true){
+						let payinfo = JSON.parse(result.data);
+						uni.requestPayment({
+						    provider: 'wxpay',
+						    timeStamp: payinfo.timeStamp,
+						    nonceStr: payinfo.nonceStr,
+						    package: payinfo.package,
+						    signType: 'MD5',
+						    paySign: payinfo.paySign,
+						    success: function (res) {
+						       that.$api.msg('充值成功');
+						    },
+						    fail: function (err) {
+						        that.$api.msg('您已取消支付');
+						    }
+						});
+					}else{
+						this.$api.msg('预支付失败，请稍后重试');
+					}
+				})
 			}
 		}
 	}
