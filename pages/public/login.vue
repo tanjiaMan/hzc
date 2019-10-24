@@ -113,7 +113,8 @@
 						mobile: data.mobile,
 						nickname: userInfo.nickName,
 						portrait: userInfo.avatarUrl,
-						token: data.token
+						token: data.token,
+						userType: data.userType
 					};
 					this.setToken(data.token);
 					this.login(userInfoVo);

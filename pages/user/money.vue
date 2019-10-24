@@ -22,20 +22,20 @@
 			代金券明细
 		</view>
 		<view class="tab_detail">
-			<view class="tab_item uni-flex uni-row" v-for="item in 10" :key="item">
+			<view class="tab_item uni-flex uni-row" v-for="(item,index) in records" :key="index">
 				<view class="flex-item d_1">
 					<img class="img" src="https://pic.youx365.com/wazi2.JPG"  />
 				</view>
 				<view class="flex-item d_2">
-					<view class="tit1">zhang三 分佣{{item}}</view>
-					<view class="tit2">14:20:30</view>
+					<view class="tit1">{{item.userId}} 购买</view>
+					<view class="tit2">{{item.createTime}}</view>
 				</view>
 				<view class="flex-item d_3">
-					+500
+					{{item.amountBalance}}
 				</view>
 			</view>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
+		<uni-load-more :status="query.loadingType"></uni-load-more>
     </view>  
 </template>  
 <script>  
@@ -48,8 +48,13 @@
 		},
 		data(){
 			return {
-				loadingType: 'more',
 				userAmount:{}, //账户金额
+				query:{
+					pageIndex: 1,
+					pageSize: 10,
+					loadingType: 'more',
+				},
+				records:[],
 			}
 		},
 		onShow(){
@@ -66,20 +71,46 @@
 				this.headerPosition = "absolute";
 			}
 		},
+		onLoad(){
+			this.getAmountFlow();
+		},
 		//下拉刷新
 		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
+			this.getAmountFlow('refresh');
 		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.getAmountFlow('more');
 		},
         methods: {
 			navTo(url){
 				uni.navigateTo({  
 					url
 				})  
-			}, 
+			},
+			async getAmountFlow(type){
+				if(this.query.loadingType == 'noMore'){
+					return;
+				}
+				if(type == 'more'){
+					this.query.pageIndex = this.query.pageIndex + 1;
+				}else if(type == 'refresh'){
+					this.query.pageIndex = 1;
+				}
+				this.query.loadingType = 'loading';
+				let result = await this.$request.ModelUser.getAmountFlow(this.query);
+				let moneylist = result.records;
+				
+				if(moneylist.length < this.query.pageSize){
+					this.query.loadingType = 'noMore';
+				}else{
+					this.query.loadingType = 'more'; 
+				}
+				
+				moneylist.forEach(item=>{
+					this.records.push(item);
+				})
+			}
         }  
     }  
 </script>  

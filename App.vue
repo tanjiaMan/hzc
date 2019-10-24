@@ -2,10 +2,13 @@
 	/**
 	 * vuex管理登陆状态，具体可以参考官方登陆模板示例
 	 */
-	import {mapMutations} from 'vuex';
+	import {mapMutations,mapState} from 'vuex';
 	import Vue from 'vue'
 	
 	export default {
+		computed: {
+			...mapState(['userInfo'])
+		},
 		methods: {
 			...mapMutations(['login']),
 		},
@@ -42,7 +45,13 @@
 			/* =========== end login ========== */
 		},
 		onShow: function() {
-			console.log('App Show')
+			let userInfo = this.userInfo;
+			if(userInfo && userInfo.id && userInfo.token){
+				this.$request.ModelUser.getUser().then(result => {
+					userInfo.userType = result.userType;
+					this.login(userInfo);
+				})
+			}
 		},
 		onHide: function() {
 			console.log('App Hide')

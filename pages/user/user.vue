@@ -1,15 +1,19 @@
 <template>  
     <view>
-		<!-- <user-normal ref="usernomal"></user-normal> -->
-		<user-vip ref="uservip"></user-vip>
+		<user-vip v-if="userInfo && userInfo.userType == 2" ref="uservip"></user-vip>
+		<user-normal v-else ref="usernomal"></user-normal>
 	</view>  
 </template>  
 <script>
 	
 	import userNormal from "./userNormal.vue";
 	import userVip from "./userVip.vue";
+	import {mapMutations,mapState} from 'vuex';
 	
     export default {
+		computed: {
+			...mapState(['userInfo'])
+		},
 		components: {
 			userNormal,userVip
 		},
@@ -33,9 +37,6 @@
 			if(this.$refs.usernomal){
 				this.$refs.usernomal.show();
 			}
-		},
-        computed: {
-			
 		},
         methods: {
 			

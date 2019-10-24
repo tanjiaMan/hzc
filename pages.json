@@ -90,6 +90,7 @@
 		},{
 			"path": "pages/user/money",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "我的代金劵"
 			}
 		},{

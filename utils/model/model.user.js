@@ -21,6 +21,26 @@ export default{
 		return result;
 	},
 	
+	//获取用户详情
+	async getUser(){
+		let url = config.api + '/h5/user/detail';
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async getFullUser(){
+		let url = config.api + '/h5/user/full-info';
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	//签到
+	async signToday(){
+		let url = config.api + '/h5/user/sign';
+		let result = await request.get(url,{});
+		return result;
+	},
+	
 	//用户资金情况
 	async getAmount(){
 		let url = config.api + '/h5/user/account';
@@ -28,4 +48,9 @@ export default{
 		return result && result.data;
 	},
 	
+	async getAmountFlow(data){
+		let url = config.api + '/h5/user/account-flow';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	}
 }

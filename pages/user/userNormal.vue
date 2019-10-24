@@ -65,7 +65,7 @@
     
 		<!-- 钱包 -->
 		<view class="user-money">
-			<text class="num">{{userAmount.userBalance || 0}}</text>
+			<text class="num">{{fullUser.accountInfo.userBalance || 0}}</text>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
 					<img src="https://pic.youx365.com/user_money.png" />
@@ -78,11 +78,11 @@
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
 					<view class="tit1">今日收入</view>
-					<view class="tit2">￥860.00</view>
+					<view class="tit2">￥{{fullUser.accountInfo.dayIncome || 0}}</view>
 				</view>
 				<view class="flex-item" style="width: 50%;">
 					<view class="tit1">本月收入</view>
-					<view class="tit2">￥1860.00</view>
+					<view class="tit2">￥{{fullUser.accountInfo.monthIncome || 0}}</view>
 				</view>
 			</view>
 		</view>
@@ -92,18 +92,18 @@
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_1">
 					<view class="tit1">我的优惠券</view>
-					<view class="tit2">7</view>
+					<view class="tit2">{{fullUser.couponInfo.couponCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1" @click="navTo('/pages/money/redPackage')">
 					<view class="tit1">我的红包</view>
-					<view class="tit2">6</view>
+					<view class="tit2">{{fullUser.couponInfo.redpackCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1" @click="navTo('/pages/user/collection')">
 					<view class="tit1">我的收藏</view>
-					<view class="tit2">3</view>
+					<view class="tit2">{{fullUser.collectInfo.totalCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1">
-					<view class="tit3">
+					<view class="tit3" @click="signToday">
 						签到
 					</view>
 				</view>
@@ -118,27 +118,27 @@
 			<view class="line"></view>
 			<uni-grid :column="3" :square="false" :show-border="false" :highlight="false" >
 			    <uni-grid-item>
-			        <view class="tit1">268</view>
+			        <view class="tit1">{{fullUser.videoInfo.publishCount || 0}}</view>
 					<view class="tit2">我的发布</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <view class="tit1">3205</view>
+				   <view class="tit1">{{fullUser.collectInfo.videoCount || 0}}</view>
 			       <view class="tit2">我的收藏</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <view class="tit1">17</view>
+			       <view class="tit1">{{fullUser.videoInfo.draftCount || 0}}</view>
 			       <view class="tit2">草稿箱</view>
 			    </uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">268</view>
+				   <view class="tit1">-1</view>
 				   <view class="tit2">我的关注</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">35</view>
+				   <view class="tit1">-1</view>
 				   <view class="tit2">粉丝</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">1112</view>
+				   <view class="tit1">{{fullUser.videoInfo.praiseCount || 0}}</view>
 				   <view class="tit2">获赞</view>
 				</uni-grid-item>
 			</uni-grid>
@@ -213,8 +213,8 @@
 		name: 'userNormal',
 		data(){
 			return {
-				userAmount:{}, //账户金额
 				unreadmsg:0,//未读消息
+				fullUser:{},
 			}
 		},
         methods: {
@@ -222,10 +222,9 @@
 				if(!this.hasLogin){
 					return;
 				}
-				//账户金额
-				this.$request.ModelUser.getAmount().then(result => {
-					this.userAmount = result || {};
-				});
+				this.$request.ModelUser.getFullUser().then(result => {
+					this.fullUser = result;
+				})
 				//未读消息
 				this.$request.ModelHome.getConfig(0).then(result => {
 					if(result.unReadMsgCount && result.unReadMsgCount>0){
@@ -249,6 +248,23 @@
 					url: '/pages/public/login'
 				})
 			},
+			signToday(){ //签到
+				this.$request.ModelUser.signToday().then(result => {
+					if(result.code == 'ok'){ //签到成功
+						uni.showModal({
+							content: "签到成功",
+							confirmText: "确定",
+							showCancel: false
+						})
+					}else{ //签到失败
+						uni.showModal({
+							content: result.msg,
+							confirmText: "确定",
+							showCancel: false
+						})
+					}
+				})
+			}
         }  
     }  
 </script>  
