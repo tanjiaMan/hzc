@@ -97,17 +97,26 @@
 					this.total = 0;
 				}
 			},
-			async submit(){
+			submit(){
 				if(this.num != "" && this.num > 0){
-					let values = {productId: this.item.productId,quantity: this.num};
-					let result = await this.$request.ModelHome.purchaseStock(values);
-					if(result.code == 'ok'){
-						this.$api.msg('进货成功');
-						this.num = "";
-						this.total = 0;
-					}else{
-						this.$api.msg(result.msg);
-					}
+					var that = this;
+					uni.showModal({
+					    content: '确定进货商品',
+					    success: function (res) {
+					        if (res.confirm) {
+					            let values = {productId: that.item.productId,quantity: that.num};
+					            that.$request.ModelHome.purchaseStock(values).then(result => {
+									if(result.code == 'ok'){
+										that.$api.msg('进货成功');
+										that.num = "";
+										that.total = 0;
+									}else{
+										that.$api.msg(result.msg);
+									}
+								});
+					        }
+					    }
+					});
 				}else{
 					this.$api.msg('请输入正确的进货数量');
 				}
