@@ -137,7 +137,7 @@
 		}, {
 			"path": "pages/address/addressManage",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "地址管理"
 			}
 		}, {
 			"path": "pages/money/pay",
@@ -148,6 +148,11 @@
 			"path": "pages/money/moneymsg",
 			"style": {
 				"navigationBarTitleText": "资金管理"
+			}
+		},{
+			"path": "pages/shop/receivables",
+			"style": {
+				"navigationBarTitleText": "收款"
 			}
 		},{
 			"path": "pages/money/paySuccess",

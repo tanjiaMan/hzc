@@ -112,25 +112,25 @@
 			
 			<!-- 底部菜单栏 -->
 			<view class="action-section">
-			<view class="check-wrapper">
-				<view
-					class="yticon icon-xuanzhong2 checkbox"
-					:class="{checked: allChecked}"
-					@click="check('all')"
-					style="font-size: 60rpx;height: auto;"
-				></view>
+				<view class="check-wrapper">
+					<view
+						class="yticon icon-xuanzhong2 checkbox"
+						:class="{checked: allChecked}"
+						@click="check('all')"
+						style="font-size: 60rpx;height: auto;"
+					></view>
+				</view>
+				<view class="qx">全选</view>
+				<view class="total-box">
+					<text class="price">总计：¥{{total}}</text>
+					<!-- <text class="coupon">
+						已优惠
+						<text>74.35</text>
+						元
+					</text> -->
+				</view>
+				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
 			</view>
-			<view class="qx">全选</view>
-			<view class="total-box">
-				<text class="price">总计：¥{{total}}</text>
-				<!-- <text class="coupon">
-					已优惠
-					<text>74.35</text>
-					元
-				</text> -->
-			</view>
-			<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
-		</view>
 		</view>
 	</view>
 </template>

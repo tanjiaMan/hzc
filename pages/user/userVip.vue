@@ -220,7 +220,7 @@
 					<img class="img" src="https://pic.youx365.com/user_s_4.png" />
 				</view>
 				<view class="flex-item d_3">
-					<img class="img" src="https://pic.youx365.com/user_s_5.png" />
+					<img class="img" src="https://pic.youx365.com/user_s_5.png" @click="navTo('/pages/shop/receivables')" />
 				</view>
 			</view>
 		</view>

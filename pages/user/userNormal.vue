@@ -65,7 +65,7 @@
     
 		<!-- 钱包 -->
 		<view class="user-money">
-			<text class="num">{{fullUser.accountInfo.userBalance || 0}}</text>
+			<text class="num">{{fullUser.accountInfo && fullUser.accountInfo.userBalance || 0}}</text>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="desc" @click="navTo('/pages/user/money')" style="width: 50%;">
 					<img src="https://pic.youx365.com/user_money.png" />
@@ -78,11 +78,11 @@
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
 					<view class="tit1">今日收入</view>
-					<view class="tit2">￥{{fullUser.accountInfo.dayIncome || 0}}</view>
+					<view class="tit2">￥{{fullUser.accountInfo && fullUser.accountInfo.dayIncome || 0}}</view>
 				</view>
 				<view class="flex-item" style="width: 50%;">
 					<view class="tit1">本月收入</view>
-					<view class="tit2">￥{{fullUser.accountInfo.monthIncome || 0}}</view>
+					<view class="tit2">￥{{fullUser.accountInfo && fullUser.accountInfo.monthIncome || 0}}</view>
 				</view>
 			</view>
 		</view>
@@ -92,15 +92,15 @@
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_1">
 					<view class="tit1">我的优惠券</view>
-					<view class="tit2">{{fullUser.couponInfo.couponCount || 0}}</view>
+					<view class="tit2">{{fullUser.couponInfo && fullUser.couponInfo.couponCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1" @click="navTo('/pages/money/redPackage')">
 					<view class="tit1">我的红包</view>
-					<view class="tit2">{{fullUser.couponInfo.redpackCount || 0}}</view>
+					<view class="tit2">{{fullUser.couponInfo && fullUser.couponInfo.redpackCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1" @click="navTo('/pages/user/collection')">
 					<view class="tit1">我的收藏</view>
-					<view class="tit2">{{fullUser.collectInfo.totalCount || 0}}</view>
+					<view class="tit2">{{fullUser.collectInfo && fullUser.collectInfo.totalCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1">
 					<view class="tit3" @click="signToday">
@@ -118,15 +118,15 @@
 			<view class="line"></view>
 			<uni-grid :column="3" :square="false" :show-border="false" :highlight="false" >
 			    <uni-grid-item>
-			        <view class="tit1">{{fullUser.videoInfo.publishCount || 0}}</view>
+			        <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.publishCount || 0}}</view>
 					<view class="tit2">我的发布</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-				   <view class="tit1">{{fullUser.collectInfo.videoCount || 0}}</view>
+				   <view class="tit1">{{fullUser.collectInfo && fullUser.collectInfo.videoCount || 0}}</view>
 			       <view class="tit2">我的收藏</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <view class="tit1">{{fullUser.videoInfo.draftCount || 0}}</view>
+			       <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.draftCount || 0}}</view>
 			       <view class="tit2">草稿箱</view>
 			    </uni-grid-item>
 				<uni-grid-item>
@@ -138,7 +138,7 @@
 				   <view class="tit2">粉丝</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">{{fullUser.videoInfo.praiseCount || 0}}</view>
+				   <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.praiseCount || 0}}</view>
 				   <view class="tit2">获赞</view>
 				</uni-grid-item>
 			</uni-grid>
