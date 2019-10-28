@@ -1304,6 +1304,22 @@
 				font-family:SourceHanSansCN-Bold;
 				font-weight:bold;
 			}
+			
+			.nav .cu-item.cur {
+			    border-bottom: none !important;
+				position: relative;
+				
+				&:after{
+					content: " ";
+					width: 36rpx;
+					height: 5rpx;
+					background: white;
+					position: absolute;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);//居中处理
+				}
+			}
 		}
 		
 		.d-nav-more{

@@ -155,12 +155,21 @@
 				"navigationBarTitleText": "收款"
 			}
 		},{
+			"path": "pages/shop/stockpurchase",
+			"style": {
+				"navigationBarTitleText": "进货"
+			}
+		},{
+			"path": "pages/shop/stockpsconfirm",
+			"style": {
+				"navigationBarTitleText": "进货确认"
+			}
+		},{
 			"path": "pages/money/paySuccess",
 			"style": {
 				"navigationBarTitleText": "支付成功"
 			}
-		}
-	    ,{
+		},{
             "path" : "pages/notice/notice",
             "style" : {
 				"navigationBarTitleText": "消息"

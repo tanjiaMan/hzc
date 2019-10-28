@@ -76,4 +76,23 @@ export default{
 		let result = await request.post(url,{},{});
 		return result && result.data;
 	},
+	
+	//agent
+	async pageAgentProduct(data){
+		let url = config.api + '/h5/agent/page-agent-product';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async getAgentProduct(productId){
+		let url = config.api + '/h5/agent/agent-product-detail?productId=' + productId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async purchaseStock(data){
+		let url = config.api + '/h5/agent/purchase-stock';
+		let result = await request.post(url,data,{});
+		return result;
+	},
 }

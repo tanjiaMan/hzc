@@ -217,7 +217,7 @@
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;">
 				<view class="flex-item d_3">
-					<img class="img" src="https://pic.youx365.com/user_s_4.png" />
+					<img class="img" src="https://pic.youx365.com/user_s_4.png" @click="navTo('/pages/shop/stockpurchase')" />
 				</view>
 				<view class="flex-item d_3">
 					<img class="img" src="https://pic.youx365.com/user_s_5.png" @click="navTo('/pages/shop/receivables')" />
