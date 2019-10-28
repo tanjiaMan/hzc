@@ -39,30 +39,30 @@
 						<view class="d-detail">
 							<view class="d-top uni-flex uni-row">
 								<view class="d-top-1">
-									<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
-									<text class="tit1">张三</text>
+									<img class="img" :src="item.avatarUrl" />
+									<text class="tit1">{{item.nickName}}</text>
 								</view>
 								<view class="tit2">
-									05-28 16:50:30
+									{{item.time}}
 								</view>
 							</view>
 							<view class="d-center uni-flex uni-row">
 								<view class="d-left">
-									<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
+									<img class="img" :src="item.coverPicUrl" />
 								</view>
 								<view class="d-right">
 									<view class="uni-flex uni-row">
-										<view class="tit1">退伍军人纪念品老兵退伍留念木盒礼盒</view>
-										<view class="tit2">￥1000.00</view>
+										<view class="tit1">{{item.productName}}</view>
+										<view class="tit2">￥{{item.productPrice}}</view>
 									</view>
 									<view class="uni-flex uni-row">
-										<view class="tit3">红色 x1</view>
-										<view class="tit4"><text class="tit5">2</text>/120</view>
+										<view class="tit3">{{item.specificationName}} x{{item.productQuantity}}</view>
+										<view class="tit4"><text class="tit5">{{item.productQuantity}}</text>/{{ite.agentStock}}</view>
 									</view>
 								</view>
 							</view>
 							<view class="d-bottom">
-								进货价：800件 总利润：200
+								进货价：{{item.agentPrice}}元 总利润：-1
 							</view>
 						</view>
 					</view>
@@ -74,35 +74,35 @@
 						<view class="d-detail">
 							<view class="d-top uni-flex uni-row">
 								<view class="d-top-1">
-									<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
-									<text class="tit1">张三</text>
+									<img class="img" :src="item.avatarUrl" />
+									<text class="tit1">{{item.nickName}}</text>
 								</view>
 								<view class="tit2">
-									05-28 16:50:30
+									{{item.time}}
 								</view>
 							</view>
 							<view class="d-center uni-flex uni-row">
 								<view class="d-left">
-									<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
+									<img class="img" :src="item.coverPicUrl" />
 								</view>
 								<view class="d-right">
 									<view class="uni-flex uni-row">
-										<view class="tit1">退伍军人纪念品老兵退伍留念木盒礼盒</view>
-										<view class="tit2">￥1000.00</view>
+										<view class="tit1">{{item.productName}}</view>
+										<view class="tit2">￥{{item.productPrice}}</view>
 									</view>
 									<view class="uni-flex uni-row">
-										<view class="tit3">红色 x1</view>
-										<view class="tit4"><text class="tit5">2</text>/120</view>
+										<view class="tit3">{{item.specificationName}} x{{item.productQuantity}}</view>
+										<view class="tit4"><text class="tit5">{{item.productQuantity}}</text>/{{ite.agentStock}}</view>
 									</view>
 								</view>
 							</view>
 							<view class="d-bottom">
-								进货价：800件 总利润：200
+								进货价：{{item.agentPrice}}元 总利润：-1
 							</view>
 						</view>
 					</view>
 					<view class="d-count" v-if="tabCurrentIndex != 2">
-						共 <text class="tit1">2</text> 件商品 合计<text class="tit1">￥1600.00</text>
+						共 <text class="tit1">{{item.total}}</text> 件商品 合计<text class="tit1">￥{{item.totalPrice}}</text>
 					</view>
 					<view v-if="tabCurrentIndex != 2" style="height: 50px;"></view>
 					 
@@ -125,8 +125,8 @@
 			<view class="total-box">
 				<text class="price">总计：¥{{total}}</text>
 			</view>
-			<button v-if="tabCurrentIndex == 0" type="primary" class="no-border confirm-btn">一键收款</button>
-			<button v-if="tabCurrentIndex == 1" type="primary" class="no-border confirm-btn">一键补货</button>
+			<button v-if="tabCurrentIndex == 0" type="primary" class="no-border confirm-btn" @click="recipt">一键收款</button>
+			<button v-if="tabCurrentIndex == 1" type="primary" class="no-border confirm-btn" @click="purchase">一键补货</button>
 		</view>
 		
 	</view>
@@ -146,23 +146,29 @@
 			return {
 				tabCurrentIndex: 0,
 				navList: [{
-						state: 0,
+						type: 1,
+						status: 1,
 						text: '待收款',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
-						pageIndex: 1
+						pageSize: 100,
+						pageIndex: 1,
+						total: 0,
+						totalPrice: 0,
 					},
 					{
-						state: 1,
+						type: 2,
 						text: '待补货',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
-						pageIndex: 1
+						pageSize: 100,
+						pageIndex: 1,
+						total: 0,
+						totalPrice: 0,
 					},
 					{
-						state: 2,
+						type: 1,
+						status: 2,
 						text: '已收款',
 						loadingType: 'more',
 						orderList: [],
@@ -207,8 +213,16 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let orderList = [{checked:false,price: 10},{checked:false,price: 5},{checked:false,price: 3},{checked:false,price: 10},{checked:false,price: 5},{checked:false,price: 3}];
+				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize,type: navItem.type};
+				if(navItem.status){
+					values['status'] = navItem.status;
+				}
+				
+				let result = await this.$request.ModelHome.pageReceipt(values);
+				result = result || {};
+				let orderList = result.records || [];
+				navItem.total = result.total || 0;
+				
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
 				})
@@ -279,6 +293,29 @@
 				this.allChecked = checked;
 				this.total = Number(total.toFixed(2));
 			},
+			recipt(){ //一键收货
+				let navItem = this.navList[this.tabCurrentIndex];
+				let list = navItem.orderList;
+				let distribIds = [];
+				list.forEach(item=>{
+					if(item.checked){
+						distribIds.push(item.id);
+					}
+				})
+				if(distribIds.length == 0){
+					return;
+				}
+				this.$request.ModelHome.receipt(JSON.stringify(distribIds)).then(result => {
+					if(result.code == 'ok'){
+						this.loadData('tabChange');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				});
+			},
+			purchase(){//一键补货
+				
+			}
 		}
 	}
 </script>

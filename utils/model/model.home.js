@@ -95,4 +95,16 @@ export default{
 		let result = await request.post(url,data,{});
 		return result;
 	},
+	
+	async pageReceipt(data){
+		let url = config.api + '/h5/agent/page-receipt';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async receipt(data){
+		let url = config.api + '/h5/agent/receipt';
+		let result = await request.post(url,data,{});
+		return result;
+	},
 }
