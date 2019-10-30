@@ -1,19 +1,19 @@
 <template>
 	<view>
 		<view class="notice-header uni-flex uni-row">
-			<view class="flex-item d_1">
+			<view class="flex-item d_1" @click="changeType(1)">
 				<img src="https://pic.youx365.com/notice_3.png" />
 				<view class="tit">
 					赞和收藏
 				</view>
 			</view>
-			<view class="flex-item d_1">
+			<view class="flex-item d_1" @click="changeType(2)">
 				<img src="https://pic.youx365.com/notice_1.png" />
 				<view class="tit">
 					新增关注
 				</view>
 			</view>
-			<view class="flex-item d_1">
+			<view class="flex-item d_1" @click="changeType(3)">
 				<img src="https://pic.youx365.com/notice_2.png" />
 				<view class="tit">
 					评论我的
@@ -22,32 +22,89 @@
 		</view>
 		
 		<view class="notice-detail">
-			<view class="tab_item uni-flex uni-row" v-for="item in 10" :key="item">
+			<empty v-if="records.length === 0"></empty>
+			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item">
 				<view class="flex-item d_1">
-					<img class="img" src="https://pic.youx365.com/wazi2.JPG"  />
+					<img class="img" :src="item.avatarUrl"  />
 				</view>
 				<view class="flex-item d_2">
-					<view class="tit1">系统通知</view>
-					<view class="tit2">xxx商品打折消息商品打折消息商品打折消息商品打折消息商品打折消息商品打折消息商品打折消息商品打折消息商品打折消息</view>
+					<view class="tit1">{{item.title}}</view>
+					<view class="tit2">{{item.content}}</view>
 				</view>
 				<view class="flex-item d_3">
-					<view class="tit3">2017-01-23</view>
-					<view class="tit4"></view>
+					<view class="tit3">{{item.createTime.split(' ')[0]}}</view>
+					<view class="tit4" v-if="item.read == 0"></view>
 				</view>
 			</view>
+			<uni-load-more :status="loadingType"></uni-load-more>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	import empty from "@/components/empty";
+	
 	export default {
+		components: {
+			uniLoadMore,
+			empty
+		},
 		data() {
 			return {
-
+				type:4,
+				pageIndex: 1,
+				pageSize: 10,
+				loadingType: 'more',
+				records:[],
 			}
 		},
+		onShow(){
+			this.loadData('fresh');
+		},
 		methods: {
-
+			async loadData(loadType){
+				if(loadType == 'fresh'){
+					this.pageIndex = 1;
+					this.loadingType = 'more';
+					this.records = [];
+				}
+				if(this.loadingType === 'loading' || this.loadingType == 'noMore'){
+					return;
+				}
+				this.loadingType = 'loading'
+				let result = await this.$request.ModelUser.getUserMsg(this.type,this.pageIndex,this.pageSize);
+				result = result || {};
+				let orderList = result.records || [];
+				orderList.forEach(item=>{
+					this.records.push(item);
+				})
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
+				}else{
+					this.loadingType = 'more'; 
+				}
+				this.pageIndex = this.pageIndex + 1;
+			},
+			onPageScroll(e){
+				//兼容iOS端下拉时顶部漂移
+				if(e.scrollTop>=0){
+					this.headerPosition = "fixed";
+				}else{
+					this.headerPosition = "absolute";
+				}
+			},
+			//加载更多
+			onReachBottom(){
+				this.loadData();
+			},
+			changeType(type){
+				if(this.type == type){
+					return;
+				}
+				this.type = type;
+				this.loadData('fresh');
+			}
 		}
 	}
 </script>

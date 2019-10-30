@@ -5,7 +5,7 @@
 				<view class="image-wrapper">
 					<image :src="item.coverPicUrl" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.name}}</text>
+				<text class="title clamp">{{item.productName}}</text>
 				<view class="price-box">
 					<text class="name">零售价：<text class="price">{{item.productPrice}}</text></text>
 					<!-- <text>已销 {{item.orderNums}}</text> -->
@@ -15,7 +15,7 @@
 					<!-- <text>剩余 {{item.orderNums}}</text> -->
 				</view>
 				<view class="ghs-box">
-					<text class="name"> 供货商：</text><!-- <img class="img" :src="item.coverPicUrl" /> --><text class="tit1">{{item.shopUserName}}</text>
+					<text class="name"> 供货商：</text><img v-if="item.shopUserAvatarUrl" class="img" :src="item.shopUserAvatarUrl" /><text class="tit1">{{item.shopUserName}}</text>
 				</view>
 			</view>
 		</view>
@@ -158,11 +158,13 @@
 			}
 		}
 		.title{
-			font-size:20rpx;
+			font-size:24rpx;
 			font-family:SourceHanSansCN;
 			font-weight:400;
 			color:rgba(0,0,0,1);
 			margin-top: 24rpx;
+			text-align: center;
+			margin-bottom: 14rpx;
 		}
 		
 		.ghs-box{
@@ -180,6 +182,7 @@
 				width: 25rpx;
 				height: 25rpx;
 				border-radius: 50%;
+				margin-right: 16rpx;
 			}
 			
 			.tit1{
@@ -187,7 +190,6 @@
 				font-family:SourceHanSansCN;
 				font-weight:500;
 				color:rgba(1,1,1,1);
-				margin-left: 16rpx;
 			}
 		}
 		
@@ -276,17 +278,6 @@
 			color:rgba(51,51,51,1);
 			line-height: 70rpx;
 			text-align: center;
-		}
-		
-		.tit1{
-			width: 50%;
-			text-align: right;
-			font-size:26rpx;
-			font-family:SourceHanSansCN;
-			font-weight:400;
-			color:#00A390;
-			line-height: 70rpx;
-			padding-right: 45rpx;
 		}
 		
 		.d_1{

@@ -79,11 +79,11 @@
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">
 				<view class="flex-item" style="width: 50%;border-right: 1px solid #D5D5D5;">
 					<view class="tit1">可提现收益</view>
-					<view class="tit2">￥-1</view>
+					<view class="tit2">￥{{fullUser.accountInfo.userBalance || 0}}</view>
 				</view>
 				<view class="flex-item" style="width: 50%;">
 					<view class="tit1">即将到账</view>
-					<view class="tit2">￥-1</view>
+					<view class="tit2">￥{{fullUser.accountInfo.pendDistrib || 0}}</view>
 				</view>
 			</view>
 			<view class="uni-flex uni-row" style="width: 100%;height: 80rpx;margin-top: 20rpx;">

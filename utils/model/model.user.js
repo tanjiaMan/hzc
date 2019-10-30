@@ -34,6 +34,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async searchUser(data){
+		let url = config.api + '/h5/user/search-user';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	//签到
 	async signToday(){
 		let url = config.api + '/h5/user/sign';
@@ -52,5 +58,24 @@ export default{
 		let url = config.api + '/h5/user/account-flow';
 		let result = await request.post(url,data,{});
 		return result && result.data;
-	}
+	},
+	
+	async transAmount(data){ //转账
+		let url = config.api + '/h5/user/balance-transfer';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async widthdraw(amount){ //转账
+		let url = config.api + '/h5/user/withdraw?amount=' + amount;
+		let result = await request.post(url,{},{});
+		return result;
+	},
+	
+	//消息
+	async getUserMsg(msgType,pageIndex,pageSize){
+		let url = config.api + '/h5/user/user-msg?msgType='+msgType+'&pageIndex='+pageIndex+'&pageSize='+pageSize;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
 }

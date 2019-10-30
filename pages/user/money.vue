@@ -24,13 +24,13 @@
 		<view class="tab_detail">
 			<view class="tab_item uni-flex uni-row" v-for="(item,index) in records" :key="index">
 				<view class="flex-item d_1">
-					<img class="img" src="https://pic.youx365.com/wazi2.JPG"  />
+					<img class="img" :src="item.avatarUrl"  />
 				</view>
 				<view class="flex-item d_2">
-					<view class="tit1">{{item.userId}} 购买</view>
+					<view class="tit1">{{item.nickName}} {{item.typeDesc}}</view>
 					<view class="tit2">{{item.createTime}}</view>
 				</view>
-				<view class="flex-item d_3">
+				<view :class=" item.amountBalance < 0 ? 'flex-item d_3 d_3_red':'flex-item d_3'">
 					{{item.amountBalance}}
 				</view>
 			</view>
@@ -62,6 +62,7 @@
 			this.$request.ModelUser.getAmount().then(result => {
 				this.userAmount = result || {};
 			});
+			this.getAmountFlow();
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -70,13 +71,6 @@
 			}else{
 				this.headerPosition = "absolute";
 			}
-		},
-		onLoad(){
-			this.getAmountFlow();
-		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.getAmountFlow('refresh');
 		},
 		//加载更多
 		onReachBottom(){
@@ -267,6 +261,10 @@
 				line-height: 129rpx;
 				text-align: center;
 				color: #00A390;
+			}
+			
+			.d_3_red{
+				color: #FF443F;
 			}
 			
 			.color_red{

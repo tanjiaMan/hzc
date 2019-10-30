@@ -1,12 +1,12 @@
 <template>
 	<view class="container">
 		<view class="header">
-			<img class="img" src="https://pic.youx365.com/0/239d0f9cd14d6c4b2a6138ec34b63310.jpg" />
+			<img class="img" :src="transUser.avatarUrl" />
 			<view class="header-tit1">
-				李四
+				{{transUser.nickName}}
 			</view>
 			<view class="header-tit2">
-				13055225889
+				{{transUser.mobile}}
 			</view>
 		</view>
 		
@@ -21,7 +21,7 @@
 					<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
 				</view>
 				<view class="flex-item d_3">
-					<input value="" class="input" type="number" placeholder="请输入充值金额" placeholder-style="color:#CACACA;font-size:13px;" />
+					<input v-model="amount" class="input" type="digit" placeholder="请输入转账金额" placeholder-style="color:#CACACA;font-size:13px;" />
 				</view>
 				<view class="flex-item d_4">
 					元
@@ -29,7 +29,7 @@
 			</view>
 		</view>
 		
-		<view class="pay-type-list">
+		<!-- <view class="pay-type-list">
 			<view class="type-item b-b" @click="changePayType(1)">
 				<img src="https://pic.youx365.com/wx-pay.png" />
 				<view class="con">
@@ -52,9 +52,9 @@
 					:class="payType == 3? 'checked':''"
 				></view>
 			</view>
-		</view>
+		</view> -->
 		
-		<view class="bt1">
+		<view class="bt1" @click="trans">
 			去支付
 		</view>
 	</view>
@@ -66,13 +66,49 @@
 		data() {
 			return {
 				payType: 1,
+				amount: "",
+				transUserId: 0,
+				transUser:{},
 			};
+		},
+		onLoad(option){
+			this.transUserId = option.transUserId;
+			this.$request.ModelUser.searchUser({userId: this.transUserId}).then(result => {
+				if(result.records == null || result.records.length == 0){
+					this.$api.msg('用户不存在!');
+					return;
+				}
+				this.transUser = result.records[0];
+			})
 		},
 		methods:{
 			navTo(url){
 				uni.navigateTo({  
 					url
 				})  
+			},
+			async trans(){
+				if(this.amount == "" || this.amount <=0){
+					this.$api.msg('请输入正确的转账金额');
+					return;
+				}
+				let values = {amount: this.amount,toUserId: this.transUserId};
+				var that = this;
+				uni.showModal({
+				    content: '确定转账',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelUser.transAmount(values).then(result => {
+								if(result.code == 'ok'){
+									that.$api.msg('转账成功');
+									that.amount = "";
+								}else{
+									that.$api.msg(result.msg);
+								}
+							});
+				        }
+				    }
+				});
 			},
 			//选择支付方式
 			changePayType(type) {

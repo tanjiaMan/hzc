@@ -51,11 +51,18 @@
 			}
 		},
 		methods: {
-			confirm(){
-				console.log('confirm');
-				this.$api.msg(this.phone);
+			async confirm(){
+				if(this.phone == null || this.phone == ''){
+					return;
+				}
+				let userResult = await this.$request.ModelUser.searchUser({mobile: this.phone})
+				if(userResult.records == null || userResult.records.length == 0){
+					this.$api.msg('用户不存在!');
+					return;
+				}
+				let user = userResult.records[0];
 				uni.navigateTo({
-					url: `/pages/withdraw/transconfirm`
+					url: `/pages/withdraw/transconfirm?transUserId=${user.id}`
 				})
 			},
 			bindClick(index){

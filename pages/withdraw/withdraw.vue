@@ -2,9 +2,9 @@
 	<view class="container">
 		<view class="uni-flex uni-row" style="width: 100%;">
 			<view class="flex-item titmy">
-				可提现金额 <text style="color: #FF443F;">￥20000.00</text> 元
+				可提现金额 <text style="color: #FF443F;">￥{{userAmount.userBalance || 0}}</text> 元
 			</view>
-			<view class="flex-item tit1">
+			<view class="flex-item tit1" @click="allwithdraw">
 				全部提现
 			</view>
 		</view>
@@ -13,7 +13,7 @@
 				<img class="img1" src="https://pic.youx365.com/withdraw_logo.png" />
 			</view>
 			<view class="flex-item d_3">
-				<input value="" class="input" type="number" placeholder="请输入提现金额" placeholder-style="color:#CACACA;font-size:13px;" />
+				<input v-model="amount" class="input" type="digit" placeholder="请输入提现金额" placeholder-style="color:#CACACA;font-size:13px;" />
 			</view>
 			<view class="flex-item d_4">
 				元
@@ -26,7 +26,7 @@
 			本次提现金额将直接从账户余额扣除，提现的金额方式为微信零钱转账，提现申请成功后工作人员将会在1-7个工作日内进行审核操作，请耐心等待。
 		</view>
 		
-		<view class="bt1">
+		<view class="bt1" @click="widthdraw">
 			立即提现
 		</view>
 		<view class="bt2" @click="navTo('/pages/withdraw/record')">
@@ -40,8 +40,15 @@
 	export default {
 		data() {
 			return {
-				
+				userAmount:0,
+				amount:"",
 			};
+		},
+		onShow(){
+			//账户金额
+			this.$request.ModelUser.getAmount().then(result => {
+				this.userAmount = result || {};
+			});
 		},
 		methods:{
 			navTo(url){
@@ -49,6 +56,35 @@
 					url
 				})  
 			}, 
+			allwithdraw(){
+				if(this.userAmount.userBalance){
+					this.amount = this.userAmount.userBalance;
+				}else{
+					this.$api.msg('没有可提现余额');
+				}
+			},
+			widthdraw(){
+				if(this.amount == "" || this.amount <=0){
+					this.$api.msg('请输入正确的提现金额');
+					return;
+				}
+				var that = this;
+				uni.showModal({
+				    content: '确定提现',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelUser.widthdraw(that.amount).then(result => {
+								if(result.code == 'ok'){
+									that.$api.msg('成功提交提现申请');
+									that.amount = "";
+								}else{
+									that.$api.msg(result.msg);
+								}
+							});
+				        }
+				    }
+				});
+			}
 		}
 	}
 </script>
