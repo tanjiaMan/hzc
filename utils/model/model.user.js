@@ -47,6 +47,13 @@ export default{
 		return result;
 	},
 	
+	//店铺申请
+	async applyShop(data){
+		let url = config.api + '/h5/user/apply-shop';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
 	//用户资金情况
 	async getAmount(){
 		let url = config.api + '/h5/user/account';

@@ -6,7 +6,7 @@
 				<text class="t1">姓名</text>
 			</view>
 			<view class="d-3">
-				<input class="inputclass" placeholder="请输入真实姓名" placeholder-class="placeholder" />
+				<input v-model="shopcert.realName" class="inputclass" placeholder="请输入真实姓名" placeholder-class="placeholder" />
 			</view>
 		</view>
 		
@@ -16,7 +16,7 @@
 				<text class="t1">手机号码</text>
 			</view>
 			<view class="d-3">
-				<input class="inputclass" type="number" placeholder="请输入手机号码" placeholder-class="placeholder" />
+				<input v-model="shopcert.contact" class="inputclass" type="number" placeholder="请输入手机号码" placeholder-class="placeholder" />
 			</view>
 		</view>
 		
@@ -36,7 +36,7 @@
 				 @onConfirm="onConfirm"></mpvue-city-picker>
 			</view>
 			<view class="d-3">
-				<input class="inputclass" placeholder="请输入详细地址" placeholder-class="placeholder" />
+				<input v-model="shopcert.address" class="inputclass" placeholder="请输入详细地址" placeholder-class="placeholder" />
 			</view>
 		</view>
 		
@@ -46,14 +46,14 @@
 				<text class="t1">上传身份证</text>
 			</view>
 			<view class="d-3">
-				<input class="inputclass" type="idcard" placeholder="请输入身份证号码" placeholder-class="placeholder" />
+				<input v-model="shopcert.idCard" class="inputclass" type="idcard" placeholder="请输入身份证号码" placeholder-class="placeholder" />
 			</view>
 			<view class="d-3 uni-flex uni-row">
 				<view class="flex-item">
-					<img src='https://pic.youx365.com/shop-cert-11.png' class="id-img" />
+					<img :src='imgCard1' class="id-img" @click="chooseImage(1)" />
 				</view>
 				<view class="flex-item">
-					<img src='https://pic.youx365.com/shop-cert-10.png'  class="id-img" />
+					<img :src='imgCard2'  class="id-img" @click="chooseImage(2)" />
 				</view>
 			</view>
 		</view>
@@ -64,20 +64,19 @@
 				<text class="t1">营业执照上传</text>
 			</view>
 			<view class="d-3">
-				<img src='https://pic.youx365.com/shop-cert-7.png' class="shopper-img" />
+				<img v-if="imgCert ==null || imgCert =='' " src='https://pic.youx365.com/shop-cert-7.png' class="shopper-img" @click="chooseImage(3)" />
+				<image v-else :src="imgCert" class="shopper-img1" mode="aspectFit" @click="chooseImage(3)" />
 			</view>
 		</view>
 		
 		<view class="d-1">
-			<checkbox-group>
-			    <label>
-			        <checkbox class="ck3" value="cb" checked="true" /><text class="tit3">请勾选同意</text><text class="tit4">《开店协议》</text>
-			    </label>
-			</checkbox-group>
+			<label @click="agreeXy">
+			    <checkbox value="" :checked="agree" class="ck3" /><text class="tit3">请勾选同意</text><text class="tit4">《开店协议》</text>
+			</label>
 		</view>
 		
 		
-		<view class="bt">
+		<view class="bt" @click="submit">
 			提交申请
 		</view>
 		
@@ -96,18 +95,25 @@
 		},
 		data(){
 			return {
+				agree: false,
 				addressData:{
 					
 				},
 				//城市选择
 				themeColor: '#007AFF',
 				cityPickerValueDefault: [0, 0, 1],
+				imgCard1:"https://pic.youx365.com/shop-cert-11.png",
+				imgCard2:"https://pic.youx365.com/shop-cert-10.png",
+				imgCert:'',
+				shopcert:{
+					realName: '',
+					contact: '',
+					address: '',
+					idCard: '',
+					cardImgList: [],
+					certImgList: []
+				}
 			}
-		},
-		onLoad(){
-		},
-        computed: {
-			
 		},
         methods: {
 			chooseAddress(){
@@ -121,6 +127,108 @@
 				this.addressData.areaName = addr[2];
 				this.addressData = Object.assign({}, this.addressData);
 				console.log('this.addressData',this.addressData);
+			},
+			submit(){
+				console.log('this.agree',this.agree);
+				if(this.agree == false){
+					this.$api.msg('请先同意开店协议');
+					return;
+				}
+				if(this.imgCard1 == 'https://pic.youx365.com/shop-cert-11.png'){
+					this.$api.msg('请上传身份证正面');
+					return;
+				}
+				if(this.imgCard2 == 'https://pic.youx365.com/shop-cert-10.png'){
+					this.$api.msg('请上传身份证反面');
+					return;
+				}
+				if(this.imgCert == ''){
+					this.$api.msg('请上传营业执照');
+					return
+				}
+				if(!this.addressData.areaName){
+					this.$api.msg('请选择所在地域');
+					return;
+				}
+				this.shopcert.address = this.addressData.provinceName + '' + this.addressData.cityName + this.addressData.areaName + this.shopcert.address;
+				this.shopcert.cardImgList.push(this.imgCard1);
+				this.shopcert.cardImgList.push(this.imgCard2);
+				this.shopcert.certImgList.push(this.imgCert);
+				this.$request.ModelUser.applyShop(this.shopcert).then(result => {
+					if(result == '' || result.code == 'ok'){
+						this.$api.msg('申请成功,审核中!');
+						this.shopcert = {
+							realName: '',
+							contact: '',
+							address: '',
+							idCard: '',
+							cardImgList: [],
+							certImgList: []
+						};
+						this.agree = false;
+						this.addressData = {};
+						this.imgCard1="https://pic.youx365.com/shop-cert-11.png";
+						this.imgCard2="https://pic.youx365.com/shop-cert-10.png";
+						this.imgCert='';
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
+			agreeXy(e){
+				this.agree = !this.agree;
+			},
+			chooseImage(type){
+				var that = this;
+				uni.chooseImage({
+				    sizeType:['original'],
+				    count: 1,
+				    success: (res) => {
+						if(res.errMsg != 'chooseImage:ok'){
+							that.$api.msg(res.errMsg);
+							return;
+						}
+						res.tempFiles.forEach(file => {
+							let filename = file.path;
+							if(filename.indexOf('.') == -1){ //TODO
+								filename =  filename + '.png';
+							}
+							let values = {fileType:'PIC_TXT',fileNames:filename};
+							that.$request.ModelCommons.getOssConfig(values).then(result => {
+								console.log('ossconfig',result);
+								let ossConfig = result.data[0];
+								uni.uploadFile({
+									url: 'https://upload.qiniup.com',
+									filePath:file.path,
+									name:'file',
+									formData:{
+										'key': ossConfig.fileName,
+										'token': ossConfig.token
+									},
+									success:(uploadFile) => {
+										if(type == 1){
+											that.imgCard1 = ossConfig.accessFile;
+										}else if(type == 2){
+											that.imgCard2 = ossConfig.accessFile;
+										}else if(type==3){
+											that.imgCert = ossConfig.accessFile;
+										}
+										console.log('success',uploadFile);
+									},
+									fail:(e) => {
+										console.log('fail',e);
+									},
+									complete:(result) => {
+										console.log('complete',result);
+									}
+								});
+							})
+						});
+				    },
+				    fail: (err) => {
+				        this.$api.msg('失败');
+				    }
+				})
 			}
         }  
     }  
@@ -164,6 +272,7 @@
 		line-height: 73rpx;
 		padding-left: 20rpx;
 		width: 660rpx;
+		margin-left: -20rpx;
 	}
 	
 	.inputclass{
@@ -171,6 +280,7 @@
 		height: 73rpx;
 		border: solid 1px rgba(238,238,238,1);
 		border-radius:10rpx;
+		padding-left: 20rpx;
 	}
 	
 	.id-img{
@@ -183,6 +293,10 @@
 	.shopper-img{
 		width: 168rpx;
 		height: 168rpx;
+	}
+	
+	.shopper-img1{
+		width: 200rpx;
 	}
 	
 	.container{
