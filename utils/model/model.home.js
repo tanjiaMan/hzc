@@ -96,6 +96,12 @@ export default{
 		return result;
 	},
 	
+	async purchaseStockBatch(data){
+		let url = config.api + '/h5/agent/purchase-stock-batch';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
 	async pageReceipt(data){
 		let url = config.api + '/h5/agent/page-receipt';
 		let result = await request.post(url,data,{});

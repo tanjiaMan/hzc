@@ -39,7 +39,7 @@
 								<!-- <text>剩余 {{item.orderNums}}</text> -->
 							</view>
 							<view class="ghs-box">
-								<text class="name"> 供货商：</text><!-- <img class="img" :src="item.coverPicUrl" /> --><text class="tit1">{{item.shopUserName}}</text>
+								<text class="name"> 供货商：</text><img class="img" :src="item.shopUserAvatarUrl" /><text class="tit1">{{item.shopUserName}}</text>
 							</view>
 							<view class="bt-box" @click.stop.prevent="stopPrevent" @click="navTo('/pages/shop/stockpsconfirm?productId='+item.productId)">
 								<view class="bt1">进货</view>

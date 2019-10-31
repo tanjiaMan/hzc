@@ -56,13 +56,13 @@
 										<view class="tit2">￥{{item.productPrice}}</view>
 									</view>
 									<view class="uni-flex uni-row">
-										<view class="tit3">{{item.specificationName}} x{{item.productQuantity}}</view>
-										<view class="tit4"><text class="tit5">{{item.productQuantity}}</text>/{{ite.agentStock}}</view>
+										<view class="tit3">{{item.specificationName?item.specificationName:""}} x{{item.productQuantity}}</view>
+										<view class="tit4"><text class="tit5">{{item.productQuantity}}</text>/{{item.agentStock}}</view>
 									</view>
 								</view>
 							</view>
 							<view class="d-bottom">
-								进货价：{{item.agentPrice}}元 总利润：-1
+								进货价：{{item.agentPrice}}元 总利润： {{item.profit}}
 							</view>
 						</view>
 					</view>
@@ -102,7 +102,7 @@
 						</view>
 					</view>
 					<view class="d-count" v-if="tabCurrentIndex != 2">
-						共 <text class="tit1">{{item.total}}</text> 件商品 合计<text class="tit1">￥{{item.totalPrice}}</text>
+						共 <text class="tit1">{{tabItem.total}}</text> 件商品 合计<text class="tit1">￥{{tabItem.totalPrice}}</text>
 					</view>
 					<view v-if="tabCurrentIndex != 2" style="height: 50px;"></view>
 					 
@@ -223,9 +223,14 @@
 				let orderList = result.records || [];
 				navItem.total = result.total || 0;
 				
+				let totalPrice = 0;
+				
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
+					totalPrice += item.agentPrice * item.productQuantity;
 				})
+				navItem.totalPrice = totalPrice;
+				
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
 				this.$set(navItem, 'loaded', true);
 				
@@ -285,7 +290,7 @@
 				let checked = true;
 				list.forEach(item=>{
 					if(item.checked === true){
-						total += item.price;
+						total += item.agentPrice * item.productQuantity;
 					}else if(checked === true){
 						checked = false;
 					}
@@ -305,16 +310,53 @@
 				if(distribIds.length == 0){
 					return;
 				}
-				this.$request.ModelHome.receipt(JSON.stringify(distribIds)).then(result => {
-					if(result.code == 'ok'){
-						this.loadData('tabChange');
-					}else{
-						this.$api.msg(result.msg);
-					}
+				var that = this;
+				uni.showModal({
+				    content: '确定收款',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelHome.receipt(JSON.stringify(distribIds)).then(result => {
+				            	if(result.code == 'ok'){
+				            		that.loadData('tabChange');
+				            	}else{
+				            		that.$api.msg(result.msg);
+				            	}
+				            });
+				        }
+				    }
 				});
 			},
 			purchase(){//一键补货
-				
+				let navItem = this.navList[this.tabCurrentIndex];
+				let list = navItem.orderList;
+				let distribIds = [];
+				list.forEach(item=>{
+					if(item.checked){
+						distribIds.push({
+							productId:item.productId,
+							productSpecId:item.productSpecId,
+							quantity:item.productQuantity
+						});
+					}
+				})
+				if(distribIds.length == 0){
+					return;
+				}
+				var that = this;
+				uni.showModal({
+				    content: '确定补货',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelHome.purchaseStockBatch(JSON.stringify(distribIds)).then(result => {
+				            	if(result.code == 'ok'){
+				            		that.loadData('tabChange');
+				            	}else{
+				            		that.$api.msg(result.msg);
+				            	}
+				            });
+				        }
+				    }
+				});
 			}
 		}
 	}

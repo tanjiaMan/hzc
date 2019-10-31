@@ -30,9 +30,9 @@
 				<view class="flex-item d_3">
 					<input @input="input" v-model="num" class="input" type="number" placeholder="请输入进货件数" placeholder-style="color:#CACACA;font-size:13px;" />
 				</view>
-				<view class="flex-item d_4">
-					件
-				</view>
+				<!-- <view class="flex-item d_4"> -->
+					<!-- 件 -->
+				<!-- </view> -->
 			</view>
 		</view>
 		<view class="d-count">
@@ -281,10 +281,10 @@
 		}
 		
 		.d_1{
-			width: 360rpx;
 			margin: -20rpx auto 0;
 			height: 118rpx;
 			line-height: 118rpx;
+			justify-content: center;
 		}
 		
 		.d_2{
@@ -302,9 +302,10 @@
 		
 		.d_3{
 			vertical-align: middle;
-			width: 240rpx;
+			width: 180rpx;
 			line-height: 118rpx;
 			height: 118rpx;
+			text-align: center;
 			
 			.input{
 				line-height: 118rpx;
