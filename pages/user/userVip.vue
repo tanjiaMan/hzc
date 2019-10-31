@@ -114,8 +114,11 @@
 					<view class="tit2">{{fullUser.collectInfo.totalCount || 0}}</view>
 				</view>
 				<view class="flex-item d_1">
-					<view class="tit3" @click="signToday">
+					<view class="tit3" @click="signToday" v-if="fullUser.signInfo.canSign == true">
 						签到
+					</view>
+					<view class="tit3" v-else>
+						已签到
 					</view>
 				</view>
 			</view>
@@ -328,6 +331,7 @@
 							confirmText: "确定",
 							showCancel: false
 						})
+						this.fullUser.signInfo.canSign = false;
 					}else{ //签到失败
 						uni.showModal({
 							content: result.msg,
