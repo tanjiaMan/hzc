@@ -159,6 +159,11 @@
 				"navigationBarTitleText": "进货"
 			}
 		},{
+			"path": "pages/shop/goodsmanager",
+			"style": {
+				"navigationBarTitleText": "商品管理"
+			}
+		},{
 			"path": "pages/shop/stockpsconfirm",
 			"style": {
 				"navigationBarTitleText": "进货确认"
