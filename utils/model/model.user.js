@@ -73,9 +73,15 @@ export default{
 		return result;
 	},
 	
-	async widthdraw(amount){ //转账
+	async widthdraw(amount){ //提现
 		let url = config.api + '/h5/user/withdraw?amount=' + amount;
 		let result = await request.post(url,{},{});
+		return result;
+	},
+	
+	async widthdrawLog(){ //提现记录
+		let url = config.api + '/h5/user/withdraw-log';
+		let result = await request.get(url,{});
 		return result;
 	},
 	

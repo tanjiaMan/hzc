@@ -102,30 +102,38 @@
 				});
 			},
 			async loginRequest(res){
-				let userInfo = res.userInfo;
-				let inviteUserId = uni.getStorageSync('inviteUserId');
-				let value = {code: this.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: inviteUserId};
-				let result = await this.$request.ModelUser.login(value);
-				if(result.code == 'ok' && result.data){
-					let data = result.data;
-					let userInfoVo = {
-						id: data.userId,
-						mobile: data.mobile,
-						nickname: userInfo.nickName,
-						portrait: userInfo.avatarUrl,
-						token: data.token,
-						userType: data.userType
-					};
-					this.setToken(data.token);
-					this.login(userInfoVo);
-					if(data.mobile && data.mobile != '' ){
-						uni.navigateBack();  
-					}else{
-						this.state = 2;
-					}
-				}else{
-					this.$api.msg(result.msg);
-				}
+				var that = this;
+				wx.getUserInfo({
+				  success: function(wxRes) {
+				    console.log('wxRes',wxRes);
+					
+					let userInfo = res.userInfo;
+					let inviteUserId = uni.getStorageSync('inviteUserId');
+					let value = {encryptedData: wxRes.encryptedData,iv: wxRes.iv,code: that.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: inviteUserId};
+					that.$request.ModelUser.login(value).then(result => {
+						if(result.code == 'ok' && result.data){
+							let data = result.data;
+							let userInfoVo = {
+								id: data.userId,
+								mobile: data.mobile,
+								nickname: userInfo.nickName,
+								portrait: userInfo.avatarUrl,
+								token: data.token,
+								userType: data.userType
+							};
+							that.setToken(data.token);
+							that.login(userInfoVo);
+							if(data.mobile && data.mobile != '' ){
+								uni.navigateBack();  
+							}else{
+								that.state = 2;
+							}
+						}else{
+							that.$api.msg(result.msg);
+						}
+					});
+				  }
+				})
 			},
 		},
 	}

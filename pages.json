@@ -216,7 +216,6 @@
 		,{
 		    "path" : "pages/withdraw/record",
 		    "style" : {
-				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "提现记录"
 			}
 		},{

@@ -10,16 +10,16 @@
 		</view>
 		
 		<view class="swiper-box">
-			<view class="tab_item uni-flex uni-row" v-for="record in 10" :key="record">
+			<view class="tab_item uni-flex uni-row" v-for="(item,index) in records" :key="index">
 				<view class="flex-item d_1">
 					<img class="img" src="https://pic.youx365.com/withdraw_money.png"  />
 				</view>
 				<view class="flex-item d_2">
-					<view class="tit1">余额提现{{record}}</view>
-					<view class="tit2">2017-02-06</view>
+					<view class="tit1">余额提现</view>
+					<view class="tit2">{{item.createTime}}</view>
 				</view>
 				<view class="flex-item d_3">
-					-500
+					{{item.withdrawAmount}}
 				</view>
 			</view>
 			
@@ -48,6 +48,8 @@
 					id: 1
 				}],
 				loadingType: 'more',
+				pageIndex:1,
+				records:[],
 			}
 		},
 		onPageScroll(e){
@@ -58,19 +60,46 @@
 				this.headerPosition = "absolute";
 			}
 		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
-		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.loadData('');
+		},
+		onLoad(){
+			this.loadData('refresh');
 		},
 		methods: {
 			//菜单切换
 			async tabSelect(e) {
-				this.tabCur = e.currentTarget.dataset.id;
-			}
+				let index = e.currentTarget.dataset.id;
+				if(this.tabCur == index){
+					return;
+				}
+				this.tabCur = index;
+				this.loadData('refresh');
+			},
+			async loadData(loadType){
+				if(loadType == 'fresh'){
+					this.pageIndex = 1;
+					this.loadingType = 'more';
+					this.records = [];
+				}
+				if(this.loadingType === 'loading' || this.loadingType == 'noMore'){
+					return;
+				}
+				this.loadingType = 'loading'
+				let result = await this.$request.ModelUser.widthdrawLog();
+				result = result || {};
+				let orderList = result.records || [];
+				orderList.forEach(item=>{
+					this.records.push(item);
+				})
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
+				}else{
+					this.loadingType = 'more'; 
+				}
+				this.pageIndex = this.pageIndex + 1;
+			},
 		}
 	}
 </script>
