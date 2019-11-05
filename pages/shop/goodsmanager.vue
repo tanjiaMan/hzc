@@ -26,6 +26,15 @@
 					 		class="goods-item"
 					 		@click="navToDetailPage(item)"
 					 	>
+							<view class="d-check" v-if="batchOper == true">
+								<view class="check-wrapper" @click.stop="stopPrevent">
+									<view
+										class="yticon icon-xuanzhong2 checkbox"
+										:class="{checked: item.checked}"
+										@click="check('item', index)"
+									></view>
+								</view>
+							</view>
 					 		<view class="image-wrapper">
 					 			<image :src="item.coverPicUrl" mode="aspectFill"></image>
 					 		</view>
@@ -57,7 +66,7 @@
 			<view class="d-left">
 				<view v-if="batchOper == false" class="bt-plcz" @click="changeBatchOper">批量操作</view>
 				<view v-if="batchOper == true" class="bt-plcz">转货</view>
-				<view v-if="batchOper == true" class="bt-th">退货</view>
+				<view v-if="batchOper == true" class="bt-th" @click="navTo('/pages/shop/goodsreturn')">退货</view>
 			</view>
 			<view class="d-right">
 				<view class="bt-zh">转货<br/>记录</view>
@@ -132,6 +141,7 @@
 				let result = await this.$request.ModelHome.pageAgentProduct(values); //TODO
 				let goodsList = result.records;
 				goodsList.forEach(item=>{
+					item.checked = false;
 					navItem.goodsList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
@@ -185,7 +195,23 @@
 			stopPrevent(){},
 			changeBatchOper(){
 				this.batchOper = !this.batchOper;
-			}
+			},
+			check(type, index){
+				let navItem = this.tabBars[this.tabCurrentIndex];
+				
+				if(type === 'item'){
+					navItem.goodsList[index].checked = !navItem.goodsList[index].checked;
+				}else{
+					const checked = !this.allChecked
+					const list = navItem.goodsList;
+					list.forEach(item=>{
+						item.checked = checked;
+					})
+					this.allChecked = checked;
+				}
+				this.tabBars[this.tabCurrentIndex] = navItem;
+				this.tabBars = Object.assign({}, this.tabBars);
+			},
 		}
 	}
 </script>
@@ -322,6 +348,20 @@
 		}
 	}
 	
+	.d-check{
+		.check-wrapper{
+			.checked{
+				color: #00A390 !important;
+			}
+			
+			.checkbox{
+				font-size: 44rpx;
+				line-height: 70rpx;
+				text-align: center;
+				color: $font-color-disabled;
+			}
+		}
+	}
 	.d-caozuoliu{
 		height: 109rpx;
 	}

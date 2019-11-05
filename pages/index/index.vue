@@ -128,7 +128,7 @@
 							<swiper :style="kjFrameHeight" class="swiper-box-tg" @change="kjSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].bargin" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId)">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>

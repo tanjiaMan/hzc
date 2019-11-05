@@ -154,6 +154,11 @@
 				"navigationBarTitleText": "收款"
 			}
 		},{
+			"path": "pages/shop/goodsreturn",
+			"style": {
+				"navigationBarTitleText": "退货"
+			}
+		},{
 			"path": "pages/shop/stockpurchase",
 			"style": {
 				"navigationBarTitleText": "进货"
