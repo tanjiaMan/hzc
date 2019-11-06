@@ -84,6 +84,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async pageAgentStock(data){
+		let url = config.api + '/h5/agent/page-agent-stock';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	async getAgentProduct(productId){
 		let url = config.api + '/h5/agent/agent-product-detail?productId=' + productId;
 		let result = await request.get(url,{});

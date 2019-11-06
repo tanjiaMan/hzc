@@ -159,6 +159,16 @@
 				"navigationBarTitleText": "退货"
 			}
 		},{
+			"path": "pages/shop/goodstransaccount",
+			"style": {
+				"navigationBarTitleText": "转货"
+			}
+		},{
+			"path": "pages/shop/goodstransconfirm",
+			"style": {
+				"navigationBarTitleText": "转货确认"
+			}
+		},{
 			"path": "pages/shop/stockpurchase",
 			"style": {
 				"navigationBarTitleText": "进货"

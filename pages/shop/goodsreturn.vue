@@ -54,6 +54,9 @@
 				
 			}
 		},
+		onLoad(option){
+			this.ids = JSON.parse(option.ids);
+		},
 		methods: {
 			
 		}

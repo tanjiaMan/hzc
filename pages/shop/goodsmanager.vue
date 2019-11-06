@@ -47,12 +47,15 @@
 								<text class="name">进货价：<text class="price">{{item.agentPrice}}</text></text>
 								<!-- <text>剩余 {{item.orderNums}}</text> -->
 							</view>
+							<view class="price-box">
+								<text class="name">库存：<text class="tit1">{{item.myStock}}</text></text>
+							</view>
 							<view class="ghs-box">
 								<text class="name"> 供货商：</text><img class="img" :src="item.shopUserAvatarUrl" /><text class="tit1">{{item.shopUserName}}</text>
 							</view>
 							<view class="bt-box" @click.stop.prevent="stopPrevent">
-								<view class="bt1">转货</view>
-								<view class="bt2">退货</view>
+								<view class="bt1" @click="navToTrans(item.productId)">转货</view>
+								<view class="bt2" @click="navToReturn(item.productId)">退货</view>
 							</view>
 					 	</view>
 					 </view>
@@ -65,8 +68,8 @@
 		<view class="d-caozuo uni-flex uni-row">
 			<view class="d-left">
 				<view v-if="batchOper == false" class="bt-plcz" @click="changeBatchOper">批量操作</view>
-				<view v-if="batchOper == true" class="bt-plcz">转货</view>
-				<view v-if="batchOper == true" class="bt-th" @click="navTo('/pages/shop/goodsreturn')">退货</view>
+				<view v-if="batchOper == true" class="bt-plcz" @click="navToTrans()">转货</view>
+				<view v-if="batchOper == true" class="bt-th" @click="navToReturn()">退货</view>
 			</view>
 			<view class="d-right">
 				<view class="bt-zh">转货<br/>记录</view>
@@ -138,7 +141,7 @@
 				navItem.loadingType = 'loading';
 				
 				let values = {classifyPid:navItem.id,pageSize:navItem.pageSize,pageIndex: navItem.pageIndex};
-				let result = await this.$request.ModelHome.pageAgentProduct(values); //TODO
+				let result = await this.$request.ModelHome.pageAgentStock(values);
 				let goodsList = result.records;
 				goodsList.forEach(item=>{
 					item.checked = false;
@@ -187,11 +190,6 @@
 					url: `/pages/product/product?id=${id}`
 				})
 			},
-			navTo(url){
-				uni.navigateTo({
-					url
-				})
-			},
 			stopPrevent(){},
 			changeBatchOper(){
 				this.batchOper = !this.batchOper;
@@ -212,6 +210,44 @@
 				this.tabBars[this.tabCurrentIndex] = navItem;
 				this.tabBars = Object.assign({}, this.tabBars);
 			},
+			navToReturn(id){ //退货
+				let ids = [];
+				if(id){
+					ids.push(id);
+				}else{
+					let navItem = this.tabBars[this.tabCurrentIndex];
+					navItem.goodsList.forEach(item=>{
+						if(item.checked){
+							ids.push(item.productId);
+						}
+					})
+				}
+				if(ids.length == 0){
+					return;
+				}
+				uni.navigateTo({
+					url: `/pages/shop/goodsreturn?ids=` + JSON.stringify(ids)
+				})
+			},
+			navToTrans(id){ //退货
+				let ids = [];
+				if(id){
+					ids.push(id);
+				}else{
+					let navItem = this.tabBars[this.tabCurrentIndex];
+					navItem.goodsList.forEach(item=>{
+						if(item.checked){
+							ids.push(item.productId);
+						}
+					})
+				}
+				if(ids.length == 0){
+					return;
+				}
+				uni.navigateTo({
+					url: `/pages/shop/goodstransaccount?ids=` + JSON.stringify(ids)
+				})
+			}
 		}
 	}
 </script>
@@ -333,6 +369,13 @@
 				font-family:SourceHanSansCN;
 				font-weight:500;
 				color:rgba(153,153,153,1);
+			}
+			
+			.tit1{
+				font-size:20rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(1,1,1,1);
 			}
 		}
 		.price{
