@@ -14,7 +14,7 @@
 					</view>
 					<view class="flex-item d-3">
 						<view class="tit2">团队人数</view>
-						<view class="tit2">862</view>
+						<view class="tit2">{{total}}</view>
 					</view>
 				</view>
 				<view class="d-5">
@@ -40,20 +40,20 @@
 		</view>
 		
 		<view class="swiper-box">
-			<view class="tab_item uni-flex uni-row" v-for="record in 10" :key="record" @click="navTo('/pages/user/userHome')">
+			<view class="tab_item uni-flex uni-row" v-for="(item,index) in records" :key="index" @click="navTo('/pages/user/userHome?id='+item.id)">
 				<view class="flex-item d_1">
-					<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg"  />
+					<img class="img" :src="item.avatarUrl"  />
 				</view>
 				<view class="flex-item d_2">
 					<view class="uni-flex uni-row">
-						<view class="tit1">陈小明{{record}}</view>
-						<view class="tit4">普通会员</view>
+						<view class="tit1">{{item.nickName}}</view>
+						<view class="tit4">{{item.userType == 2? '代理商'+item.agentLevel + '级':'普通会员'}}</view>
 						<view class="tit3">升级</view>
 					</view>
-					<view class="tit2">2019-08-10 09:02:01</view>
+					<view class="tit2">{{item.createTime}}</view>
 				</view>
 				<view class="flex-item d_3">
-					<view>已推2人<text class="yticon icon-you"></text></view>
+					<view>已推-1人<text class="yticon icon-you"></text></view>
 					<view class="bt3">发消息</view>
 				</view>
 			</view>
@@ -81,10 +81,15 @@
 					name: '其他',
 					id: 2
 				}],
+				pageIndex: 1,
+				pageSize: 10,
 				loadingType: 'more',
+				records:[],
+				total: 0,
 			}
 		},
-		onLoad(){
+		onShow(){
+			this.loadData('fresh');
 		},
         computed: {
 			...mapState(['hasLogin','userInfo'])
@@ -97,23 +102,55 @@
 				this.headerPosition = "absolute";
 			}
 		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
-		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.loadData();
 		},
         methods: {
 			//菜单切换
 			async tabSelect(e) {
-				this.tabCur = e.currentTarget.dataset.id;
+				let index = e.currentTarget.dataset.id;
+				if(this.tabCur == index){
+					return;
+				}
+				this.tabCur = index;
+				this.loadData('fresh');
 			},
 			navTo(url){
 				uni.navigateTo({  
 					url
 				})  
+			},
+			async loadData(loadType){
+				if(loadType == 'fresh'){
+					this.pageIndex = 1;
+					this.loadingType = 'more';
+					this.records = [];
+				}
+				if(this.loadingType === 'loading' || this.loadingType == 'noMore'){
+					return;
+				}
+				this.loadingType = 'loading';
+				let values = {pageIndex: this.pageIndex,pageSize: this.pageSize};
+				let tabBar = this.tabBars[this.tabCur];
+				if(tabBar.id == 1){
+					values['directTeam'] == true;
+				}else if(tabBar.id == 2){
+					values['directTeam'] == false;
+				}
+				let result = await this.$request.ModelHome.pageAgentTeam(values);
+				result = result || {};
+				this.total = result.total || 0;
+				let orderList = result.records || [];
+				orderList.forEach(item=>{
+					this.records.push(item);
+				})
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
+				}else{
+					this.loadingType = 'more'; 
+				}
+				this.pageIndex = this.pageIndex + 1;
 			},
         }  
     }  

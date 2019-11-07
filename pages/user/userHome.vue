@@ -9,6 +9,9 @@
 					<view class="flex-item d-2">
 						<view class="tit1">{{userInfo.nickname || '游客'}}</view>
 					</view>
+					<view class="d-7">
+						
+					</view>
 					<view class="flex-item d-3">
 						<view class="tit2">团队人数</view>
 						<view class="tit2">862</view>
@@ -100,7 +103,7 @@
 			}
 			
 			.d-2{
-				width: 400rpx;
+				width: 314rpx;
 				
 				.tit1{
 					font-size:34rpx;
@@ -111,9 +114,16 @@
 				}
 			}
 			
+			.d-7{
+				width: 2rpx;
+				background-color: #ffffff;
+				height: 60rpx;
+				opacity: 0.34;
+				margin-top: 8rpx;
+			}
+			
 			.d-3{
-				width: 203rpx;
-				border-left: solid 1px white;
+				width: 287rpx;
 				padding-left: 8px;
 				
 				.bt1{

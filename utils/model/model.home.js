@@ -138,4 +138,11 @@ export default{
 		let result = await request.post(url,data,{});
 		return result;
 	},
+	
+	//团队
+	async pageAgentTeam(data){
+		let url = config.api + '/h5/agent/agent-team';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
 }
