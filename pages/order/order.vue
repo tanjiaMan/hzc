@@ -32,7 +32,7 @@
 							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
 							<!-- <text 
 								@click.stop="stopPrevent"
-								v-if="item.payStatus== -10" 
+								v-if="item.orderStatus== -10" 
 								class="del-btn yticon icon-iconfontshanchu1"
 								@click="deleteOrder(index)"
 							></text> -->
@@ -43,7 +43,7 @@
 								v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 								class="goods-item"
 							>
-								<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
+								<image class="goods-img" :src="goodsItem.coverPicUrl" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view 
@@ -51,10 +51,10 @@
 							class="goods-box-single"
 							v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 						>
-							<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
+							<image class="goods-img" :src="goodsItem.coverPicUrl" mode="aspectFill"></image>
 							<view class="right">
-								<text class="title clamp">{{goodsItem.product.name}}</text>
-								<text class="attr-box">{{goodsItem.product.specificationName != null? goodsItem.product.specificationName:''}}  x {{goodsItem.quantity}}</text>
+								<text class="title clamp">{{goodsItem.productName}}</text>
+								<text class="attr-box">{{goodsItem.specificationName != null? goodsItem.specificationName:''}}  x {{goodsItem.productQuantity}}</text>
 								<text class="price">{{goodsItem.productPrice}}</text>
 							</view>
 						</view>
@@ -65,18 +65,18 @@
 							件商品 合计
 							<text class="price">{{item.totalPrice}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 0" @click.stop="stopPrevent"> <!-- 待付款  -->
+						<view class="action-box b-t" v-if="item.orderStatus == 0" @click.stop="stopPrevent"> <!-- 待付款  -->
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
 							<button class="action-btn recom" @click="payOrder(item)">立即支付</button>
 						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 20" @click.stop="stopPrevent"> <!-- 待发货  -->
+						<view class="action-box b-t" v-if="item.orderStatus == 20" @click.stop="stopPrevent"> <!-- 待发货  -->
 							
 						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 40" @click.stop="stopPrevent"> <!-- 待收货  -->
+						<view class="action-box b-t" v-if="item.orderStatus == 40" @click.stop="stopPrevent"> <!-- 待收货  -->
 							<button class="action-btn" @click="logistOrder(item)">查看物流</button>
 							<button class="action-btn recom" @click="sureOrder(item)">确认收货</button>
 						</view>
-						<view class="action-box b-t" v-if="item.payStatus == 60" @click.stop="stopPrevent"> <!-- 待评价  -->
+						<view class="action-box b-t" v-if="item.orderStatus == 60" @click.stop="stopPrevent"> <!-- 待评价  -->
 							<button class="action-btn recom" @click="navTo('/pages/order/comment')">去评价</button>
 						</view>
 					</view>
@@ -184,14 +184,14 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {needDetail: true,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
 				if(navItem.payState != null){
-					values['payStatus'] = navItem.payState;
+					values['orderStatus'] = navItem.payState;
 				}
 				let result = await this.$request.ModelOrder.listOrder(values);
 				let orderList = result.records;
 				orderList.forEach(item=>{
-					item = Object.assign(item, this.orderStateExp(item.payStatus));
+					item = Object.assign(item, this.orderStateExp(item.orderStatus));
 					navItem.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页

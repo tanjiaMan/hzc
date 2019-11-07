@@ -130,11 +130,11 @@
 			       <view class="tit2">草稿箱</view>
 			    </uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">-1</view>
+				   <view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.followCount || 0}}</view>
 				   <view class="tit2">我的关注</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">-1</view>
+				   <view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.fansCount || 0}}</view>
 				   <view class="tit2">粉丝</view>
 				</uni-grid-item>
 				<uni-grid-item>

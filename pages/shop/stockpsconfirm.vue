@@ -88,7 +88,10 @@
 		},
 		methods:{
 			async loadData(){
-				this.item = await this.$request.ModelHome.getAgentProduct(this.productId);
+				let result = await this.$request.ModelHome.getAgentProduct(this.productId);
+				if(result.length > 0){
+					this.item = result[0]
+				}
 			},
 			input(e){
 				if(this.num != "" && this.num > 0){

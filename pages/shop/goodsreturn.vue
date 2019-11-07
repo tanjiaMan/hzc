@@ -1,18 +1,18 @@
 <template>
 	<view class="container">
-		<view class="goods-item" v-for="(item,index) in 2" :key="index">
+		<view class="goods-item" v-for="(item,index) in products" :key="index">
 			<view class="d-header">
-				<img class="img-header" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
-				<text class="tit-header">韩梅梅与李雷雷</text>
+				<img class="img-header" :src="item.shopUserAvatarUrl" />
+				<text class="tit-header">{{item.shopUserName}}</text>
 			</view>
 			<view class="d-goods">
-				<img class="img-goods" src="https://pic.youx365.com/shop1.png" />
+				<img class="img-goods" :src="item.coverPicUrl" />
 				<view class="d-right">
-					<view class="tit-title">颜值在线！旅游、出行、上班！轻便实 用大容量，进口尼龙双肩背包进口尼龙双肩背包进口尼龙双肩背包</view>
-					<view class="tit-static">已销 25 剩余 128</view>
+					<view class="tit-title">{{item.productName}}</view>
+					<!-- <view class="tit-static">已销 25 剩余 128</view> -->
 					<view class="uni-flex uni-row">
-						<view class="d-lsj">零售价：<text class="priceicon">￥</text><text class="price">14.9</text></view>
-						<view class="d-lsj">进货价：<text class="priceicon">￥</text><text class="price">14.9</text></view>
+						<view class="d-lsj">零售价：<text class="priceicon">￥</text><text class="price">{{item.productPrice}}</text></view>
+						<view class="d-lsj">进货价：<text class="priceicon">￥</text><text class="price">{{item.agentPrice}}</text></view>
 					</view>
 				</view>
 			</view>
@@ -21,7 +21,7 @@
 					退货理由
 				</view>
 				<view class="d-inputitem">
-					<input class="inputclass" placeholder="请输入退货理由" placeholder-class="placeholder" />
+					<input class="inputclass" v-model="item.reason" placeholder="请输入退货理由" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="d-input uni-flex uni-row">
@@ -29,7 +29,7 @@
 					退货数量
 				</view>
 				<view class="d-inputitem">
-					<input class="inputclass" placeholder="请输入需要退货的数量" placeholder-class="placeholder" />
+					<input class="inputclass" v-model="item.number" type="number" placeholder="请输入需要退货的数量" placeholder-class="placeholder" />
 				</view>
 			</view>
 			<view class="d-input uni-flex uni-row">
@@ -37,12 +37,12 @@
 					退货金额
 				</view>
 				<view class="d-inputitem">
-					<text class="tit-1">¥</text><text class="tit-2">14.9</text>
+					<text class="tit-1">¥</text><text class="tit-2">{{item.agentPrice}}</text>
 				</view>
 			</view>
 		</view>
 		<view class="d-bt">
-			<view class="bt">提交申请</view>
+			<view class="bt" @click="submit">提交申请</view>
 		</view>
 	</view>
 </template>
@@ -51,14 +51,46 @@
 	export default {
 		data() {
 			return {
-				
+				products:[],
 			}
 		},
 		onLoad(option){
-			this.ids = JSON.parse(option.ids);
+			this.$request.ModelHome.getAgentProductByIds(option.ids).then(result => {
+				this.products = result;
+				this.products.forEach(item => {
+					item.reason = '';
+					item.number = item.myStock;
+				})
+			})
 		},
 		methods: {
-			
+			submit(){
+				let values = [];
+				var that = this;
+				this.products.forEach(item => {
+					if(item.number > 0){
+						values.push({
+							productId: item.productId,
+							quantity: item.number,
+							reason:item.reason
+						});
+					}
+				})
+				uni.showModal({
+				    content: '确定退货',
+				    success: function (res) {
+				        if (res.confirm) {
+				            that.$request.ModelHome.withdrawStock(values).then(result => {
+								if(result.code == 'ok'){
+									that.$api.msg('退货成功');
+								}else{
+									that.$api.msg(result.msg);
+								}
+							});
+				        }
+				    }
+				});
+			}
 		}
 	}
 </script>

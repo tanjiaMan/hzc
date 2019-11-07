@@ -111,11 +111,11 @@
 				
 				this.loadingType = 'loading';
 				
-				let values = {needDetail: true,pageIndex: this.pageIndex,pageSize: this.pageSize};
+				let values = {orderStatus: 80,pageIndex: this.pageIndex,pageSize: this.pageSize};
 				let result = await this.$request.ModelOrder.listOrder(values);
 				let orderList = result.records;
 				orderList.forEach(item=>{
-					// item = Object.assign(item, this.orderStateExp(item.payStatus));
+					// item = Object.assign(item, this.orderStateExp(item.orderStatus));
 					this.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页

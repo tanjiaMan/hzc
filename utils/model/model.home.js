@@ -91,8 +91,15 @@ export default{
 	},
 	
 	async getAgentProduct(productId){
-		let url = config.api + '/h5/agent/agent-product-detail?productId=' + productId;
-		let result = await request.get(url,{});
+		let productIds = [];productIds.push(productId);
+		let url = config.api + '/h5/agent/agent-product-detail';
+		let result = await request.post(url,JSON.stringify(productIds),{});
+		return result && result.data;
+	},
+	
+	async getAgentProductByIds(data){
+		let url = config.api + '/h5/agent/agent-product-detail';
+		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
 	
@@ -116,6 +123,18 @@ export default{
 	
 	async receipt(data){
 		let url = config.api + '/h5/agent/receipt';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async transStock(data){//转货
+		let url = config.api + '/h5/agent/transfer-stock-batch';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async withdrawStock(data){//退货
+		let url = config.api + '/h5/agent/withdraw-stock-batch';
 		let result = await request.post(url,data,{});
 		return result;
 	},

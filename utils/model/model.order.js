@@ -79,7 +79,7 @@ export default{
 	},
 	
 	async listOrder(data){ //订单列表
-		let url = config.api + `/h5/order/page`;
+		let url = config.api + `/h5/order/page-template`;
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},

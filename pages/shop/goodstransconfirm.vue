@@ -11,34 +11,34 @@
 			<view class="header-tit3">转货商品/个数</view>
 		</view>
 		
-		<view class="order-list uni-flex uni-row" v-for="(item,index) in 2" :key="index">
+		<view class="order-list uni-flex uni-row" v-for="(item,index) in products" :key="index">
 			<view class="d-left">
-				<img class="img" src="https://pic.youx365.com/shop1.png" />
+				<img class="img" :src="item.coverPicUrl" />
 			</view>
 			<view class="d-center">
-				<view class="tit1">秋冬女装春装新款上衣</view>
+				<view class="tit1">{{item.productName}}</view>
 				<view class="tit2 tit2marign">
 					<text class="tit-1">零售价</text>
 					<text class="tit-2">￥</text>
-					<text class="tit-3">78.60</text>
+					<text class="tit-3">{{item.productPrice}}</text>
 				</view>
 				<view class="tit2">
-					<text class="tit-1">零售价</text>
+					<text class="tit-1">进货价</text>
 					<text class="tit-2">￥</text>
-					<text class="tit-3">78.60</text>
+					<text class="tit-3">{{item.agentPrice}}</text>
 				</view>
 			</view>
 			<view class="d-right">
-				<view class="tit-1">已销 25 剩余 127</view>
+				<!-- <view class="tit-1">已销 25 剩余 127</view> -->
 				<view class="tit-2">
 					<uni-number-box
 						class="step"
-						:min="1" 
-						:max="3"
-						:value="2"
-						:isMax="false"
-						:isMin="false"
-						:index="0"
+						:min="0" 
+						:max="item.myStock"
+						:value="item.number"
+						:isMax="item.number>=item.myStock?true:false"
+						:isMin="item.number===0"
+						:index="index"
 						@eventChange="numberChange"
 					></uni-number-box>
 				</view>
@@ -63,6 +63,7 @@
 			return {
 				transUserId: 0,
 				transUser:{},
+				products:[],
 			};
 		},
 		onLoad(option){
@@ -74,7 +75,12 @@
 				}
 				this.transUser = result.records[0];
 			})
-			this.ids = JSON.parse(option.ids);
+			this.$request.ModelHome.getAgentProductByIds(option.ids).then(result => {
+				this.products = result;
+				this.products.forEach(item => {
+					item.number = 0;
+				})
+			})
 		},
 		methods:{
 			navTo(url){
@@ -83,28 +89,35 @@
 				})  
 			},
 			async trans(){
-				let values = {amount: this.amount,toUserId: this.transUserId};
+				let values = [];
 				var that = this;
+				this.products.forEach(item => {
+					if(item.number > 0){
+						values.push({
+							productId: item.productId,
+							quantity: item.number,
+							toUserId:this.transUserId
+						});
+					}
+				})
 				uni.showModal({
 				    content: '确定转货',
 				    success: function (res) {
 				        if (res.confirm) {
-				   //          that.$request.ModelUser.transAmount(values).then(result => {
-							// 	if(result.code == 'ok'){
-							// 		that.$api.msg('转账成功');
-							// 		that.amount = "";
-							// 	}else{
-							// 		that.$api.msg(result.msg);
-							// 	}
-							// });
+				            that.$request.ModelHome.transStock(values).then(result => {
+								if(result.code == 'ok'){
+									that.$api.msg('转货成功');
+								}else{
+									that.$api.msg(result.msg);
+								}
+							});
 				        }
 				    }
 				});
 			},
 			//数量
 			numberChange(data){
-				console.log('data.index',data.index);
-				
+				this.products[data.index].number = data.number
 			},
 		}
 	}
