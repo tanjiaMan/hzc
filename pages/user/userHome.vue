@@ -2,29 +2,29 @@
 	<view class="container">
 		<view class="team-header uni-flex uni-row">
 			<view class="flex-item d-1">
-				<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+				<image class="portrait" :src="agentInfo.avatarUrl || '/static/missing-face.png'"></image>
 			</view>
 			<view class="flex-item">
 				<view class="d-4 uni-flex uni-row">
 					<view class="flex-item d-2">
-						<view class="tit1">{{userInfo.nickname || '游客'}}</view>
+						<view class="tit1">{{agentInfo.nickName}}</view>
 					</view>
 					<view class="d-7">
 						
 					</view>
 					<view class="flex-item d-3">
 						<view class="tit2">团队人数</view>
-						<view class="tit2">862</view>
+						<view class="tit2">{{agentInfo.sonsCount}}</view>
 					</view>
 				</view>
 				<view class="d-5">
 					<view class="uni-flex uni-row">
-						<view class="tit2 flex-item d-6">等级：2</view>
-						<view class="tit2 flex-item d-6">推 荐 人：李四</view>
+						<view class="tit2 flex-item d-6">等级：{{agentInfo.agentLevel}}</view>
+						<view class="tit2 flex-item d-6">推 荐 人：{{agentInfo.inviteUserName || '无'}}</view>
 					</view>
 					<view class="uni-flex uni-row">
-						<view class="tit2 flex-item d-6">手 机 号：13012341234</view>
-						<view class="tit2 flex-item d-6">上 级：李四</view>
+						<view class="tit2 flex-item d-6">手 机 号：{{agentInfo.mobile || '无'}}</view>
+						<view class="tit2 flex-item d-6">上 级：{{agentInfo.parentAgentUserName || '无'}}</view>
 					</view>
 				</view>
 			</view>
@@ -33,11 +33,11 @@
 		<view class="d-content">
 			<view class="uni-flex uni-row">
 				<view class="flex-item d-1">
-					<img class="img" src="https://pic.youx365.com/uhome-3.png" />
+					<img class="img" src="https://pic.youx365.com/uhome-3.png" @click="navTo('/pages/shop/goodsmanager?transUserId='+ userId)" />
 					<view class="tit1">转货</view>
 				</view>
 				<view class="flex-item d-1">
-					<img class="img" src="https://pic.youx365.com/uhome-2.png" />
+					<img class="img" src="https://pic.youx365.com/uhome-2.png" @click="navTo('/pages/withdraw/transconfirm?transUserId='+ userId)" />
 					<view class="tit1">转账</view>
 				</view>
 				<view class="flex-item d-1">
@@ -54,15 +54,18 @@
 </template>
 
 <script>
-	import {mapState} from 'vuex';
 	export default {
-		computed: {
-			...mapState(['userInfo'])
-		},
 		data() {
 			return {
-				
+				agentInfo:{},
+				userId:0
 			}
+		},
+		onLoad(option){
+			this.userId = option.id;
+			this.$request.ModelHome.getAgentInfo(this.userId).then(agentInfo => {
+				this.agentInfo = agentInfo;
+			})
 		},
 		methods: {
 			navTo(url){

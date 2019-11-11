@@ -145,4 +145,10 @@ export default{
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
+	
+	async getAgentInfo(userId){
+		let url = config.api + '/h5/agent/agent-info?userId=' + userId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
 }

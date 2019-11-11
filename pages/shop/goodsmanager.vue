@@ -55,7 +55,7 @@
 							</view>
 							<view class="bt-box" @click.stop.prevent="stopPrevent">
 								<view class="bt1" @click="navToTrans(item.productId)">转货</view>
-								<view class="bt2" @click="navToReturn(item.productId)">退货</view>
+								<view class="bt2" @click="navToReturn(item.productId)" v-if="transUserId == 0">退货</view>
 							</view>
 					 	</view>
 					 </view>
@@ -69,9 +69,9 @@
 			<view class="d-left">
 				<view v-if="batchOper == false" class="bt-plcz" @click="changeBatchOper">批量操作</view>
 				<view v-if="batchOper == true" class="bt-plcz" @click="navToTrans()">转货</view>
-				<view v-if="batchOper == true" class="bt-th" @click="navToReturn()">退货</view>
+				<view v-if="batchOper == true && transUserId == 0" class="bt-th" @click="navToReturn()">退货</view>
 			</view>
-			<view class="d-right">
+			<view class="d-right" v-if="transUserId == 0">
 				<view class="bt-zh">转货<br/>记录</view>
 				<view class="bt-zh bt-th">退货<br/>记录</view>
 			</view>
@@ -95,9 +95,11 @@
 				scrollLeft:0,
 				tabBars:[],
 				batchOper: false,
+				transUserId:0,
 			}
 		},
 		onLoad(options){
+			this.transUserId = options.transUserId || 0; //转货
 			this.loadMenu();
 		},
 		methods: {
@@ -244,9 +246,15 @@
 				if(ids.length == 0){
 					return;
 				}
-				uni.navigateTo({
-					url: `/pages/shop/goodstransaccount?ids=` + JSON.stringify(ids)
-				})
+				if(this.transUserId == 0){
+					uni.navigateTo({
+						url: `/pages/shop/goodstransaccount?ids=` + JSON.stringify(ids)
+					})
+				}else{
+					uni.navigateTo({
+						url: `/pages/shop/goodstransconfirm?transUserId=${this.transUserId}&ids=`+JSON.stringify(ids)
+					})
+				}
 			}
 		}
 	}

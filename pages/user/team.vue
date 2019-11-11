@@ -14,17 +14,17 @@
 					</view>
 					<view class="flex-item d-3">
 						<view class="tit2">团队人数</view>
-						<view class="tit2">{{total}}</view>
+						<view class="tit2">{{agentInfo.sonsCount}}</view>
 					</view>
 				</view>
 				<view class="d-5">
 					<view class="uni-flex uni-row">
-						<view class="tit2 flex-item d-6">等级：2</view>
-						<view class="tit2 flex-item d-6">推 荐 人：李四</view>
+						<view class="tit2 flex-item d-6">等级：{{agentInfo.agentLevel}}</view>
+						<view class="tit2 flex-item d-6">推 荐 人：{{agentInfo.inviteUserName || '无'}}</view>
 					</view>
 					<view class="uni-flex uni-row">
-						<view class="tit2 flex-item d-6">手 机 号：13012341234</view>
-						<view class="tit2 flex-item d-6">上 级：李四</view>
+						<view class="tit2 flex-item d-6">手 机 号：{{userInfo.mobile || '无'}}</view>
+						<view class="tit2 flex-item d-6">上 级：{{agentInfo.parentAgentUserName}}</view>
 					</view>
 				</view>
 			</view>
@@ -48,13 +48,13 @@
 					<view class="uni-flex uni-row">
 						<view class="tit1">{{item.nickName}}</view>
 						<view class="tit4">{{item.userType == 2? '代理商'+item.agentLevel + '级':'普通会员'}}</view>
-						<view class="tit3">升级</view>
+						<!-- <view class="tit3">升级</view> -->
 					</view>
 					<view class="tit2">{{item.createTime}}</view>
 				</view>
 				<view class="flex-item d_3">
-					<view>已推-1人<text class="yticon icon-you"></text></view>
-					<view class="bt3">发消息</view>
+					<view>已推{{item.sonsCount}}人<text class="yticon icon-you"></text></view>
+					<!-- <view class="bt3">发消息</view> -->
 				</view>
 			</view>
 			
@@ -85,11 +85,16 @@
 				pageSize: 10,
 				loadingType: 'more',
 				records:[],
-				total: 0,
+				agentInfo:{}
 			}
 		},
 		onShow(){
 			this.loadData('fresh');
+		},
+		onLoad(){
+			this.$request.ModelHome.getAgentInfo(this.userInfo.id).then(agentInfo => {
+				this.agentInfo = agentInfo;
+			})
 		},
         computed: {
 			...mapState(['hasLogin','userInfo'])
@@ -134,13 +139,12 @@
 				let values = {pageIndex: this.pageIndex,pageSize: this.pageSize};
 				let tabBar = this.tabBars[this.tabCur];
 				if(tabBar.id == 1){
-					values['directTeam'] == true;
+					values['directTeam'] = true;
 				}else if(tabBar.id == 2){
-					values['directTeam'] == false;
+					values['directTeam'] = false;
 				}
 				let result = await this.$request.ModelHome.pageAgentTeam(values);
 				result = result || {};
-				this.total = result.total || 0;
 				let orderList = result.records || [];
 				orderList.forEach(item=>{
 					this.records.push(item);

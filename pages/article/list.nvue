@@ -396,8 +396,8 @@
 	    display: inline-block;
 	    /* #endif */
 	    flex-wrap: nowrap;
-	    padding-left: 34upx;
-	    padding-right: 34upx;
+	    padding-left: 10upx;
+	    padding-right: 10upx;
 	}
 	
 	.uni-tab-item-title {

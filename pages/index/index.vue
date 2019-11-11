@@ -1386,6 +1386,8 @@
 			line-height: 93rpx;
 			width:201rpx;
 			padding-left:22rpx;
+			display: flex;
+			align-items: center;
 			
 			img:first-child{
 				width:120rpx;
@@ -1394,7 +1396,7 @@
 			img:nth-child(2){
 				width: 10rpx;
 				height: 10rpx;
-				top:-27rpx;
+				top:-10rpx;
 			}
 			img:nth-child(3){
 				width: 32rpx;

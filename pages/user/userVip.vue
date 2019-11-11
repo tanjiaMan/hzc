@@ -246,10 +246,12 @@
 						<view class="tit2">商品管理</view>
 					</view>
 				</uni-grid-item>
-			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/uvip_m_3.png" />
-			       <view class="tit2">订单管理</view>
-			    </uni-grid-item>
+				<uni-grid-item>
+					<view @click="navTo('/pages/shop/shoporder')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/uvip_m_3.png" />
+						<view class="tit2">订单管理</view>
+					</view>
+				</uni-grid-item>
 				<uni-grid-item>
 				   <img class="tit1" src="https://pic.youx365.com/uvip_m_4.png" />
 				   <view class="tit2">评价管理</view>

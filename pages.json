@@ -184,6 +184,11 @@
 				"navigationBarTitleText": "进货确认"
 			}
 		},{
+			"path": "pages/shop/shoporder",
+			"style": {
+				"navigationBarTitleText": "订单管理"
+			}
+		},{
 			"path": "pages/money/paySuccess",
 			"style": {
 				"navigationBarTitleText": "支付成功"
