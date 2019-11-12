@@ -524,8 +524,8 @@
 				this.loadSubData(firstCat.id);
 			},
 			getnewsMore(){
-				this.$api.msg('get news more');
-				this.navTo('/pages/article/list');
+				let firstCat = this.tabBars[this.TabCur];
+				this.navTo('/pages/article/list?id=' + firstCat.id);
 			}
 		},
 		// #ifndef MP

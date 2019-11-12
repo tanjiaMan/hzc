@@ -46,7 +46,7 @@
 				</view>
 			</view>
 			
-			<view class="btzy" @click="navTo('/pages/user/userTrans')">
+			<view class="btzy" @click="navTo('/pages/user/userTrans?transUserId=' + userId)">
 				转移记录 >
 			</view>
 		</view>

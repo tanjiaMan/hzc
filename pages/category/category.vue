@@ -5,7 +5,7 @@
 				{{item.name}}
 			</view>
 		</scroll-view>
-		<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
+		<scroll-view scroll-with-animation scroll-y class="right-aside">
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
@@ -28,12 +28,10 @@
 		},
 		data() {
 			return {
-				sizeCalcState: false,
-				tabScrollTop: 0,
 				currentId: 1,
 				flist: [],
-				slist: [],
-				tlist: [],
+				slist: [],oslist:[],
+				tlist: [],otlist:[],
 			}
 		},
 		onLoad(){
@@ -42,57 +40,31 @@
 		methods: {
 			async loadData(){
 				let catall = await this.$request.ModelHome.getCategoryAll();
+				this.currentId = catall[0].id;
 				catall.forEach(flist => {
 					//一级分类
 					this.flist.push({id: flist.id,name: flist.name});
 					var index = 1;
 					Object.keys(flist.subItems).forEach(slist => {
 						let slistid = flist.id +'-' + index;
-						this.slist.push({id: slistid,pid: flist.id,name: slist});
+						this.oslist.push({id: slistid,pid: flist.id,name: slist});
 						index ++;
 						
 						flist.subItems[slist].forEach(tlist => {
-							this.tlist.push({id: tlist.id,pid: slistid,ppid: flist.id,name: tlist.name,picture: tlist.picUrl});
+							this.otlist.push({id: tlist.id,pid: slistid,ppid: flist.id,name: tlist.name,picture: tlist.picUrl});
 						})
-						
 					});
-				})
+				}),
+				this.filter();
 			},
 			//一级分类点击
 			tabtap(item){
-				if(!this.sizeCalcState){
-					this.calcSize();
-				}
-				
 				this.currentId = item.id;
-				let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
-				this.tabScrollTop = this.slist[index].top;
+				this.filter();
 			},
-			//右侧栏滚动
-			asideScroll(e){
-				if(!this.sizeCalcState){
-					this.calcSize();
-				}
-				let scrollTop = e.detail.scrollTop;
-				let tabs = this.slist.filter(item=>item.top <= scrollTop).reverse();
-				if(tabs.length > 0){
-					this.currentId = tabs[0].pid;
-				}
-			},
-			//计算右侧栏每个tab的高度等信息
-			calcSize(){
-				let h = 0;
-				this.slist.forEach(item=>{
-					let view = uni.createSelectorQuery().select("#main-" + item.id);
-					view.fields({
-						size: true
-					}, data => {
-						item.top = h;
-						h += data.height;
-						item.bottom = h;
-					}).exec();
-				})
-				this.sizeCalcState = true;
+			filter(){
+				this.slist = this.oslist.filter(item => item.pid == this.currentId);
+				this.tlist = this.otlist.filter(item => item.ppid == this.currentId);
 			},
 			navToList(id,name){
 				uni.navigateTo({

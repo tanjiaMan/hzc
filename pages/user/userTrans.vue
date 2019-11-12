@@ -25,35 +25,35 @@
 					<view class="tans-item" v-for="(item,index) in tabItem.orderList" :key="index" v-if="tabItem.state == 0">
 						<view class="zh-item uni-flex uni-row">
 							<view class="pic flex-item">
-								<img class="img" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" />
+								<img class="img" :src="item.coverPicUrl" />
 							</view>
 							<view class="desc flex-item">
-								<view class="tit1">秋冬女装春装新款上衣</view>
-								<view class="tit4">零售价<text class="tit2">￥</text><text class="tit3">78.60</text></view>
-								<view class="tit4">进货价<text class="tit2">￥</text><text class="tit3">78.60</text></view>
+								<view class="tit1">{{item.productName}}</view>
+								<view class="tit4">零售价<text class="tit2">￥</text><text class="tit3">{{item.productPrice}}</text></view>
+								<view class="tit4">进货价<text class="tit2">￥</text><text class="tit3">{{item.price}}</text></view>
 							</view>
 							<view class="num flex-item">
-								已销 25 剩余 127
+								<!-- 已销 25 剩余 127 -->
 							</view>
 						</view>
 						<view class="tit-border-none tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转账金额：500.00
+							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转账金额：{{item.price * item.quantity}}
 						</view>
 						<view class="tit-border-none tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />收账人：<img class="header" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" /> 张三 15200942946
+							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />收账人：<img class="header" :src="item.avatarUrl" /> {{item.nickName}} {{item.mobile}}
 						</view>
 						<view class="tit-border-none tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />转账时间：2019-09-10 16:42:10
+							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />转账时间：{{item.createTime}}
 						</view>
 					</view>
 					
 					<!-- 转账 -->
 					<view class="tans-item" v-for="(item,index) in tabItem.orderList" :key="index" v-if="tabItem.state == 1">
 						<view class="tit-num tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转账金额：500.00
+							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转账金额：{{item.amountBalance * -1}}
 						</view>
 						<view class="tit-name tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />收账人：<img class="header" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" /> 张三 15200942946
+							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />收账人：<img class="header" :src="item.avatarUrl" /> {{item.nickName}} {{item.mobile || ''}}
 						</view>
 						<view class="tit-border-none tit-item">
 							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />转账时间：2019-09-10 16:42:10
@@ -108,6 +108,7 @@
 		data() {
 			return {
 				tabCurrentIndex: 0,
+				transUserId: 0,
 				navList: [{
 						state: 0,
 						text: '转货',
@@ -136,6 +137,7 @@
 			}
 		},
 		onLoad(options){
+			this.transUserId = options.transUserId;
 			this.loadData()
 		},
 		methods: {
@@ -167,8 +169,19 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
 				let orderList = [{},{},{}];
+				if(navItem.state == 0){ //转货记录
+					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+					let result = await this.$request.ModelHome.getTransStockLog(values);
+					result = result || {};
+					orderList = result.records || [];
+				}else if(navItem.state == 1){ //转账记录
+					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+					let result = await this.$request.ModelUser.pageTransLog(values);
+					result = result || {};
+					orderList = result.records || [];
+				}
+				
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
 				})

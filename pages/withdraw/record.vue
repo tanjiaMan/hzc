@@ -42,10 +42,12 @@
 				tabCur: 0,
 				tabBars:[{
 					name: '待审核',
-					id: 0
+					id: 0,
+					state: 1,
 				},{
 					name: '已提现',
-					id: 1
+					id: 1,
+					state: 2,
 				}],
 				loadingType: 'more',
 				pageIndex:1,
@@ -86,8 +88,9 @@
 				if(this.loadingType === 'loading' || this.loadingType == 'noMore'){
 					return;
 				}
+				let navItem = this.tabBars[this.tabCur];
 				this.loadingType = 'loading'
-				let result = await this.$request.ModelUser.widthdrawLog();
+				let result = await this.$request.ModelUser.widthdrawLog(navItem.state);
 				result = result || {};
 				let orderList = result.records || [];
 				orderList.forEach(item=>{

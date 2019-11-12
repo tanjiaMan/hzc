@@ -31,7 +31,7 @@
 		                </div>
 		            </refresh>
 		            <!-- #endif -->
-					<view class="d_ad">
+					<view class="d_ad" v-if="info.length > 0">
 						<uni-swiper-dot :info="info" :current="adCurrent" mode="nav" :dots-styles="dotsStyles" field="content">
 							<swiper class="swiper-box" @change="adChange">
 								<swiper-item v-for="(item, index) in info" :key="index">
@@ -46,19 +46,19 @@
 		                <!-- <media-item :options="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-item> -->
 						<view class="d-news-item" @click="goDetail(newsitem)">
 							<view class="d-img">
-								<img class="img" :src="newsitem.image_url" />
+								<img class="img" :src="newsitem.picUrl" />
 							</view>
 							<view class="d-text-frame">
 								<view class="tit">
-									法德合资的ARTE电视台是一个专注艺术和文化内容的电视台
+									{{newsitem.title}}
 								</view>
 								<view class="d-bottom">
 									<view class="tit1">
-										2019-08-07
+										{{newsitem.createTime}}
 									</view>
 									<view class="bt-look">
 										<img class="img" src="https://pic.youx365.com/icon-look.png" />
-										<text class="tit2">200</text>
+										<text class="tit2">{{newsitem.viewCount}}</text>
 									</view>
 								</view>
 							</view>
@@ -134,34 +134,7 @@
 				newsList: [],
 				cacheTab: [],
 				tabIndex: 0,
-				tabBars: [{
-				    name: '推荐',
-				    id: 'guanzhu'
-				}, {
-				    name: '精品服饰',
-				    id: 'tuijian'
-				}, {
-				    name: '社会百态',
-				    id: 'tiyu'
-				}, {
-				    name: '生活百科',
-				    id: 'redian'
-				}, {
-				    name: '财经',
-				    id: 'caijing'
-				}, {
-				    name: '娱乐',
-				    id: 'yule'
-				}, {
-				    name: '军事',
-				    id: 'junshi'
-				}, {
-				    name: '历史',
-				    id: 'lishi'
-				}, {
-				    name: '本地',
-				    id: 'bendi'
-				}],
+				tabBars: [],
 				scrollInto: "",
 				showTips: false,
 				navigateFlag: false,
@@ -171,18 +144,18 @@
 				
 				//广告
 				info: [
-					{
-						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
-						content: '冰雪漂浮，星云移动，萤火虫纷飞'
-					},
-					{
-						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
-						content: '内容 B'
-					},
-					{
-						url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
-						content: '内容 C'
-					}
+					// {
+					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
+					// 	content: '冰雪漂浮，星云移动，萤火虫纷飞'
+					// },
+					// {
+					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
+					// 	content: '内容 B'
+					// },
+					// {
+					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
+					// 	content: '内容 C'
+					// }
 				],
 				dotsStyles: {
 					backgroundColor: 'rgba(0, 0, 0, .3)',
@@ -194,26 +167,51 @@
 				adCurrent:0
 			}
 		},
-		onLoad() {
-		    this.tabBars.forEach((tabBar) => {
-		        this.newsList.push({
-		            data: [],
-		            refreshText: "",
-		            loadingText: '加载更多...'
-		        });
-		    });
-		    this.getList(0);
+		onLoad(options) {
+			this.$request.ModelHome.getCategoryByPid(0).then(result => {
+				if(result != null && result.length > 0){
+					this.tabBars = result;
+					this.tabBars.forEach((tabBar) => {
+					    this.newsList.push({
+					        data: [],
+					        refreshText: "",
+					        loadingText: '加载更多...',
+							pageSize: 10,
+							pageIndex: 1,
+							classId: tabBar.id,
+							hasMore: true,
+					    });
+					});
+					this.tabIndex = this.tabBars.findIndex(item => item.id == options.id);
+					this.getList('refresh');
+				}
+			})
 		},
 		methods: {
-			getList(index) {
-			    let activeTab = this.newsList[index];
-			    let list = [];
-			    for (let i = 1; i <= 10; i++) {
-			        let item = Object.assign({}, newsData['data' + Math.floor(Math.random() * 5)]);
-			        item.id = this.newGuid();
-			        list.push(item);
-			    }
-			    activeTab.data = activeTab.data.concat(list);
+			async getList(type) {
+			    let activeTab = this.newsList[this.tabIndex];
+				
+				if(type == 'refresh'){
+					activeTab.hasMore = true;
+					activeTab.pageIndex = 1;
+					activeTab.data = [];
+					activeTab.loadingText = '加载更多...';
+				}
+				
+				if(activeTab.hasMore == false){
+					return;
+				}
+				let values = {classId: activeTab.classId,pageIndex:activeTab.pageIndex,pageSize: activeTab.pageSize};
+				let result = await this.$request.ModelHome.pageArtice(values);
+				result = result || {};
+				let articleList = result.records || [];
+			    activeTab.data = activeTab.data.concat(articleList);
+				if(articleList.length < activeTab.pageSize){
+					activeTab.hasMore = false;
+					activeTab.loadingText = '已加载完毕';
+				}else{
+					activeTab.pageIndex = activeTab.pageIndex + 1;
+				}
 			},
 			goDetail(e) {
 			    if (this.navigateFlag) {
@@ -221,7 +219,7 @@
 			    }
 			    this.navigateFlag = true;
 			    uni.navigateTo({
-			        url: './detail?title=' + e.title
+			        url: './detail?id=' + e.id
 			    });
 			    setTimeout(() => {
 			        this.navigateFlag = false;
@@ -238,9 +236,7 @@
 			    })
 			},
 			loadMore(e) {
-			    setTimeout(() => {
-			        this.getList(this.tabIndex);
-			    }, 500)
+			    this.getList();
 			},
 			ontabtap(e) {
 			    let index = e.target.dataset.current || e.currentTarget.dataset.current;
@@ -251,12 +247,13 @@
 			    this.switchTab(index);
 			},
 			switchTab(index) {
+				if (this.tabIndex === index) {
+				    return;
+				}
+				this.tabIndex = index;
+				
 			    if (this.newsList[index].data.length === 0) {
-			        this.getList(index);
-			    }
-			
-			    if (this.tabIndex === index) {
-			        return;
+			        this.getList('refresh');
 			    }
 			
 			    // 缓存 tabId
@@ -264,11 +261,9 @@
 			        let isExist = this.cacheTab.indexOf(this.tabIndex);
 			        if (isExist < 0) {
 			            this.cacheTab.push(this.tabIndex);
-			            //console.log("cache index:: " + this.tabIndex);
 			        }
 			    }
-			
-			    this.tabIndex = index;
+		
 			    this.scrollInto = this.tabBars[index > 0 ? index - 1:index].id;
 			
 			    // 释放 tabId

@@ -139,6 +139,12 @@ export default{
 		return result;
 	},
 	
+	async getTransStockLog(data){//转货记录
+		let url = config.api + '/h5/agent/transfer-stock-log';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	//团队
 	async pageAgentTeam(data){
 		let url = config.api + '/h5/agent/agent-team';
@@ -148,6 +154,19 @@ export default{
 	
 	async getAgentInfo(userId){
 		let url = config.api + '/h5/agent/agent-info?userId=' + userId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	//文章
+	async pageArtice(data){
+		let url = config.api + '/h5/index/artice/page';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async getArticeInfo(id){
+		let url = config.api + '/h5/index/artice/detail?articleId=' + id;
 		let result = await request.get(url,{});
 		return result && result.data;
 	},

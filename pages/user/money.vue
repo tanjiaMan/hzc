@@ -50,6 +50,7 @@
 			return {
 				userAmount:{}, //账户金额
 				query:{
+					flowType:1,
 					pageIndex: 1,
 					pageSize: 10,
 					loadingType: 'more',

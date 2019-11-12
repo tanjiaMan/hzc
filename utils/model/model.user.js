@@ -73,14 +73,20 @@ export default{
 		return result;
 	},
 	
+	async pageTransLog(data){ //转账记录
+		let url = config.api + '/h5/user/balance-transfer-log';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	async widthdraw(amount){ //提现
 		let url = config.api + '/h5/user/withdraw?amount=' + amount;
 		let result = await request.post(url,{},{});
 		return result;
 	},
 	
-	async widthdrawLog(){ //提现记录
-		let url = config.api + '/h5/user/withdraw-log';
+	async widthdrawLog(status){ //提现记录
+		let url = config.api + '/h5/user/withdraw-log?status='+status;
 		let result = await request.get(url,{});
 		return result;
 	},
