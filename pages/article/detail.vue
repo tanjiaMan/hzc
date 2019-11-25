@@ -4,7 +4,10 @@
 			<view class="title flex-item">{{info.title}}</view>
 			<view class="d-img flex-item">
 				<img class="img" style="margin-right: 31rpx;" src="https://pic.youx365.com/article-sc.png" />
-				<img class="img" src="https://pic.youx365.com/article-zf.png" />
+				
+				<button class="p-b-btn" open-type="share">
+					<img class="img" src="https://pic.youx365.com/article-zf.png" />
+				</button>
 			</view>
 		</view>
 		<image class="main-img" mode="widthFix" :src="info.picUrl" />
@@ -14,17 +17,37 @@
 	</view>
 </template>
 <script>
+	import {mapState} from 'vuex';
+	
 	export default {
 		data() {
 			return {
-				info:{}
+				info:{},
+				id:0,
 			}
 		},
-		onLoad(e) {
-			this.$request.ModelHome.getArticeInfo(e.id).then(result => {
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
+		onLoad(options) {
+			if(options.inviteUserId){
+				uni.setStorage({//缓存用户登陆状态
+				    key: 'inviteUserId',  
+				    data: options.inviteUserId  
+				})
+			}
+			
+			this.id = options.id;
+			this.$request.ModelHome.getArticeInfo(this.id).then(result => {
 				this.info = result;
 			})
-		}
+		},
+		onShareAppMessage() { //设置分享
+			return {
+				title: this.info.title,
+				path: '/pages/article/detail?id='+this.id + '&inviteUserId=' + this.userInfo.id
+			}
+		},
 	}
 </script>
 <style lang='scss'>
@@ -51,10 +74,23 @@
 		.d-img{
 			width: 200rpx;
 			text-align: right;
+			display: flex;
+			justify-content: center;
 			
 			.img{
 				width: 40rpx;
 				height: 40rpx;
+			}
+			
+			.p-b-btn{
+				position: unset;
+				background-color: unset;
+				padding-left: unset;
+				padding-right: unset;
+				font-size: unset;
+				height: 40rpx;
+				line-height: 40rpx;
+				margin: 0 !important;
 			}
 		}
 	}

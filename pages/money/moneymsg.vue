@@ -12,33 +12,33 @@
 		
 			<view class="d-count uni-flex uni-row" v-if="tabCur == 0">
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.totalIncome}}</view>
 					<view class="tit2">总收入</view>
 				</view>
 				<view class="flex-item line1"></view>
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.withdrawStock}}</view>
 					<view class="tit2">退货</view>
 				</view>
 				<view class="flex-item line1"></view>
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.agentPayInStock}}</view>
 					<view class="tit2">代理进货</view>
 				</view>
 			</view>
 			<view class="d-count uni-flex uni-row" v-else>
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.totalOutcome}}</view>
 					<view class="tit2">总收入</view>
 				</view>
 				<view class="flex-item line1"></view>
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.agentPayOutStock}}</view>
 					<view class="tit2">补货</view>
 				</view>
 				<view class="flex-item line1"></view>
 				<view class="flex-item d-1">
-					<view class="tit1">-1</view>
+					<view class="tit1">{{sts.agentSpuStock}}</view>
 					<view class="tit2">进货</view>
 				</view>
 			</view>
@@ -117,6 +117,7 @@
 				pageIndex: 1,
 				pageSize: 10,
 				records:[],
+				sts:{},
 				
 				startDate: null,
 				endDate: null,
@@ -213,6 +214,8 @@
 					values['endT'] = this.endDate + ' 23:23:23';
 				}
 				let result = await this.$request.ModelUser.getAmountFlow(values);
+				let sts = await this.$request.ModelUser.getAmountSts(values);
+				this.sts = sts;
 				let moneylist = result.records;
 				
 				if(moneylist.length < this.pageSize){

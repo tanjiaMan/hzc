@@ -335,7 +335,8 @@
 						distribIds.push({
 							productId:item.productId,
 							productSpecId:item.productSpecId,
-							quantity:item.productQuantity
+							quantity:item.productQuantity,
+							purchaseType: 2
 						});
 					}
 				})

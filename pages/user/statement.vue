@@ -15,7 +15,7 @@
 			    <view class="flex-item d_2">
 					<view class="tit1" @click="navTo('/pages/user/team')">
 						<view class="tit1_1">团队人数</view>
-						<view class="tit1_2">2356</view>
+						<view class="tit1_2">{{agentInfo.sonsCount}}</view>
 					</view>
 				</view> 
 			</view>
@@ -24,18 +24,18 @@
 				</view>
 			    <view class="flex-item d_3">
 					<view class="tit2">
-						等 级：2
+						等 级：{{agentInfo.agentLevel}}
 					</view>
 					<view class="tit2">
-						手 机 号：13012341234
+						手 机 号：{{userInfo.mobile || '无'}}
 					</view>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="tit2">
-						推 荐 人：李四
+						推 荐 人：{{agentInfo.inviteUserName || '无'}}
 					</view>
 					<view class="tit2">
-						上 级：李四
+						上 级：{{agentInfo.parentAgentUserName}}
 					</view>
 				</view> 
 			</view>
@@ -48,15 +48,15 @@
 			</view>
 			<view class="d-body uni-flex uni-row">
 				<view class="flex-item d_left">
-					<view class="tit3">10086元</view>
+					<view class="tit3">{{sts.incomeSts.totalIncome?sts.incomeSts.totalIncome:0}}元</view>
 					<view class="tit4">总收入</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">8965元</view>
+					<view class="tit3">{{sts.incomeSts.totalWithDraw?sts.incomeSts.totalWithDraw:0}}元</view>
 					<view class="tit4">已提现</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">1986元</view>
+					<view class="tit3">{{sts.incomeSts.balance?sts.incomeSts.balance:0}}元</view>
 					<view class="tit4">待提现</view>
 				</view>
 			</view>
@@ -69,15 +69,15 @@
 			</view>
 			<view class="d-body uni-flex uni-row">
 				<view class="flex-item d_left">
-					<view class="tit3">10086元</view>
+					<view class="tit3">-1元</view>
 					<view class="tit4">总支出</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">8965元</view>
+					<view class="tit3">-1元</view>
 					<view class="tit4">进货</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">1986元</view>
+					<view class="tit3">-1元</view>
 					<view class="tit4">补货</view>
 				</view>
 			</view>
@@ -91,19 +91,19 @@
 			</view>
 			<view class="d-body-1 uni-flex uni-row">
 				<view class="flex-item d_center">
-					<view class="tit3">17</view>
+					<view class="tit3">{{sts.productSts.classifyCount ?sts.productSts.classifyCount:0}}</view>
 					<view class="tit4">商品分类</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">208</view>
+					<view class="tit3">{{sts.productSts.totalCount?sts.productSts.totalCount:0}}</view>
 					<view class="tit4">商品数量</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">19</view>
+					<view class="tit3">{{sts.productSts.unShelfCount?sts.productSts.unShelfCount:0}}</view>
 					<view class="tit4">待上架商品</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">198</view>
+					<view class="tit3">{{sts.productSts.shelfCount?sts.productSts.shelfCount:0}}</view>
 					<view class="tit4">已上架商品</view>
 				</view>
 			</view>
@@ -116,7 +116,7 @@
 				<view class="flex-item tit3" @click="navTo('/pages/user/statementlist')">查看排行<text class="yticon icon-you"></text></view>
 			</view>
 			<view class="d-header-body">
-				<text class="tit1">总销量：</text><text class="tit2">1908</text>
+				<text class="tit1">总销量：</text><text class="tit2">-1</text>
 			</view>
 			<uni-swiper-dot :info="bkInfo" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
 				<swiper @change="bkSwitch" style="height: 350rpx;">
@@ -143,31 +143,31 @@
 				<view class="flex-item tit2">统计</view>
 			</view>
 			<view class="d-header-body">
-				<text class="tit1">总订单：</text><text class="tit2">1908</text>
+				<text class="tit1">总订单：</text><text class="tit2">{{sts.orderSts.totalCount?sts.orderSts.totalCount:0}}</text>
 			</view>
 			<view class="d-body-2 uni-flex uni-row">
 				<view class="flex-item d_center">
-					<view class="tit3">88</view>
+					<view class="tit3">{{sts.orderSts.toPayCount?sts.orderSts.toPayCount:0}}</view>
 					<view class="tit4">待付款</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">531</view>
+					<view class="tit3">{{sts.orderSts.toDeliverCount?sts.orderSts.toDeliverCount:0}}</view>
 					<view class="tit4">待发货</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">66</view>
+					<view class="tit3">{{sts.orderSts.toReceiveCount?sts.orderSts.toReceiveCount:0}}</view>
 					<view class="tit4">待收货</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">19</view>
+					<view class="tit3">-1</view>
 					<view class="tit4">待评价</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">20</view>
+					<view class="tit3">{{sts.orderSts.refundCount?sts.orderSts.refundCount:0}}</view>
 					<view class="tit4">退款</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">1440</view>
+					<view class="tit3">{{sts.orderSts.receiveCount?sts.orderSts.receiveCount:0}}</view>
 					<view class="tit4">已完成</view>
 				</view>
 			</view>
@@ -198,9 +198,17 @@
 				bkInfo: [{},{},{}],
 				bkCurrent: 0,
 				info: [{},{},{}],
+				agentInfo:{},
+				sts:{}
 			}
 		},
 		onLoad(){
+			this.$request.ModelHome.getAgentInfo(this.userInfo.id).then(agentInfo => {
+				this.agentInfo = agentInfo;
+			})
+			this.$request.ModelUser.getSts().then(result => {
+				this.sts = result;
+			})
 		},
         computed: {
 			...mapState(['hasLogin','userInfo'])

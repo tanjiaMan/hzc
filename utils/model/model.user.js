@@ -67,6 +67,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async getAmountSts(data){
+		let url = config.api + '/h5/user/account-flow-sts';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	async transAmount(data){ //转账
 		let url = config.api + '/h5/user/balance-transfer';
 		let result = await request.post(url,data,{});
@@ -94,6 +100,13 @@ export default{
 	//消息
 	async getUserMsg(msgType,pageIndex,pageSize){
 		let url = config.api + '/h5/user/user-msg?msgType='+msgType+'&pageIndex='+pageIndex+'&pageSize='+pageSize;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	//统计报表
+	async getSts(){ //提现记录
+		let url = config.api + '/h5/user/sts-page';
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
