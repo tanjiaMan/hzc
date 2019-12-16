@@ -93,6 +93,11 @@
 				"navigationBarTitleText": "我的代金劵"
 			}
 		},{
+			"path": "pages/user/myScore",
+			"style": {
+				"navigationBarTitleText": "我的积分"
+			}
+		},{
 			"path": "pages/order/order",
 			"style": {
 				"navigationBarTitleText": "我的订单",

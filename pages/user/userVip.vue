@@ -10,11 +10,18 @@
 			    <view class="flex-item d_2">
 					<view class="username">
 						{{userInfo.nickname || '游客'}}
-						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
-						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
 					</view>
 					<text class="mobile">{{userInfo.mobile}}</text>
 					<view v-if="!hasLogin" class="loginbt" @click="navToLogin">注册/登陆</view>
+				</view>
+				<view class="flex-item d_4">
+					<view class="d_4_item">
+						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
+						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
+					</view>
+					<view class="d_4_item">
+						<span class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：2011 ></span>
+					</view>
 				</view>
 			    <view class="flex-item d_3">
 					<view class="uni-flex uni-row" @click="navTo('/pages/notice/message')">
@@ -387,7 +394,7 @@
 			}
 			
 			.d_2{
-				width: 450rpx;
+				width: 180rpx;
 				height: 198rpx;
 				padding-top: 44rpx;
 				
@@ -396,6 +403,9 @@
 					font-family:SourceHanSansCN;
 					font-weight:500;
 					color:rgba(233,211,175,1);
+					text-overflow: ellipsis;
+					overflow: hidden;
+					white-space: nowrap;
 				}
 				
 				.mobile{
@@ -415,9 +425,18 @@
 					border-radius: 100rpx;
 					padding: 0px 10rpx 0 10rpx;
 				}
+			}
+			
+			.d_4{
+				flex: 1;
+				padding-top: 44rpx;
+				padding-left: 10rpx;
+				
+				.d_4_item{
+					line-height: 1 !important;
+				}
 				
 				.user-vip{
-					width:105rpx;
 					height:30rpx;
 					border:1px solid rgba(255,210,0,1);
 					opacity:0.8;
@@ -426,9 +445,25 @@
 					font-family:SourceHanSansCN;
 					font-weight:400;
 					color:rgba(233,211,175,1);
-					margin-left: 22rpx;
 					padding:0 9rpx 0 9rpx;
-
+				
+					img{
+						width: 16rpx;
+						height: 16rpx;
+						margin-right:5rpx;
+					}
+				}
+				
+				.user-score{
+					height:30rpx;
+					border:1px solid #e9d3af;
+					border-radius:3rpx;
+					font-size:18rpx;
+					font-family:SourceHanSansCN;
+					font-weight:400;
+					color:#e9d3af;
+					padding:0 9rpx 0 9rpx;
+									
 					img{
 						width: 16rpx;
 						height: 16rpx;
