@@ -189,6 +189,11 @@
 				"navigationBarTitleText": "订单管理"
 			}
 		},{
+			"path": "pages/shop/commentMsg",
+			"style": {
+				"navigationBarTitleText": "评价管理"
+			}
+		},{
 			"path": "pages/money/paySuccess",
 			"style": {
 				"navigationBarTitleText": "支付成功"
@@ -279,6 +284,11 @@
 				"navigationBarTitleText": "店铺认证"
 			}
         },{
+            "path" : "pages/money/coupon",
+            "style" : {
+				"navigationBarTitleText": "优惠券"
+			}
+        },{
             "path" : "pages/money/redPackage",
             "style" : {
 				"navigationBarTitleText": "我的红包"
@@ -288,7 +298,22 @@
             "style" : {
 				"navigationBarTitleText": "红包转账"
 			}
-        }
+        },{
+		    "path" : "pages/other/aboutus",
+		    "style" : {
+				"navigationBarTitleText": "关于我们"
+			}
+		},{
+		    "path" : "pages/other/feedback",
+		    "style" : {
+				"navigationBarTitleText": "投诉建议"
+			}
+		},{
+		    "path" : "pages/other/help",
+		    "style" : {
+				"navigationBarTitleText": "帮助中心"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

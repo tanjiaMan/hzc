@@ -168,7 +168,7 @@
 			}
 		},
 		onLoad(options) {
-			this.$request.ModelHome.getCategoryByPid(0).then(result => {
+			this.$request.ModelHome.getMediaCategoryByPid(0).then(result => {
 				if(result != null && result.length > 0){
 					this.tabBars = result;
 					this.tabBars.forEach((tabBar) => {

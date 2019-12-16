@@ -2,6 +2,12 @@
 	<view>
 		<view class="notice-header uni-flex uni-row">
 			<view class="flex-item d_1">
+				<img src="https://pic.youx365.com/notice_4.png" />
+				<view class="tit">
+					系统通知
+				</view>
+			</view>
+			<view class="flex-item d_1">
 				<img src="https://pic.youx365.com/notice_3.png" />
 				<view class="tit">
 					赞和收藏
@@ -97,7 +103,7 @@
 		background-color: #F6F6F6;
 		
 		.d_1{
-			width: 33.33%;
+			width: 25%;
 			text-align: center;
 			padding: 30rpx 0;
 		}
@@ -110,13 +116,13 @@
 		}
 		
 		image{
-			width: 56rpx;
-			height: 56rpx;
+			width: 46rpx;
+			height: 46rpx;
 		}
 		
 		img{
-			width: 56rpx;
-			height: 56rpx;
+			width: 46rpx;
+			height: 46rpx;
 		}
 	}
 

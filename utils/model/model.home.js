@@ -15,6 +15,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async getMediaCategoryByPid(pid){
+		let url = config.api + '/h5/index/media-classifys?mediaType=' + pid;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	//首页
 	async getConfig(classfyId){
 		let url = config.api + '/h5/index/config-facade?classifyId='+classfyId;
@@ -159,6 +165,12 @@ export default{
 	},
 	
 	//文章
+	async getArticeList(classifyId){
+		let url = config.api + '/h5/index/artice/list?classifyId='+classifyId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	async pageArtice(data){
 		let url = config.api + '/h5/index/artice/page';
 		let result = await request.post(url,data,{});

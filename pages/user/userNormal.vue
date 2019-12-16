@@ -90,7 +90,7 @@
 		<!-- 我的优惠券 -->
 		<view class="user-coupon">
 			<view class="uni-flex uni-row" style="width: 100%;">
-				<view class="flex-item d_1">
+				<view class="flex-item d_1" @click="navTo('/pages/money/coupon')">
 					<view class="tit1">我的优惠券</view>
 					<view class="tit2">{{fullUser.couponInfo && fullUser.couponInfo.couponCount || 0}}</view>
 				</view>
@@ -157,25 +157,35 @@
 						<view class="tit2">公司客服</view>
 					</button>
 			    </uni-grid-item>
-			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/usr_o_2.png" />
-			       <view class="tit2">关于我们</view>
-			    </uni-grid-item>
-			    <uni-grid-item>
-			       <img class="tit1" src="https://pic.youx365.com/usr_o_3.png" />
-			       <view class="tit2">帮助中心</view>
-			    </uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_4.png" />
-				   <view class="tit2">意见反馈</view>
+					<view @click="navTo('/pages/other/aboutus')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_2.png" />
+						<view class="tit2">关于我们</view>
+					</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_5.png" />
-				   <view class="tit2">邀请好友</view>
+					<view @click="navTo('/pages/other/help')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_3.png" />
+						<view class="tit2">帮助中心</view>
+					</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <img class="tit1" src="https://pic.youx365.com/usr_o_6.png" />
-				   <view class="tit2">平台客服</view>
+				   <view @click="navTo('/pages/other/feedback')" style="line-height: initial;text-align: center;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_4.png" />
+						<view class="tit2">意见反馈</view>
+				   </view>
+				</uni-grid-item>
+				<uni-grid-item>
+					<button class="contract-btn" open-type="share" style="line-height: initial;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_5.png" />
+						<view class="tit2">邀请好友</view>
+					</button>
+				</uni-grid-item>
+				<uni-grid-item>
+					<button class="contract-btn" open-type="contact" @contact="handleContact" style="line-height: initial;">
+						<img class="tit1" src="https://pic.youx365.com/usr_o_6.png" />
+						<view class="tit2">平台客服</view>
+					</button>
 				</uni-grid-item>
 				<uni-grid-item>
 				   <view @click="navTo('/pages/address/address')" style="line-height: initial;text-align: center;">
@@ -265,7 +275,13 @@
 					}
 				})
 			}
-        }  
+        },
+		onShareAppMessage() { //设置分享
+			return {
+				title: '欢迎来到社集优选',
+				path: '/pages/index/index?inviteUserId=' + this.userInfo.id
+			}
+		},
     }  
 </script>  
 <style lang='scss'>

@@ -29,7 +29,7 @@
 						v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 						class="goods-item"
 					>
-						<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
+						<image class="goods-img" :src="goodsItem.coverPicUrl" mode="aspectFill"></image>
 					</view>
 				</scroll-view>
 				<view 
@@ -37,10 +37,10 @@
 					class="goods-box-single"
 					v-for="(goodsItem, goodsIndex) in item.orderDetails" :key="goodsIndex"
 				>
-					<image class="goods-img" :src="goodsItem.product.coverPicUrl" mode="aspectFill"></image>
+					<image class="goods-img" :src="goodsItem.coverPicUrl" mode="aspectFill"></image>
 					<view class="right">
-						<text class="title clamp">{{goodsItem.product.name}}</text>
-						<text class="attr-box">{{goodsItem.product.specificationName != null? goodsItem.product.specificationName:''}}  x {{goodsItem.quantity}}</text>
+						<text class="title clamp">{{goodsItem.productName}}</text>
+						<text class="attr-box">{{goodsItem.specificationName != null? goodsItem.specificationName:''}}  x {{goodsItem.productQuantity}}</text>
 						<text class="price">{{goodsItem.productPrice}}</text>
 					</view>
 				</view>

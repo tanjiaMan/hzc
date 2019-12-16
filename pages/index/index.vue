@@ -61,7 +61,7 @@
 					
 					
 					<!-- 今日头条 -->
-					<view class="d-toutiao uni-flex uni-row">
+					<view class="d-toutiao uni-flex uni-row" v-if="newsitems[TabCur] && newsitems[TabCur].menu && newsitems[TabCur].articles.length > 0">
 					    <view class="flex-item d-title">
 							<img src='https://pic.youx365.com/toutiao_1.png' />
 							<img src='https://pic.youx365.com/toutiao_2.png' />
@@ -69,7 +69,7 @@
 						</view>
 						<view class="flex-item d-news" @click="getnewsMore">
 							<uni-notice-bar :show-get-more="true" :single="true" 
-							text="年末大礼：uni-app1.4 新增百度、支付宝小程序。插件市场重磅上线！"></uni-notice-bar>
+							:text="newsitems[TabCur].articles[0].title"></uni-notice-bar>
 						</view>
 					</view>
 					
@@ -342,6 +342,10 @@
 				//加载banner
 				let banner = await this.$request.ModelHome.getBanner(pid);
 				subData.banner = banner;
+				
+				//加载文章
+				let articles = await this.$request.ModelHome.getArticeList(pid);
+				subData.articles = articles;
 				
 				//获取秒杀
 				let seckill = await this.$request.ModelHome.getSeckill({classifyPid: pid});
