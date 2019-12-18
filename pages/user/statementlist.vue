@@ -1,42 +1,96 @@
 <template>
 	<view class="container">
-		<view class="goods-item uni-flex uni-row" v-for="(item,index) in 4" :key="index">
+		<view class="goods-item uni-flex uni-row" v-for="(item,index) in records" :key="index">
 			<view class="dleft">
 				<view class="bk_index_text"><text class="num">{{index + 1}}</text></view>
-				<image src="https://pic.youx365.com/0/3d3eb27fa52c439607ca26e4225cfca6.jpg" mode="aspectFill"></image>
+				<image :src="item.coverPicUrl" mode="aspectFill"></image>
 			</view>
 			<view class="dcenter">
 				<view class="tit1">
 					热风时尚专属女鞋
 				</view>
 				<view class="tit2">
-					韩国旅行流苏潮女小双肩包女成人儿童
+					
 				</view>
 				<view class="d1">
-					<text class="tit3">¥</text><text class="tit4">14.9</text>
+					<text class="tit3">¥</text><text class="tit4">{{item.price}}</text>
 				</view>
 			</view>
 			<view class="dright">
-				<view class="bt">1323</view>
+				<view class="bt">{{item.dealQuantity?item.dealQuantity:0}}</view>
 			</view>
 		</view>
+		<uni-load-more :status="query.loadingType"></uni-load-more>
 	</view>
 </template>
 
 <script>
+	
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	
 	export default {
+		components: {
+			uniLoadMore	
+		},
 		data() {
 			return {
-				
+				query:{
+					pageIndex: 1,
+					pageSize: 10,
+					loadingType: 'more',
+				},
+				records:[],
 			}
 		},
+		onPageScroll(e){
+			//兼容iOS端下拉时顶部漂移
+			if(e.scrollTop>=0){
+				this.headerPosition = "fixed";
+			}else{
+				this.headerPosition = "absolute";
+			}
+		},
+		//加载更多
+		onReachBottom(){
+			this.getProduce('more');
+		},
+		onLoad(){
+			this.getProduce();
+		},
 		methods: {
-			
+			async getProduce(type){
+				if(this.query.loadingType == 'noMore'){
+					return;
+				}
+				if(type == 'more'){
+					this.query.pageIndex = this.query.pageIndex + 1;
+				}else if(type == 'refresh'){
+					this.query.pageIndex = 1;
+				}
+				this.query.loadingType = 'loading';
+				let result = await this.$request.ModelUser.getStsProduct(this.query);
+				let moneylist = result.records;
+				
+				if(moneylist.length < this.query.pageSize){
+					this.query.loadingType = 'noMore';
+				}else{
+					this.query.loadingType = 'more'; 
+				}
+				
+				moneylist.forEach(item=>{
+					this.records.push(item);
+				})
+			}
 		}
 	}
 </script>
 
 <style lang='scss'>
+	
+	body{
+		background-color: #FFFFFF;
+	}
+	
 	.container{
 		width: 100vw;
 		height: 100vh;

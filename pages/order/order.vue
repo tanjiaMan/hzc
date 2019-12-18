@@ -25,7 +25,7 @@
 					<view 
 						v-for="(item,index) in tabItem.orderList" :key="index"
 						class="order-item"
-						@click="navTo('/pages/order/orderDetail?orderNum='+item.orderNum)"
+						@click="gotoGoodsDetail(item)"
 					>
 						<view class="i-top b-b">
 							<text class="time">订单编号: {{item.orderNum}}</text>
@@ -67,7 +67,7 @@
 						</view>
 						<view class="action-box b-t" v-if="item.orderStatus == 0" @click.stop="stopPrevent"> <!-- 待付款  -->
 							<button class="action-btn" @click="cancelOrder(item)">取消订单</button>
-							<button class="action-btn recom" @click="payOrder(item)">立即支付</button>
+							<button class="action-btn recom" @click="payOrder(item)">去付款</button>
 						</view>
 						<view class="action-box b-t" v-if="item.orderStatus == 20" @click.stop="stopPrevent"> <!-- 待发货  -->
 							
@@ -77,7 +77,7 @@
 							<button class="action-btn recom" @click="sureOrder(item)">确认收货</button>
 						</view>
 						<view class="action-box b-t" v-if="item.orderStatus == 60" @click.stop="stopPrevent"> <!-- 待评价  -->
-							<button class="action-btn recom" @click="navTo('/pages/order/comment')">去评价</button>
+							<button class="action-btn recom" @click="navTo('/pages/order/comment?orderNum='+item.orderNum)">去评价</button>
 						</view>
 					</view>
 					 
@@ -284,6 +284,17 @@
 					//更多自定义
 				}
 				return {stateTip, stateTipColor};
+			},
+			gotoGoodsDetail(item){
+				if(item.orderStatus == -10){
+					return;
+				}
+				if(item.orderStatus < 40){
+					this.navTo('/pages/order/orderDetail?id='+item.orderNum + '&orderStatus=' + item.orderStatus)
+				}else{
+					let id = item.orderDetails[0].orderDetailId;
+					this.navTo('/pages/order/orderDetail?id=' + id + '&orderStatus=' + item.orderStatus)
+				}
 			}
 		},
 	}

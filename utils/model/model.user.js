@@ -110,4 +110,10 @@ export default{
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
+	
+	async getStsProduct(query){
+		let url = config.api + '/h5/user/sts-product-sale';
+		let result = await request.post(url ,query ,{});
+		return result && result.data;
+	},
 }

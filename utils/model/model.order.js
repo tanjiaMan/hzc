@@ -72,6 +72,18 @@ export default{
 		return result && result.data;
 	},
 	
+	async infoOrderTemp(ordernum){ //订单详情
+		let url = config.api + `/h5/order/detail-template?orderNum=${ordernum}`;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async infoOrderPD(orderDetailId){ //订单详情
+		let url = config.api + `/h5/order/detail-pd-template?orderDetailId=${orderDetailId}`;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	async cancelOrder(ordernum){ //取消订单
 		let url = config.api + `/h5/order/close?orderNum=${ordernum}`;
 		let result = await request.post(url,{},{});

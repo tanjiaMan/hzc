@@ -69,15 +69,15 @@
 			</view>
 			<view class="d-body uni-flex uni-row">
 				<view class="flex-item d_left">
-					<view class="tit3">-1元</view>
+					<view class="tit3">{{sts.outcomeSts.totalOutcome?sts.outcomeSts.totalOutcome:0}}元</view>
 					<view class="tit4">总支出</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">-1元</view>
+					<view class="tit3">{{sts.outcomeSts.agentPayOut?sts.outcomeSts.agentPayOut:0}}元</view>
 					<view class="tit4">进货</view>
 				</view>
 				<view class="flex-item d_right">
-					<view class="tit3">-1元</view>
+					<view class="tit3">{{sts.outcomeSts.agentSupStock?sts.outcomeSts.agentSupStock:0}}元</view>
 					<view class="tit4">补货</view>
 				</view>
 			</view>
@@ -109,26 +109,26 @@
 			</view>
 		</view>
 		<!-- 商品销量 -->
-		<view class="goods-sale">
+		<view class="goods-sale" v-if="sts.productSaleSts && sts.productSaleSts.totalQuantity">
 			<view class="uni-flex uni-row d-header">
 				<view class="flex-item tit1">商品销量</view>
 				<view class="flex-item tit2">销量</view>
 				<view class="flex-item tit3" @click="navTo('/pages/user/statementlist')">查看排行<text class="yticon icon-you"></text></view>
 			</view>
 			<view class="d-header-body">
-				<text class="tit1">总销量：</text><text class="tit2">-1</text>
+				<text class="tit1">总销量：</text><text class="tit2">{{sts.productSaleSts.totalQuantity}}</text>
 			</view>
-			<uni-swiper-dot :info="bkInfo" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
+			<uni-swiper-dot :info="info" :current="bkCurrent" mode="long" :dots-styles="dotsStyles" field="content">
 				<swiper @change="bkSwitch" style="height: 350rpx;">
-					<swiper-item v-for="(item, index) in info" :key="index">
+					<swiper-item v-for="(infolist, index) in info" :key="index">
 						<view class="bk-list">
 							<view class="uni-flex uni-row">
-							    <view class="flex-item bk_frame" v-for="(item,index) in 3" :key="item">
-									<view :class="'bk_index bk_index_' + (index%3) "></view>
-									<text class="bk_index_text">{{index + 1}}</text>
-									<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
-									<text class="title clamp">兰兰女鞋运动鞋</text>
-									<text class="price">￥14.9</text>
+							    <view class="flex-item bk_frame" v-for="(item,index1) in infolist" :key="index1" @click="navToDetailPage(item.id)">
+									<view :class="'bk_index bk_index_' + (index1 % 3) "></view>
+									<text class="bk_index_text">{{index1 + 1 + (index * 3)}}</text>
+									<image :src="item.coverPicUrl" mode="aspectFill"></image>
+									<text class="title clamp">{{item.name}}</text>
+									<text class="price">￥{{item.price * item.price}}</text>
 								</view>
 							</view>
 						</view>
@@ -159,7 +159,7 @@
 					<view class="tit4">待收货</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">-1</view>
+					<view class="tit3">{{sts.orderSts.toEvalCount?sts.orderSts.toEvalCount:0}}</view>
 					<view class="tit4">待评价</view>
 				</view>
 				<view class="flex-item d_center">
@@ -167,7 +167,7 @@
 					<view class="tit4">退款</view>
 				</view>
 				<view class="flex-item d_center">
-					<view class="tit3">{{sts.orderSts.receiveCount?sts.orderSts.receiveCount:0}}</view>
+					<view class="tit3">{{sts.orderSts.finishedCount?sts.orderSts.finishedCount:0}}</view>
 					<view class="tit4">已完成</view>
 				</view>
 			</view>
@@ -195,9 +195,8 @@
 					selectedBackgroundColor: '#00A390',
 					selectedBorder: '1px #00A390 solid'
 				},
-				bkInfo: [{},{},{}],
 				bkCurrent: 0,
-				info: [{},{},{}],
+				info: [],
 				agentInfo:{},
 				sts:{}
 			}
@@ -208,6 +207,24 @@
 			})
 			this.$request.ModelUser.getSts().then(result => {
 				this.sts = result;
+				
+				if(result.productSaleSts && result.productSaleSts.products && result.productSaleSts.products.length > 0){
+					let info = [],temp = [];
+					let index = 0;
+					for(var i=0;i<result.productSaleSts.products.length;i++){
+						if(index > 2){
+							info.push(temp);
+							temp = [];index = 0;
+						}
+						temp.push(result.productSaleSts.products[i]);
+						index ++;
+					}
+					if(temp.length != 0){
+						info.push(temp);
+					}
+					this.info = info;
+					console.log('info',this.info);
+				}
 			})
 		},
         computed: {
@@ -221,7 +238,13 @@
 			},
 			async bkSwitch(e){
 				this.bkCurrent = e.detail.current
-			}
+			},
+			//详情页
+			navToDetailPage(id) {
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
+			},
         }  
     }  
 </script>  
@@ -355,10 +378,9 @@
 						width:0;
 						height:0;
 						position:absolute;
-						top:3rpx;
+						top:0;
 						z-index:999;
 						border-right:47rpx solid transparent;
-						margin-left:4rpx;
 					}
 					
 					.bk_index_0{
