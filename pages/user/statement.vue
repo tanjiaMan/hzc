@@ -128,7 +128,7 @@
 									<text class="bk_index_text">{{index1 + 1 + (index * 3)}}</text>
 									<image :src="item.coverPicUrl" mode="aspectFill"></image>
 									<text class="title clamp">{{item.name}}</text>
-									<text class="price">￥{{item.price * item.price}}</text>
+									<text class="price">￥{{item.price}}</text>
 								</view>
 							</view>
 						</view>

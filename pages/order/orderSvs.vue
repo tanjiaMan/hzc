@@ -12,11 +12,11 @@
 			<view 
 				v-for="(item,index) in orderList" :key="index"
 				class="order-item"
-				@click="navTo('/pages/order/orderSvsDetail?orderNum='+item.orderNum)"
+				@click="gotoGoodsDetail(item)"
 			>
 				<view class="i-top b-b">
 					<text class="time">{{item.createTime}}</text>
-					<text class="state" style="color: '#FF443F'">退款完成</text>
+					<text class="state" style="color: '#FF443F'">{{item.orderStatusDesc}}</text>
 					<text
 						@click.stop="stopPrevent"
 						class="del-btn yticon icon-iconfontshanchu1"
@@ -52,7 +52,8 @@
 					<text class="price">{{item.totalPrice}}</text>
 				</view>
 				<view class="action-box b-t" @click.stop="stopPrevent">
-					<button class="action-btn recom">申请售后</button>
+					<button class="action-btn recom" @click="gotoApply(item)">申请售后</button>
+					<button class="action-btn recom" @click="gotoSvr(item)">售后详情</button>
 				</view>
 			</view>
 			 
@@ -141,6 +142,25 @@
 				this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
 				console.log('delete order',orderItem);
 				uni.hideLoading();
+			},
+			gotoSvr(item){
+				let id = item.orderDetails[0].orderDetailId;
+				this.navTo('/pages/order/orderSvsDetail?orderDetailId='+id)
+			},
+			gotoApply(item){
+				let id = item.orderDetails[0].orderDetailId;
+				this.navTo('/pages/order/orderSvsApply?orderDetailId='+id)
+			},
+			gotoGoodsDetail(item){
+				if(item.orderStatus == -10){
+					return;
+				}
+				if(item.orderStatus < 40){
+					this.navTo('/pages/order/orderDetail?id='+item.orderNum + '&orderStatus=' + item.orderStatus)
+				}else{
+					let id = item.orderDetails[0].orderDetailId;
+					this.navTo('/pages/order/orderDetail?id=' + id + '&orderStatus=' + item.orderStatus)
+				}
 			}
 		},
 	}

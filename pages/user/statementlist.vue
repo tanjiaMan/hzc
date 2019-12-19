@@ -7,7 +7,7 @@
 			</view>
 			<view class="dcenter">
 				<view class="tit1">
-					热风时尚专属女鞋
+					{{item.name}}
 				</view>
 				<view class="tit2">
 					

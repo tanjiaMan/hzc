@@ -54,7 +54,7 @@
 
 <style lang='scss'>
 	.linetop{
-		height: 40rpx;
+		height: 31rpx;
 	}
 	.line{
 		width:630rpx;
@@ -65,30 +65,30 @@
 	}
 	.header{
 		width:711rpx;
-		height:143rpx;
-		background:rgba(255,255,255,1);
+		height:177rpx;
+		background:#00A390;
 		border-radius:10rpx;
 		margin: 0 auto;
 		
 		.dleft{
 			width: 60%;
-			padding-left: 61rpx;
-			padding-top: 30rpx;
+			padding-left: 55rpx;
+			padding-top: 49rpx;
 		}
 		
 		.tit1{
 			font-size:36rpx;
 			font-family:SourceHanSansCN;
 			font-weight:500;
-			color:rgba(255,68,63,1);
+			color:#FFFFFF;
 			line-height: 1.3;
 		}
 		
 		.tit2{
-			font-size:28rpx;
+			font-size:26rpx;
 			font-family:SourceHanSansCN;
 			font-weight:400;
-			color:rgba(51,51,51,1);
+			color:#FFFFFF;
 		}
 		
 		.dright{
@@ -99,17 +99,16 @@
 			margin-right: 28rpx;
 			
 			.bt{
-				height: 60rpx;
-				width: fit-content;
-				line-height: 60rpx;
+				height: 63rpx;
+				width: 154rpx;
+				line-height: 63rpx;
 				text-align: center;
-				font-size:28rpx;
+				background-color: #FFB238;
+				font-size:29rpx;
 				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(255,68,63,1);
-				border-radius: 60rpx;
-				border: solid 1px #FF443F;
-				padding: 0 20rpx 0 20rpx;
+				color:#FFFFFF;
+				border-radius: 10rpx;
 			}
 		}
 	}
@@ -149,33 +148,37 @@
 		.v-descf{
 			height: 73rpx;
 			line-height: 73rpx;
+			display: flex;
 			
 			.tit1{
 				font-size:22rpx;
 				font-family:Microsoft YaHei;
 				font-weight:400;
-				color:#666666;
+				color: #333333;
+				flex: 1;
 			}
 			
 			.tit2{
 				font-size:22rpx;
 				font-family:Microsoft YaHei;
 				font-weight:400;
-				color:#333333;
+				color: #888888;
+				width: 50%;
+				text-align: right;
 			}
 			
 			.tit3{
 				font-size:22rpx;
 				font-family:Microsoft YaHei;
 				font-weight:400;
-				color:#FF443F;
+				color:#FF4B38;
 			}
 			
 			.tit4{
 				font-size:30rpx;
 				font-family:Microsoft YaHei;
 				font-weight:400;
-				color:#FF443F;
+				color:#FF4B38;
 			}
 		}
 	}

@@ -3,8 +3,8 @@
 		<!-- 头部状态 待支付 -->
 		<view class="header" v-if="orderStatus == 0">
 			<view class="tit1">待支付</view>
-			<view class="tit2">199.00</view>
-			<view class="tit3">14:59</view>
+			<view class="tit2">{{order.totalPrice}}</view>
+			<view class="tit3">{{i}}:{{s}}</view>
 		</view>
 		<view class="header" v-if="orderStatus == 20">
 			<view class="tit1">等待商家发货</view>
@@ -124,12 +124,38 @@
 			return {
 				orderStatus:2,
 				orderNum: 0,
-				order:{}
+				order:{},
+				
+				// 订单待支付状态
+				//倒计时
+				timer: null,
+				seconds: 0, //剩余支付时间
+				d: '00',
+				h: '00',
+				i: '00',
+				s: '00',
 			}
 		},
 		onLoad(option){
 			this.orderStatus = option.orderStatus;
 			
+			if(this.orderStatus == 0){
+				this.$request.ModelOrder.infoOder(option.id).then(result => {
+					if(result && result.leftPaySeconds && result.leftPaySeconds>0){
+						this.seconds = result.leftPaySeconds;
+						
+						this.countDown()
+						this.timer = setInterval(() => {
+							this.seconds--
+							if (this.seconds < 0) {
+								this.timeUp()
+								return
+							}
+							this.countDown()
+						}, 1000)
+					}
+				})
+			}
 			if(this.orderStatus < 40){
 				this.$request.ModelOrder.infoOrderTemp(option.id).then(result => {
 					this.order = result;
@@ -141,6 +167,9 @@
 					this.orderNum = result.orderNum;
 				})
 			}
+		},
+		beforeDestroy() {
+			clearInterval(this.timer)
 		},
         methods: {
 			navTo(url){
@@ -160,6 +189,38 @@
 			 	        }
 			 	    }
 			 	});
+			 },
+			 //定时器
+			 timeUp() {
+			 	clearInterval(this.timer)
+			 },
+			 countDown() {
+			 	let seconds = this.seconds
+			 	let [day, hour, minute, second] = [0, 0, 0, 0]
+			 	if (seconds > 0) {
+			 		day = Math.floor(seconds / (60 * 60 * 24))
+			 		hour = Math.floor(seconds / (60 * 60)) - day * 24
+			 		minute = Math.floor(seconds / 60) - day * 24 * 60 - hour * 60
+			 		second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
+			 	} else {
+			 		this.timeUp()
+			 	}
+			 	if (day < 10) {
+			 		day = '0' + day
+			 	}
+			 	if (hour < 10) {
+			 		hour = '0' + hour
+			 	}
+			 	if (minute < 10) {
+			 		minute = '0' + minute
+			 	}
+			 	if (second < 10) {
+			 		second = '0' + second
+			 	}
+			 	this.d = day
+			 	this.h = hour
+			 	this.i = minute
+			 	this.s = second
 			 },
 			 payOrder(){ //支付订单
 			 	uni.navigateTo({

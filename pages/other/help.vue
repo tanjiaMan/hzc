@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<uni-collapse>
-			<uni-collapse-item title="关于社集优选" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png">
+			<uni-collapse-item title="关于社集优选" thumb="https://pic.youx365.com/bluecycle.png">
 				<view class="content">
 					<img class="img_1" src="https://pic.youx365.com/aboutUs.png" />
 					<view class="tit1">
@@ -9,7 +9,7 @@
 					</view>
 				</view>
 			</uni-collapse-item>
-			<uni-collapse-item title="如何进行分享" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png">
+			<uni-collapse-item title="如何进行分享" thumb="https://pic.youx365.com/bluecycle.png">
 				<view class="content">
 					<img class="img_1" src="https://pic.youx365.com/aboutUs.png" />
 					<view class="tit1">
@@ -17,7 +17,7 @@
 					</view>
 				</view>
 			</uni-collapse-item>
-			<uni-collapse-item title="如何使用积分" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png">
+			<uni-collapse-item title="如何使用积分" thumb="https://pic.youx365.com/bluecycle.png">
 				<view class="content">
 					<img class="img_1" src="https://pic.youx365.com/aboutUs.png" />
 					<view class="tit1">
@@ -25,7 +25,7 @@
 					</view>
 				</view>
 			</uni-collapse-item>
-			<uni-collapse-item title="平台说明" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png">
+			<uni-collapse-item title="平台说明" thumb="https://pic.youx365.com/bluecycle.png">
 				<view class="content">
 					<img class="img_1" src="https://pic.youx365.com/aboutUs.png" />
 					<view class="tit1">
@@ -33,7 +33,7 @@
 					</view>
 				</view>
 			</uni-collapse-item>
-			<uni-collapse-item title="隐私条约" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png">
+			<uni-collapse-item title="隐私条约" thumb="https://pic.youx365.com/bluecycle.png">
 				<view class="content">
 					<img class="img_1" src="https://pic.youx365.com/aboutUs.png" />
 					<view class="tit1">
@@ -114,14 +114,14 @@
 	}
 	
 	.uni-collapse-cell__title-img{
-		width: 13rpx !important;
-		height: 13rpx !important;
+		width: 32rpx !important;
+		height: 32rpx !important;
 		border-radius: 50% !important;
 	}
 	
 	/deep/ .uni-collapse-cell__title-img{
-		width: 13rpx !important;
-		height: 13rpx !important;
+		width: 32rpx !important;
+		height: 32rpx !important;
 		border-radius: 50% !important;
 	}
 	

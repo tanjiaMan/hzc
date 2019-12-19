@@ -111,9 +111,14 @@
 				"navigationBarTitleText": "退款售后"
 			}
 		},{
+			"path": "pages/order/orderSvsApply",
+			"style": {
+				"navigationBarTitleText": "申请售后"
+			}
+		},{
 			"path": "pages/order/orderSvsDetail",
 			"style": {
-				"navigationBarTitleText": "订单详情"
+				"navigationBarTitleText": "售后详情"
 			}
 		},{
 			"path": "pages/money/money",
