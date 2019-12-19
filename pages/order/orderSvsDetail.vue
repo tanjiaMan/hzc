@@ -11,7 +11,7 @@
 				</view>
 			</view>
 			<view class="dright flex-item">
-				<view class="bt">查看进度</view>
+				<view class="bt" @click="open">查看进度</view>
 			</view>
 		</view>
 		<view class="v-goods">
@@ -36,18 +36,46 @@
 				<text class="tit1">申请金额： </text><text class="tit3">￥</text><text class="tit4">199.00</text>
 			</view>
 		</view>
+		
+		<!-- 查看进度 -->
+		<uni-popup ref="detail" type="center" :custom="true" :mask-click="true">
+			<view>
+				<view class="d_popup">
+					<uni-steps :options="options" direction="column" :active="active" active-color="#00A491"></uni-steps>
+				</view>
+				<view class="uni-image-close" @click="cancel()">
+					<uni-icon type="clear" color="#fff" size="30" />
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import uniIcon from '@/components/uni-icon/uni-icon.vue'
+	import uniSteps from '@/components/uni-steps/uni-steps.vue'
+	
 	export default {
+		components: {
+			uniPopup,uniIcon,uniSteps
+		},
 		data() {
 			return {
-				
+				active:1,
+				options:[
+					{title:'发出售后申请',desc:'2019-11-11 08:00'},
+					{title:'申请已通过',desc:'2019-11-12 12:00'},
+					{title:'已退款',desc:'2019-11-13 12:00'}],
 			}
 		},
 		methods: {
-			
+			open() {
+				this.$refs['detail'].open()
+			},
+			cancel() {
+				this.$refs['detail'].close()
+			},
 		}
 	}
 </script>
@@ -181,5 +209,68 @@
 				color:#FF4B38;
 			}
 		}
+	}
+
+	.d_popup{
+		width: 638rpx;
+		height: 470rpx;
+		background-color: #FFFFFF;
+		border-radius: 10rpx;
+		padding: 40rpx;
+		
+		/deep/ .uni-steps-item-title-container{
+			display: flex !important;
+		}
+		.uni-steps-item-title-container{
+			display: flex !important;
+		}
+		
+		/deep/ .uni-steps-item-title{
+			flex: 1;
+			font-size:28rpx !important;
+			font-weight:500 !important;
+		}
+		.uni-steps-item-title{
+			flex: 1;
+			font-size:28rpx !important;
+			font-weight:500 !important;
+		}
+		
+		/deep/ .uni-steps-item-desc{
+			font-size:24rpx !important;
+			font-weight:400 !important;
+		}
+		.uni-steps-item-desc{
+			font-size:24rpx !important;
+			font-weight:400 !important;
+		}
+
+		/deep/ .uni-steps-item-circle{
+			width: 10px !important;
+			height: 10px !important;
+		}
+		.uni-steps-item-circle{
+			width: 10px !important;
+			height: 10px !important;
+		}
+		
+		/deep/ .uni-steps-item-line{
+			left: -13px !important;
+		}
+		.uni-steps-item-line{
+			left: -13px !important;
+		}
+		
+		/deep/ .uni-steps-process .uni-steps-item-circle-container {
+			left: -19px !important;
+		}
+		
+		.uni-steps-process .uni-steps-item-circle-container {
+			left: -19px !important;
+		}
+	}
+	.uni-image-close {
+		margin-top: 28rpx;
+		width: 638rpx;
 	}
 </style>
