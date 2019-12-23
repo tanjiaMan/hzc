@@ -44,7 +44,7 @@
 								</view>
 							</view>
 							<view class="d_status" v-if="tabItem.state == 1 || tabItem.state == 2">
-								<image class="img-status" src="https://pic.youx365.com/couponStatus.png"></image>
+								<view class="titstatus">{{tabItem.state == 1?'已使用':'已过期'}}</view>
 							</view>
 						</view>
 					</view>
@@ -229,6 +229,19 @@
 				right: 48rpx;
 				width: 133rpx;
 				height: 105rpx;
+				background-image: url('https://pic.youx365.com/couponStatusBg.png');
+				background-size: cover;
+				
+				.titstatus{
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					font-size: 28rpx;
+					font-weight: 400;
+					color: #B0B0B0;
+					transform: rotate(-30deg);
+					padding-top: 28rpx;
+				}
 				
 				.img-status{
 					width: 100%;
@@ -315,6 +328,10 @@
 	
 	.uni-swiper-item{
 		height: auto;
+	}
+	
+	.tab-content{
+		background-color: #FFFFFF;
 	}
 	
 	.navbar{

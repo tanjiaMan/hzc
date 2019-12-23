@@ -77,7 +77,7 @@
 							<button class="action-btn recom" @click="sureOrder(item)">确认收货</button>
 						</view>
 						<view class="action-box b-t" v-if="item.orderStatus == 60" @click.stop="stopPrevent"> <!-- 待评价  -->
-							<button class="action-btn recom" @click="navTo('/pages/order/comment?orderNum='+item.orderNum)">去评价</button>
+							<button class="action-btn recom" @click="gotoComments(item)">去评价</button>
 						</view>
 					</view>
 					 
@@ -153,7 +153,6 @@
 			this.tabCurrentIndex = options.state;
 			this.loadData()
 		},
-		 
 		methods: {
 			stopPrevent(){},
 			navTo(url){
@@ -257,10 +256,30 @@
 				})
 			},
 			logistOrder(item){ //查看物流
-				
+				let orderDetailId = item.orderDetails[0].orderDetailId;
+				uni.navigateTo({
+					url: '/pages/order/logistics?orderDetailId='+orderDetailId
+				})
+			},
+			gotoComments(item){ //查看物流
+				let orderDetailId = item.orderDetails[0].orderDetailId;
+				uni.navigateTo({
+					url: '/pages/order/comment?orderDetailId='+orderDetailId
+				})
 			},
 			sureOrder(item){ //确认收货
-				
+				var that = this;
+				let orderDetailId = item.orderDetails[0].orderDetailId;
+				uni.showModal({
+				    title: '确定已经收到商品?',
+				    success: function (res) {
+				        if (res.confirm) {
+							that.$request.ModelOrder.confirmOrder(orderDetailId).then(result => {
+								that.loadData('tabChange');
+							});
+				        }
+				    }
+				});
 			},
 			//订单状态文字和颜色
 			orderStateExp(state){

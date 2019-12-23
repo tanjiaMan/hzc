@@ -111,7 +111,7 @@
 		</view>
 		
 		<view class="d_bottom" v-if="orderStatus == 60">
-			<view class="bt2" @click="navTo('/pages/order/comment?orderNum'+item.orderNum)">去评价</view>
+			<view class="bt2" @click="gotoComments()">去评价</view>
 		</view>
 		
 		<view style="height: 144rpx;"></view>
@@ -184,7 +184,7 @@
 			 				that.$request.ModelOrder.cancelOrder(that.orderNum).then(result => {
 								uni.redirectTo({
 									url: '/pages/order/order?state=1'
-								})({url})  
+								})
 			 				});
 			 	        }
 			 	    }
@@ -228,10 +228,32 @@
 			 	})
 			 },
 			 logistOrder(){ //查看物流
-			 	
+			 	let orderDetailId = this.order.orderDetails[0].orderDetailId;
+			 	uni.navigateTo({
+			 		url: '/pages/order/logistics?orderDetailId='+orderDetailId
+			 	})
+			 },
+			 gotoComments(item){ //查看物流
+			 	let orderDetailId = this.order.orderDetails[0].orderDetailId;
+			 	uni.navigateTo({
+			 		url: '/pages/order/comment?orderDetailId='+orderDetailId
+			 	})
 			 },
 			 sureOrder(){ //确认收货
-			 	
+			 	var that = this;
+				let orderDetailId = this.order.orderDetails[0].orderDetailId;
+			 	uni.showModal({
+			 	    title: '确定已经收到商品?',
+			 	    success: function (res) {
+			 	        if (res.confirm) {
+			 				that.$request.ModelOrder.confirmOrder(orderDetailId).then(result => {
+			 					that.$request.ModelOrder.infoOrderPD(orderDetailId).then(result => {
+			 						that.order = result;
+			 					}) 
+			 				});
+			 	        }
+			 	    }
+			 	});
 			 },
         }  
     }  

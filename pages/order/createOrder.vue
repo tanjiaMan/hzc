@@ -24,15 +24,16 @@
 		<view class="goods-section">
 			<!-- 商品列表 -->
 			<view class="g-item" v-for="(item,index) in productInfos" :key="index">
-				<image v-if="item.picUrlList && item.picUrlList.length >0" :src="item.picUrlList[0]"></image>
+				<image :src="item.coverPicUrl"></image>
 				<view class="right">
-					<text class="title clamp">{{item.name}}</text>
+					<text class="title clamp">{{item.productName}}</text>
 					<view class="uni-flex uni-row" style="width: 100%;">
 						<view style="width: 50%;" class="flex-item">
-							<text class="price">￥{{item.price}}</text>
+							<view class="price">{{item.specificationName}}</view>
+							<text class="price" style="color: red;">￥{{item.productPrice}}</text>
 						</view>
 						<view style="width: 50%;text-align: right;" class="flex-item">
-							<text class="price">{{item.specificationName}}</text>
+							<text class="price">×️ {{item.productQuantity}}</text>
 						</view>
 					</view>
 				</view>
@@ -43,7 +44,8 @@
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip">￥{{data.logisticsPrice}}</text>
+				<text class="cell-tip" v-if="data.logisticsPrice != 0">￥{{data.logisticsPrice}}</text>
+				<text class="cell-tip" v-else>包邮</text>
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">商品金额</text>
@@ -140,8 +142,8 @@
 					this.productparam.addressId = this.addressData.id;
 				}
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
-				if(result.productInfos){
-					this.productInfos = result.productInfos;
+				if(result.orderDetails){
+					this.productInfos = result.orderDetails;
 					this.addressData = result.addressInfo || {};
 					this.data = result.priceInfo;
 				}

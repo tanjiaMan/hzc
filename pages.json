@@ -138,6 +138,11 @@
 			"style": {
 				"navigationBarTitleText": "订单详情"
 			}
+		}, {
+			"path": "pages/order/logistics",
+			"style": {
+				"navigationBarTitleText": "物流信息"
+			}
 		},{
 			"path": "pages/address/address",
 			"style": {

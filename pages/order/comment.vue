@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<view class="v-comment">
-			 <textarea class="texta" placeholder="说点什么吧" placeholder-class="pla" />
+			 <textarea v-model="message" class="texta" placeholder="说点什么吧" placeholder-class="pla" />
 			 <view class="titdesc">
 				 不低于15字，评价可得积分
 			 </view>
@@ -36,7 +36,7 @@
 		        </view>
 		    </view>
 		</view>
-		<view class="btsub">
+		<view class="btsub" @click="submit">
 			提交
 		</view>
 	</view>
@@ -46,6 +46,8 @@
 	export default {
 		data() {
 			return {
+				orderDetailId: 0,
+				message: '',
 				starNum:[{},{},{},{},{}],
 				rate:4,
 				rateDesc:[
@@ -59,7 +61,31 @@
 				imageList:[],
 			}
 		},
+		onLoad(option){
+			this.orderDetailId = option.orderDetailId;
+		},
 		methods: {
+			submit(){
+				if(this.message == null || this.message.length == 0){
+					this.$api.msg('请输入评价内容')
+					return;
+				}
+				if(this.message.length <= 15){
+					this.$api.msg('评价内容不能低于15字')
+					return;
+				}
+				let value  = {message: this.message,orderDetailId: this.orderDetailId,starCount: this.rate,picUrlList: this.imageList};
+				this.$request.ModelOrder.comment(value).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('评价成功');
+						uni.redirectTo({
+							url: '/pages/order/order?state=4'
+						})
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
 			chooseRate(value){
 				this.rate = value + 1;
 			},

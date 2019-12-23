@@ -2,10 +2,10 @@
 	<view class="container">
 		<view class="d_header">
 			<view class="d_left">
-				<image class="img1" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" mode="aspectFill"></image>
+				<image class="img1" :src="order.orderDetails[0].coverPicUrl" mode="aspectFill"></image>
 			</view>
 			<view class="d_right">
-				韩束红胶囊水保湿弹润爽肤精华
+				{{order.orderDetails[0].productName}}
 			</view>
 		</view>
 		<view class="d_body">
@@ -23,7 +23,7 @@
 			<view class="line"></view>
 			<view class="d_item">
 				<view class="tit1">退款金额：</view>
-				<view class="tit2"><text class="tit21">￥</text>148.00</view>
+				<view class="tit2"><text class="tit21">￥</text>{{order.totalPrice}}</view>
 			</view>
 			<view class="line"></view>
 			<view class="d_item">
@@ -33,7 +33,7 @@
 			<view class="line"></view>
 		</view>
 		
-		<view class="d_bt">
+		<view class="d_bt" @click="submit">
 			提交
 		</view>
 	</view>
@@ -43,6 +43,8 @@
 	export default {
 		data() {
 			return {
+				order:{},
+				orderDetailId:0,
 				//picker
 				index: 0,
 				array: ['不喜欢，效果不好', '多拍，错拍，不想要', '做工问题', '货物与描述不符','质量问题','卖家发错货','其他'],
@@ -52,13 +54,29 @@
 		},
 		onLoad(option){
 			let orderDetailId = option.orderDetailId;
-			
+			this.orderDetailId = orderDetailId;
+			this.$request.ModelOrder.infoOrderPD(orderDetailId).then(result => {
+				this.order = result;
+			})
 		},
 		methods: {
 			bindPickerChange: function(e) {
 			    console.log('picker发送选择改变，携带值为', e.target.value)
 			    this.index = e.target.value
 			},
+			submit(){
+				let value = {message: this.array[this.index],orderDetailId: this.orderDetailId};
+				this.$request.ModelOrder.applySale(value).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('申请成功');
+						uni.redirectTo({
+							url: '/pages/order/orderSvs'
+						})
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			}
 		}
 	}
 </script>

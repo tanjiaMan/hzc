@@ -53,6 +53,32 @@ export default{
 		return result && result.data;
 	},
 	
+	async getLogistics(orderDetailId){
+		let url = config.api + '/h5/oper/logistics?orderDetailId='+orderDetailId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	//评论
+	async comment(data){
+		let url = config.api + '/h5/oper/post-product-eval';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async listComment(data){
+		let url = config.api + '/h5/oper/evaluation';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	//售后
+	async applySale(data){
+		let url = config.api + '/h5/oper/apply-post-sale';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
 	//订单
 	async getOrderCaculate(data){ // 计算订单信息
 		let url = config.api + '/h5/order/order-template';
@@ -82,6 +108,12 @@ export default{
 		let url = config.api + `/h5/order/detail-pd-template?orderDetailId=${orderDetailId}`;
 		let result = await request.get(url,{});
 		return result && result.data;
+	},
+	
+	async confirmOrder(orderDetailId){ //取消订单
+		let url = config.api + `/h5/order/confirm?orderDetailId=${orderDetailId}`;
+		let result = await request.post(url,{},{});
+		return result;
 	},
 	
 	async cancelOrder(ordernum){ //取消订单

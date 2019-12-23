@@ -212,7 +212,7 @@
 					<image :src="goods.coverPicUrl" v-else></image>
 					<view class="right">
 						<text class="price" v-if="goodsStockSelectd.price">¥{{goodsStockSelectd.price}}</text>
-						<text class="stock" v-if="goodsStockSelectd.leftStock">库存：{{goodsStockSelectd.leftStock}}{{goods.unit}}</text>
+						<text class="stock" v-if="goodsStockSelectd.leftStock">库存：{{goodsStockSelectd.leftStock}}{{goods.unit?goods.unit:''}}</text>
 						<text v-else>没有库存</text>
 						<view class="selected">
 							已选：

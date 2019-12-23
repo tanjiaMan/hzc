@@ -16,8 +16,8 @@
 		</view>
 		<view class="v-goods">
 			<view class="v-frame goodsdetail uni-flex uni-row">
-				<view class="dimg flex-item"><img class="img" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" /></view>
-				<view class="dtitle">男士短袖体t恤港风ins潮牌2019 新款夏装</view>
+				<view class="dimg flex-item"><img class="img" :src="order.orderDetails[0].coverPicUrl" /></view>
+				<view class="dtitle">{{order.orderDetails[0].productName}}</view>
 			</view>
 			<view class="line"></view>
 			<view class="v-frame v-descf">
@@ -33,7 +33,7 @@
 			</view>
 			<view class="line"></view>
 			<view class="v-frame v-descf">
-				<text class="tit1">申请金额： </text><text class="tit3">￥</text><text class="tit4">199.00</text>
+				<text class="tit1">申请金额： </text><text class="tit3">￥</text><text class="tit4">{{order.totalPrice}}</text>
 			</view>
 		</view>
 		
@@ -62,12 +62,20 @@
 		},
 		data() {
 			return {
+				order:{},
 				active:1,
 				options:[
 					{title:'发出售后申请',desc:'2019-11-11 08:00'},
 					{title:'申请已通过',desc:'2019-11-12 12:00'},
 					{title:'已退款',desc:'2019-11-13 12:00'}],
 			}
+		},
+		onLoad(option){
+			let orderDetailId = option.orderDetailId;
+			this.orderDetailId = orderDetailId;
+			this.$request.ModelOrder.infoOrderPD(orderDetailId).then(result => {
+				this.order = result;
+			})	
 		},
 		methods: {
 			open() {

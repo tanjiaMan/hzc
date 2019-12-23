@@ -17,11 +17,11 @@
 				<view class="i-top b-b">
 					<text class="time">{{item.createTime}}</text>
 					<text class="state" style="color: '#FF443F'">{{item.orderStatusDesc}}</text>
-					<text
+					<!-- <text
 						@click.stop="stopPrevent"
 						class="del-btn yticon icon-iconfontshanchu1"
 						@click="deleteOrder(index)"
-					></text>
+					></text> -->
 				</view>
 				
 				<scroll-view v-if="item.orderDetails.length > 1" class="goods-box" scroll-x>

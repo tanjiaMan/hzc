@@ -110,6 +110,10 @@
 					let userInfo = res.userInfo;
 					let inviteUserId = uni.getStorageSync('inviteUserId');
 					let value = {encryptedData: wxRes.encryptedData,iv: wxRes.iv,code: that.wxCode,nickName: userInfo.nickName,avatarUrl: userInfo.avatarUrl,inviteUserId: inviteUserId};
+					if(inviteUserId && inviteUserId != 'undefined'){
+						value['inviteUserId'] = inviteUserId;
+					}
+					
 					that.$request.ModelUser.login(value).then(result => {
 						if(result.code == 'ok' && result.data){
 							let data = result.data;
