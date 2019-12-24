@@ -104,7 +104,7 @@
 			<view class="e-header">
 				<text class="tit">宝贝评价（86）</text>
 				<text class="tit1">好评率 100%</text>
-				<text class="tip">查看全部</text>
+				<text class="tip" @click="navTo('/pages/product/commentlist?id='+goods.id)">查看全部</text>
 				<text class="yticon icon-you"></text>
 			</view> 
 			<view class="eva-box">
@@ -118,7 +118,7 @@
 								v-for="(item, index) in 3" :key="index"
 								class="floor-item"
 							>
-								<image src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4031878334,2682695508&fm=11&gp=0.jpg" mode="aspectFill"></image>
+								<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
 							</view>
 						</view>
 					</scroll-view>

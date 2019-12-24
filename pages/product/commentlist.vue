@@ -7,7 +7,7 @@
 				:class="{current: tabCurrentIndex == index}"
 				@click="tabClick(index)"
 			>
-				{{item.text}}
+				{{item.text}}({{item.total}})
 			</view>
 		</view>
 		
@@ -24,20 +24,29 @@
 					<!-- 订单列表 -->
 					<view 
 						v-for="(item,index) in tabItem.orderList" :key="index"
-						class="order-item uni-flex uni-row"
+						class="eva-box uni-flex uni-row"
 					>
-						<view class="d_1">
-							<img class="img_1" src="https://pic.youx365.com/withdraw_money.png" />
-						</view>
-						<view class="d_2">
-							<view class="tit2_1">{{item.typeDesc}}</view>
-							<view class="tit2_2">{{item.createTime}}</view>
-						</view>
-						<view class="d_3" v-if="tabItem.balanceFlow == 1">
-							+{{item.amountPoints}}积分
-						</view>
-						<view class="d_3" v-else>
-							-{{item.amountPoints}}积分
+						<image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image>
+						<view class="right">
+							<view style="display: flex;">
+								<text class="name">Leo yo</text>
+								<text class="time">2019-08-25 13:20</text>
+							</view>
+							<text class="con">商品收到了，79元两件，质量不错，试了一下有点瘦，但是加个外罩很漂亮，我很喜欢</text>
+							<scroll-view class="floor-list" scroll-x>
+								<view class="scoll-wrapper">
+									<view 
+										v-for="(item, index) in 6" :key="index"
+										class="floor-item"
+									>
+										<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
+									</view>
+								</view>
+							</scroll-view>
+							<!-- <view class="bot">
+								<text class="attr">购买类型：XL 红色</text>
+								<text class="time">2019-04-01 19:21</text>
+							</view> -->
 						</view>
 					</view>
 					 
@@ -61,28 +70,40 @@
 		},
 		data() {
 			return {
+				productId:0,
 				tabCurrentIndex: 0,
 				navList: [{
-						pointFlow: 1,
-						text: '收入',
+						state: 0,
+						text: '全部',
 						loadingType: 'more',
 						orderList: [],
 						pageSize: 10,
-						pageIndex: 1
+						pageIndex: 1,
+						total:10,
+					},{
+						state: 1,
+						text: '最新',
+						loadingType: 'more',
+						orderList: [],
+						pageSize: 10,
+						pageIndex: 1,
+						total:10,
 					},
 					{
-						pointFlow: 2,
-						text: '支出',
+						state: 2,
+						text: '有图',
 						loadingType: 'more',
 						orderList: [],
 						pageSize: 10,
-						pageIndex: 1
+						pageIndex: 1,
+						total:4,
 					}
 				],
 			}
 		},
 		onLoad(options){
-			this.loadData()
+			this.productId = options.id;
+			this.loadData();
 		},
 		methods: {
 			navTo(url){
@@ -113,9 +134,8 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {flowType: 2,pointFlow: navItem.pointFlow,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let result = await this.$request.ModelUser.getAmountFlow(values);
-				let orderList = result.records;
+				let values = {flowType: 2,balanceFlow: navItem.balanceFlow,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				let orderList = [{},{},{}];
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
 				})
@@ -159,53 +179,83 @@
 		background: $page-color-base;
 		height: 100%;
 	}
-	
-	.order-item{
-		background: #fff;
-		margin: 20rpx auto 0;
-		width: 694rpx;
-		height: 150rpx;
-		border-radius: 10rpx;
-		box-shadow:0px 9px 46px 0px rgba(175,175,175,0.27);
+	.tab-content{
+		padding: 40rpx;
+		background-color: #FFFFFF;
+	}
+	.eva-box{
 		display: flex;
-		align-items: center;
-		
-		.d_1{
-			width: 118rpx;
-			text-align: center;
-			
-			.img_1{
-				width: 72rpx;
-				height: 72rpx;
-			}
+		padding: 20upx 0;
+		.portrait{
+			flex-shrink: 0;
+			width: 64rpx;
+			height: 64rpx;
+			border-radius: 100px;
 		}
-		
-		.d_2{
+		.right{
 			flex: 1;
+			display: flex;
+			flex-direction: column;
+			font-size: $font-base;
+			color: $font-color-base;
+			padding-left: 26rpx;
 			
-			.tit2_1{
-				font-size:30rpx;
+			.time{
+				font-size:25rpx;
 				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(155,155,155,1);
+			}
+			
+			.name{
+				flex: 1;
+			}
+			
+			.name span{
+				font-size:26rpx;
+				font-family:SourceHanSansCN;
 				font-weight:400;
 				color:rgba(51,51,51,1);
 			}
-			
-			.tit2_2{
+			.con{
 				font-size:24rpx;
-				font-family:Source Han Sans CN;
+				font-family:SourceHanSansCN;
 				font-weight:400;
-				color:rgba(136,136,136,1);
+				color:rgba(102,102,102,1);
+				padding: 20rpx 0;
+			}
+			.bot{
+				display: flex;
+				justify-content: space-between;
+				font-size: $font-sm;
+				color:$font-color-light;
+			}
+			
+			.floor-list{
+				white-space: nowrap;
+				width: 560rpx;
+			}
+			.scoll-wrapper{
+				display:flex;
+				align-items: flex-start;
+			}
+			.floor-item{
+				width: 168rpx;
+				margin-right: 26rpx;
+				
+				image{
+					width: 168rpx;
+					height: 168rpx;
+					border-radius: 10rpx;
+				}
+				
+				img{
+					width: 168rpx;
+					height: 168rpx;
+					border-radius: 10rpx;
+				}
 			}
 		}
-		
-		.d_3{
-			width: 150rpx;
-			font-size:32rpx;
-			font-family:Source Han Sans CN;
-			font-weight:400;
-			color:rgba(255,68,63,1);
-		}
-		
 	}
 	
 	.swiper-box{

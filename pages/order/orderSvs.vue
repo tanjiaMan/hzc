@@ -16,7 +16,7 @@
 			>
 				<view class="i-top b-b">
 					<text class="time">{{item.createTime}}</text>
-					<text class="state" style="color: '#FF443F'">{{item.orderStatusDesc}}</text>
+					<text class="state" style="color: '#FF443F'">{{item.stateTip}}</text>
 					<!-- <text
 						@click.stop="stopPrevent"
 						class="del-btn yticon icon-iconfontshanchu1"
@@ -52,8 +52,8 @@
 					<text class="price">{{item.totalPrice}}</text>
 				</view>
 				<view class="action-box b-t" @click.stop="stopPrevent">
-					<button class="action-btn recom" @click="gotoApply(item)">申请售后</button>
-					<button class="action-btn recom" @click="gotoSvr(item)">售后详情</button>
+					<button v-if="item.postSaleStatus === 10" class="action-btn recom" @click="gotoApply(item)">申请售后</button>
+					<button v-else class="action-btn recom" @click="gotoSvr(item)">售后详情</button>
 				</view>
 			</view>
 			 
@@ -116,7 +116,7 @@
 				let result = await this.$request.ModelOrder.listOrder(values);
 				let orderList = result.records;
 				orderList.forEach(item=>{
-					// item = Object.assign(item, this.orderStateExp(item.orderStatus));
+					item = Object.assign(item, this.orderStateExp(item.postSaleStatus));
 					this.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页
@@ -161,7 +161,24 @@
 					let id = item.orderDetails[0].orderDetailId;
 					this.navTo('/pages/order/orderDetail?id=' + id + '&orderStatus=' + item.orderStatus)
 				}
-			}
+			},
+			//订单状态文字和颜色
+			orderStateExp(state){
+				let stateTip = '';
+				switch(+state){
+					case 0:
+						stateTip = '已驳回';break;
+					case 10:
+						stateTip = '可申请';break;
+					case 20:
+						stateTip = '处理中'; break;
+					case 30:
+						stateTip = '已换'; break;
+					case 40:
+						stateTip = '已退货款';break;
+				}
+				return {stateTip};
+			},
 		},
 	}
 </script>

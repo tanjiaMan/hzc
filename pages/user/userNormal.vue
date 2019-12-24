@@ -19,7 +19,7 @@
 						<span v-if="hasLogin" class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
 					</view>
 					<view class="d_4_item">
-						<span v-if="hasLogin" class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：2011 ></span>
+						<span v-if="hasLogin" class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：{{fullUser.accountInfo.userPoints || 0}} ></span>
 					</view>
 				</view>
 			    <view class="flex-item d_3">

@@ -297,9 +297,9 @@
 					case 40:
 						stateTip = '待收货'; break;
 					case 60:
-						stateTip = '已收货';break;
-					case 80:
 						stateTip = '待评价';break;
+					case 80:
+						stateTip = '可售后';break;
 					//更多自定义
 				}
 				return {stateTip, stateTipColor};

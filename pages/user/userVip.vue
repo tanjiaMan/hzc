@@ -20,7 +20,7 @@
 						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
 					</view>
 					<view class="d_4_item">
-						<span class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：2011 ></span>
+						<span class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：{{fullUser.accountInfo.userPoints || 0}} ></span>
 					</view>
 				</view>
 			    <view class="flex-item d_3">

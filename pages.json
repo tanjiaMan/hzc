@@ -43,6 +43,11 @@
 				"navigationBarTitleText": "设置"
 			}
 		},{
+			"path": "pages/set/vfphone",
+			"style": {
+				"navigationBarTitleText": "手机号验证"
+			}
+		},{
 			"path": "pages/cart/cart",
 			"style": {
 				"navigationBarTitleText": "购物车"
@@ -236,6 +241,11 @@
             "style" : {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "商品列表"
+			}
+        },{
+            "path" : "pages/product/commentlist",
+            "style" : {
+				"navigationBarTitleText": "评论列表"
 			}
         },{
 		    "path" : "pages/withdraw/withdraw",
