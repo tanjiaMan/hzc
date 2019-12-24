@@ -116,4 +116,17 @@ export default{
 		let result = await request.post(url ,query ,{});
 		return result && result.data;
 	},
+	
+	//密码
+	async setPwd(pwd){
+		let url = config.api + '/h5/user/set-bank-pwd?pwd='+pwd;
+		let result = await request.post(url ,{} ,{});
+		return result;
+	},
+	
+	async ckPwd(pwd){
+		let url = config.api + '/h5/user/check-bank-pwd?pwd='+pwd;
+		let result = await request.post(url ,{} ,{});
+		return result && result.data;
+	},
 }

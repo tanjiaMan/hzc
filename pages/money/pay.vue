@@ -199,15 +199,22 @@
 					return;
 				}
 				console.log(this.code); //TODO code校验
-				
-				let result = await this.$request.ModelOrder.payBalance(this.orderNum);
-				if(result.code == 'ok'){
-					this.$refs.popup.close();
-					uni.redirectTo({
-						url: '/pages/money/paySuccess?orderNum=' + this.orderNum
-					});
+				let result = await this.$request.ModelUser.ckPwd(this.code);
+				if(result == true || result == 'true'){
+					result = await this.$request.ModelOrder.payBalance(this.orderNum);
+					if(result.code == 'ok'){
+						this.$refs.popup.close();
+						uni.redirectTo({
+							url: '/pages/money/paySuccess?orderNum=' + this.orderNum
+						});
+					}else{
+					    this.$api.msg(result.msg);	
+					}
 				}else{
-				    this.$api.msg(result.msg);	
+					this.code = '';
+					this.codeLength = 0;
+					this.$api.msg('密码不正确');
+					return;
 				}
 			},
 			contToggle(k){

@@ -9,15 +9,15 @@
 				<view class="d_name">您的姓名</view>
 				<view class="d_input1"><input class="uni-input" placeholder-class="placeholderClass1" placeholder="请输入您的真实姓名" /></view>
 			</view>
-			<view class="d_input">
+			<!-- <view class="d_input">
 				<view class="d_name">手机号码</view>
-				<view class="d_input1"><input class="uni-input" type="number" placeholder-class="placeholderClass1" placeholder="请输入您的手机号码" /></view>
+				<view class="d_input1"><input v-model='mobile' class="uni-input" type="number" placeholder-class="placeholderClass1" placeholder="请输入您的手机号码" /></view>
 			</view>
 			<view class="d_input">
 				<view class="d_name">验证码</view>
 				<view class="d_input1"><input class="uni-input" type="number" placeholder-class="placeholderClass1" placeholder="请输入验证码" /></view>
-				<view class="bt_verify">获取验证码</view>
-			</view>
+				<view :class="sendSmsdisabled?'bt_verify dis':'bt_verify'" @click="send">{{content}}</view>
+			</view> -->
 		</view>
 		
 		<view class="bt_submit">提交</view>
@@ -28,11 +28,34 @@
 	export default {
 		data() {
 			return {
+				mobile: '',
+				verifycode: '',
 				
+				//验证码业务倒计时
+				sendSmsdisabled: false,
+				totalTime: 60,
+				content: '获取验证码',
 			}
 		},
 		methods: {
-			
+			countDown() {
+				this.sendSmsdisabled = true;
+				this.content = this.totalTime + 's后重新发送';
+				let clock = setInterval(() => {
+				  this.totalTime--;
+				  this.content = this.totalTime + 's后重新发送';
+				  if (this.totalTime < 0) {     //当倒计时小于0时清除定时器
+				    clearInterval(clock)
+				    this.content = '重新发送验证码'
+				    this.totalTime = 60;
+				    this.sendSmsdisabled = false;
+				  }
+				},1000)
+			},
+			send(){
+				console.log('给手机号发送验证码：',this.mobile);
+				this.countDown();
+			}
 		}
 	}
 </script>
@@ -105,7 +128,6 @@
 		}
 		
 		.bt_verify{
-			width: 176rpx;
 			height: 71rpx;
 			line-height: 71rpx;
 			border-radius: 10rpx;
@@ -115,6 +137,11 @@
 			color: #FFFFFF;
 			text-align: center;
 			margin-left: 20rpx;
+			padding: 0 20rpx;
+		}
+		
+		.dis{
+			background-color: #bbbbbd !important;
 		}
 	}
 

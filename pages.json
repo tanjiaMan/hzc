@@ -48,6 +48,11 @@
 				"navigationBarTitleText": "手机号验证"
 			}
 		},{
+			"path": "pages/set/resetpwd",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		},{
 			"path": "pages/cart/cart",
 			"style": {
 				"navigationBarTitleText": "购物车"

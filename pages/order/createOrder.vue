@@ -142,10 +142,15 @@
 					this.productparam.addressId = this.addressData.id;
 				}
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
-				if(result.orderDetails){
-					this.productInfos = result.orderDetails;
-					this.addressData = result.addressInfo || {};
-					this.data = result.priceInfo;
+				if(result.code == 'ok'){
+					result = result.data;
+					if(result.orderDetails){
+						this.productInfos = result.orderDetails;
+						this.addressData = result.addressInfo || {};
+						this.data = result.priceInfo;
+					}
+				}else{
+					this.$api.msg(result.msg);
 				}
 			},
 			//显示优惠券面板

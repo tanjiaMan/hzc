@@ -83,7 +83,7 @@ export default{
 	async getOrderCaculate(data){ // 计算订单信息
 		let url = config.api + '/h5/order/order-template';
 		let result = await request.post(url,data,{});
-		return result && result.data;
+		return result;
 	},
 	
 	async createOrder(data){ //创建订单

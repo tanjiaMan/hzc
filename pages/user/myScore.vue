@@ -33,7 +33,7 @@
 							<view class="tit2_1">{{item.typeDesc}}</view>
 							<view class="tit2_2">{{item.createTime}}</view>
 						</view>
-						<view class="d_3" v-if="tabItem.balanceFlow == 1">
+						<view class="d_3" v-if="tabItem.pointFlow == 1">
 							+{{item.amountPoints}}积分
 						</view>
 						<view class="d_3" v-else>

@@ -67,6 +67,11 @@
 					this.$api.msg('请输入验证码');
 					return;
 				}
+				
+				//跳转到密码修改
+				uni.redirectTo({
+					url: '/pages/set/resetpwd'
+				})  
 			}
 		}
 	}

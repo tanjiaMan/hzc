@@ -389,6 +389,10 @@
 			async buyNow(){
 				if(this.navToLogin()){return};
 				let goods = this.goods;
+				if(goods.realLeftStock <= 0){
+					this.$api.msg('库存不足');
+					return;
+				}
 				let productSpecId = null;
 				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
 					if(!this.goodsStockSelectd.id){
