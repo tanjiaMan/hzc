@@ -90,7 +90,7 @@
 								<view 
 									v-for="(item, index) in newsitems[TabCur].seckill" :key="index"
 									class="floor-item"
-									@click="navToDetailPage(item.productId)"
+									@click="navToDetailPage(item.productId,'seckill')"
 								>
 									<image :src="item.coverPicUrl" mode="aspectFill"></image>
 									<text class="title clamp">{{item.productName}}</text>
@@ -128,7 +128,7 @@
 							<swiper :style="kjFrameHeight" class="swiper-box-tg" @change="kjSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].bargin" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId)">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'bargain')">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>
@@ -166,7 +166,7 @@
 							<swiper :style="tgFrameHeight" class="swiper-box-tg" @change="tgSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].groupbuy" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId)">
+										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'groupbuy')">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>
@@ -481,9 +481,10 @@
 				})  
 			},
 			//详情页
-			navToDetailPage(id) {
+			navToDetailPage(id, source) {
+				source = source? source:'';
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?id=${id}&source=${source}`
 				})
 			},
 			navToCategory(){

@@ -12,12 +12,52 @@
 					</view>
 				</swiper-item>
 			</swiper>
+			<view class="d_sc">
+				<image class="img2" src="https://pic.youx365.com/collection_z.png" mode="aspectFit"></image>
+				<view class="titsc">收藏</view>
+			</view>
 		</view>
 		
-		<view class="tg_frame">
-			<span class="tag">团购价</span>
-			<span class="now_price">¥ {{goods.price}}</span>
-			<!-- <span class="org_price">¥ {{goods.originPrice}}</span> -->
+		<view v-if="goods.id">
+			<view class="tg_frame" v-if="source == 'seckill' ">
+				<view class="kill_left">
+					<view class="d_seckill_img">
+						<image class="img_seckill" src="https://pic.youx365.com/product_seckill.png" mode="aspectFill"></image>
+					</view>
+					<span class="now_price">¥ {{goods.price}}</span>
+					<span class="org_price">¥ {{goods.originPrice}}</span>
+				</view>
+				<view class="kill_right">
+					今日 20:30开抢
+				</view>
+			</view>
+			<view class="tg_frame" v-else-if="source == 'groupbuy'">
+				<view style="flex: 1;">
+					<span class="now_price">¥ {{goods.price}}</span>
+					<span class="org_price">¥ {{goods.originPrice}}</span>
+				</view>
+				<view class="kill_right">
+					已拼{{goods.orderNums}}件
+				</view>
+			</view>
+			<view class="tg_frame" v-else-if="source == 'bargain' ">
+				<view style="flex: 1;">
+					<span class="bargain_desc">可砍至</span>
+					<span class="now_price">¥ {{goods.price}}</span>
+				</view>
+				<view class="bargin_right">
+					<view class="tit_bargin_1">距结束还剩：</view>
+					<view class="tit_bargin_2">00</view>
+					<view class="tit_bargin_1">：</view>
+					<view class="tit_bargin_2">38</view>
+					<view class="tit_bargin_1">：</view>
+					<view class="tit_bargin_2">52</view>
+				</view>
+			</view>
+			<view class="tg_frame" v-else>
+				<span class="now_price">¥ {{goods.price}}</span>
+				<!-- <span class="org_price">¥ {{goods.originPrice}}</span> -->
+			</view>
 		</view>
 		
 		<view class="introduce-section">
@@ -177,7 +217,23 @@
 		</view>
 		
 		<!-- 底部操作菜单 -->
-		<view class="page-bottom uni-flex uni-row">
+		<view class="page-bottom uni-flex uni-row" v-if="source == 'bargain'">
+		    <view class="flex-item frame1">
+				<button class="p-b-btn" open-type="contact" @contact="handleContact">
+					<img src="https://pic.youx365.com/kf.png" />
+					<text>客服</text>
+				</button>
+				<view class="d_bargin_price">
+					￥32.66
+				</view>
+			</view>
+		    <view class="flex-item" style="width: 50%;">
+				<view class="action-btn-group">
+					<button type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
+				</view>
+			</view>
+		</view>
+		<view class="page-bottom uni-flex uni-row" v-else>
 		    <view class="flex-item frame1">
 				<button class="p-b-btn" open-type="contact" @contact="handleContact">
 					<img src="https://pic.youx365.com/kf.png" />
@@ -256,6 +312,7 @@
 		data() {
 			return {
 				goods:{},
+				source:'',
 				
 				specClass: 'none',
 				specSelected:[],
@@ -353,7 +410,7 @@
 			},
 			async dataLoad(id){
 				//加载商品详情
-				let goods = await this.$request.ModelHome.getGoodsDetail(id);
+				let goods = await this.$request.ModelHome.getGoodsDetail(id,this.source);
 				goods.desc = JSON.parse(goods.desc);
 				this.goods = goods;
 				
@@ -454,6 +511,7 @@
 				})
 			}
 			
+			this.source = options.source;
 			let id = options.id;
 			this.dataLoad(id);
 		},
@@ -472,6 +530,7 @@
 	.carousel {
 		height: 722upx;
 		position:relative;
+		
 		swiper{
 			height: 100%;
 		}
@@ -491,12 +550,33 @@
 			}
 		}
 		
+		.d_sc{
+			position: absolute;
+			bottom: 0;
+			right: 5px;
+			line-height: 1;
+			text-align: center;
+			.img2{
+				width: 42rpx;
+				height: 40rpx;
+			}
+			
+			.titsc{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(255,255,255,1);
+				text-align: center;
+			}
+		}
 	}
 	/* 其他商品属性 */
 	.tg_frame{
 		height: 93rpx;
 		width: 750rpx;
 		background-color: #FF443F;
+		display: flex;
+		align-items: center;
 		
 		.tag{
 			width: 78rpx;
@@ -511,13 +591,20 @@
 			margin-left:22rpx;
 			margin-right:22rpx;
 		}
-		
+		.bargain_desc{
+			font-size:18rpx;
+			font-family:Source Han Sans CN;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+			padding-left: 40rpx;
+		}
 		.now_price{
 			line-height: 93rpx;
 			font-size: 42rpx;
 			font-family:SourceHanSansCN;
 			font-weight:500;
 			color:rgba(255,255,255,1);
+			margin-left: 30rpx;
 		}
 		
 		.org_price{
@@ -529,6 +616,63 @@
 			text-decoration:line-through;
 			color:rgba(255,255,255,1);
 			opacity:0.55;
+		}
+		.d_seckill_img{
+			width: 115rpx;
+			height: 37rpx;
+			
+			.img_seckill{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.kill_left{
+			flex: 1;
+			width: 544rpx;
+			background:rgba(0,163,144,1);
+			display: flex;
+			align-items: center;
+			padding-left: 18rpx;
+		}
+		
+		.bargin_right{
+			width: 343rpx;
+			background:rgba(255,234,233,1);
+			display: flex;
+			align-items: center;
+			height: 93rpx;
+			line-height: 93rpx;
+			justify-content: center;
+
+			.tit_bargin_1{
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:rgba(255,68,63,1);
+			}
+			.tit_bargin_2{
+				font-size:19rpx;
+				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+				width:26rpx;
+				height:25rpx;
+				line-height:25rpx;
+				background:rgba(255,68,63,1);
+				border-radius:2rpx;
+				text-align: center;
+			}
+		}
+		
+		.kill_right{
+			width: 206rpx;
+			background:rgba(255,234,233,1);
+			text-align: center;
+			font-size:22rpx;
+			font-family:SourceHanSansCN;
+			font-weight:500;
+			color:rgba(255,68,63,1);
+			line-height: 93rpx;
 		}
 	}
 	
@@ -1117,10 +1261,18 @@
 		background: #EEEEEE;
 		
 		.frame1{
-			width: 50%;
+			flex: 1;
 			height: 100%;
 			display: flex;
 			justify-content: center;
+			align-items: center;
+
+			.d_bargin_price{
+				font-size:30rpx;
+				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+			}
 		}
 		
 		.p-b-btn:after{

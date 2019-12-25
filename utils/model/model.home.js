@@ -59,8 +59,11 @@ export default{
 		return result && result.data;
 	},
 	
-	async getGoodsDetail(id){
+	async getGoodsDetail(id,source){
 		let url = config.api + '/h5/product/detail?id='+id;
+		if(source != null && source != ''){
+			url = url + '&source=' + source;
+		}
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
