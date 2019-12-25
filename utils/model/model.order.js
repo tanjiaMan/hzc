@@ -22,6 +22,12 @@ export default{
 		return result;
 	},
 	
+	async getSearchTags(classifyId){
+		let url = config.api + '/h5/oper/search-tags?classifyId='+classifyId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	//收货地址
 	async addOrUpdateAddress(data){
 		let url = config.api + '/h5/user/shopping-address/addOrUpdate';

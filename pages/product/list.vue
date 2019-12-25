@@ -41,10 +41,23 @@
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>
 		
-		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
+		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask" @click.stop="stopPrevent">
 			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
 				<scroll-view scroll-y class="cate-list">
-					暂无过滤条件
+					<view class="d_nocontent" v-if="disData.length == 0">暂无过滤条件</view>
+					<view class="sect_item" v-for="item in disData" :key="item.id">
+						<view class="title">{{item.name}}</view>
+						<view class="d_dis">
+							<view :class="disIds.indexOf(dis.id)>-1?'d_dis_item seclt':'d_dis_item'" v-for="dis in item.childs" :key="dis.id" @click="selectQuery(dis.id)">
+								{{dis.name}}
+							</view>
+						</view>
+					</view>
+					
+					<view class="d_bt">
+						<view class="bt_cz" @click="reset">重置</view>
+						<view class="bt_qd" @click="search">确定</view>
+					</view>
 				</scroll-view>
 			</view>
 		</view>
@@ -73,9 +86,12 @@
 				direction: true,
 				
 				goodsList: [], //推荐
+				
+				//刷选
+				disData:[],
+				disIds:[],
 			};
 		},
-		
 		onLoad(options){
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
@@ -87,6 +103,11 @@
 			});
 			
 			this.loadData('refresh');
+			
+			//搜索属性加载
+			this.$request.ModelOrder.getSearchTags(this.cateId).then(result => {
+				this.disData = result;
+			});
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -129,6 +150,9 @@
 				}
 				values[this.sort] = true;
 				values['direction'] = this.direction;
+				if(this.disIds.length > 0){
+					values['searchTags'] = this.disIds;
+				}
 				console.log('search',values);
 				
 				let result = await this.$request.ModelHome.getGoodsList(values);
@@ -196,7 +220,22 @@
 					url: `/pages/product/product?id=${id}`
 				})
 			},
-			stopPrevent(){}
+			stopPrevent(){},
+			reset(){
+				this.disIds = [];
+			},
+			search(){
+				this.loadData('refresh');
+				this.cateMaskState = 0;
+			},
+			selectQuery(id){
+				if(this.disIds.indexOf(id) > -1){
+					this.disIds = this.disIds.filter(item => item != id);
+				}else{
+					this.disIds.push(id);
+				}
+				console.log('this.disIds',this.disIds);
+			}
 		},
 	}
 </script>
@@ -317,27 +356,78 @@
 		}
 	}
 	.cate-list{
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		.cate-item{
+		padding: 20rpx;
+		background-color: #EFEFEF;
+		height: 100vh;
+		
+		.d_nocontent{
+			text-align: center;
+		}
+		
+		.sect_item{
+			.title{
+				font-size:28rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+				margin-top: 50rpx;
+			}
+			.d_dis{
+				display: flex;
+				flex-wrap: wrap;
+				
+				.d_dis_item{
+					background-color: #FFFFFF;
+					font-size:24rpx;
+					font-family:Microsoft YaHei;
+					font-weight:400;
+					color:rgba(51,51,51,1);
+					height: 46rpx;
+					padding: 0 20rpx;
+					margin-right: 13rpx;
+					margin-top: 19rpx;
+				}
+				
+				.seclt{
+					color: #FFFFFF !important;
+					background-color: #00A390 !important;
+				}
+			}
+		}
+		
+		.d_bt{
 			display: flex;
-			align-items: center;
-			height: 90upx;
-			padding-left: 30upx;
- 			font-size: 28upx;
-			color: #555;
-			position: relative;
+			justify-content: flex-end;
+			margin-top: 100rpx;
+			
+			.bt_cz{
+				width: 180rpx;
+				height: 62rpx;
+				line-height: 62rpx;
+				text-align: center;
+				font-size:28rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+				background-color: #6D6D6D;
+				border-radius: 30rpx;
+			}
+			
+			.bt_qd{
+				width: 180rpx;
+				height: 62rpx;
+				line-height: 62rpx;
+				text-align: center;
+				font-size:28rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+				background-color: #00A390;
+				margin-left: 30rpx;
+				border-radius: 30rpx;
+			}
 		}
-		.two{
-			height: 64upx;
-			color: #303133;
-			font-size: 30upx;
-			background: #f8f8f8;
-		}
-		.active{
-			color: $base-color;
-		}
+		
 	}
 
 	/* 商品列表 */
