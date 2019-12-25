@@ -253,6 +253,11 @@
 				"navigationBarTitleText": "评论列表"
 			}
         },{
+            "path" : "pages/product/searchDetail",
+            "style" : {
+				"navigationBarTitleText": "搜索结果"
+			}
+        },{
 		    "path" : "pages/withdraw/withdraw",
 		    "style" : {
 				"navigationBarTitleText": "申请提现"

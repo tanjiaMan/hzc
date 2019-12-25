@@ -61,6 +61,15 @@
 				uni.navigateBack({
 					delta: 1
 				});
+			},
+			confirm(e){
+				let keywords = e.detail.value;
+				if(keywords == null || keywords == ''){
+					return;
+				}
+				uni.navigateTo({
+					url: `/pages/product/searchDetail?keywords=${keywords}`
+				})
 			}
 		}
 	}
