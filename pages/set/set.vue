@@ -28,7 +28,6 @@
 			...mapMutations(['logout']),
 
 			navTo(url){
-				this.$api.msg(`跳转到${url}`);
 				uni.navigateTo({
 					url
 				})
