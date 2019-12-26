@@ -33,13 +33,20 @@
 							<text class="price" style="color: red;">￥{{item.productPrice}}</text>
 						</view>
 						<view style="width: 50%;text-align: right;" class="flex-item">
-							<text class="price">×️ {{item.productQuantity}}</text>
+							<!-- <text class="price">×️ {{item.productQuantity}}</text> -->
+							<uni-number-box
+								:min="1"
+								:value="item.productQuantity"
+								:isMin="item.productQuantity <= 1"
+								:index="index"
+								@eventChange="numberChange"
+							></uni-number-box>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-		
+		<uni-number-box></uni-number-box>
 		<!-- 金额明细 -->
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
@@ -114,7 +121,12 @@
 </template>
 
 <script>
+	import uniNumberBox from '@/components/uni-number-box.vue'
+	
 	export default {
+		components: {
+			uniNumberBox
+		},
 		data() {
 			return {
 				
@@ -185,6 +197,12 @@
 				}else{
 					this.$api.msg('创建订单失败');
 				}
+			},
+			numberChange(data){
+				let product = this.productInfos[data.index];
+				let index = this.productparam.orderProducts.findIndex(item => item.productId == product.productId && item.productSpecId == product.productSpecId);
+				this.productparam.orderProducts[index].quantity = data.number;
+				this.calute();
 			},
 			stopPrevent(){}
 		}
@@ -337,6 +355,10 @@
 				flex: 1;
 				padding-left: 24upx;
 				overflow: hidden;
+				
+				.uni-numbox{
+					position: relative !important;
+				}
 			}
 
 			.title {

@@ -464,7 +464,7 @@
 					productSpecId: productSpecId,
 					quantity: 1
 				})
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/order/createOrder?order=' + JSON.stringify(orderProducts)
 				})
 			},

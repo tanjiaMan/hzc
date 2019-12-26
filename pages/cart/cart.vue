@@ -350,7 +350,7 @@
 						})
 					}
 				})
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/order/createOrder?order=' + JSON.stringify(orderProducts)
 				})
 			},
