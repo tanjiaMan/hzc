@@ -80,11 +80,12 @@
 				pageIndex: 1
 			};
 		},
-		
 		onLoad(options){
 			this.loadData()
 		},
-		 
+		 onShow(){
+		 	this.$fire.$off('refresh');	
+		 },
 		methods: {
 			stopPrevent(){},
 			navTo(url){
@@ -149,7 +150,14 @@
 			},
 			gotoApply(item){
 				let id = item.orderDetails[0].orderDetailId;
-				this.navTo('/pages/order/orderSvsApply?orderDetailId='+id)
+				this.navTo('/pages/order/orderSvsApply?orderDetailId='+id);
+				//监听数据
+				var that = this;
+				this.$fire.$on('refresh', function (data) {
+				 	console.log('refresh - '+data);
+					that.$fire.$off('refresh');
+					that.loadData('tabChange');
+				});
 			},
 			gotoGoodsDetail(item){
 				if(item.orderStatus == -10){

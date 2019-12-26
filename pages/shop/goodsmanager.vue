@@ -104,6 +104,9 @@
 			this.transUserId = options.transUserId || 0; //转货
 			this.loadMenu();
 		},
+		onShow(){
+			this.$fire.$off('refresh');	
+		},
 		methods: {
 			navTo(url){
 				uni.navigateTo({
@@ -271,8 +274,15 @@
 				})
 				uni.navigateTo({
 					url: '/pages/order/createOrder?source=agent&order=' + JSON.stringify(orderProducts)
-				})
-			}
+				});
+				//监听数据
+				var that = this;
+				this.$fire.$on('refresh', function (data) {
+				 	console.log('refresh - '+data);
+					that.$fire.$off('refresh');
+					that.loadData('tabChange');
+				});
+			},
 		}
 	}
 </script>

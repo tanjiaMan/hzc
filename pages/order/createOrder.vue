@@ -175,6 +175,7 @@
 				let result = await this.$request.ModelOrder.createOrder(this.productparam);
 				if(result.orderNum){
 					if(this.productparam.source == 'agent'){
+						this.$fire.$emit('refresh',{});
 						uni.navigateBack({delta: 1});
 					}else{
 						uni.redirectTo({

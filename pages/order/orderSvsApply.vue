@@ -69,9 +69,8 @@
 				this.$request.ModelOrder.applySale(value).then(result => {
 					if(result.code == 'ok'){
 						this.$api.msg('申请成功');
-						uni.redirectTo({
-							url: '/pages/order/orderSvs'
-						})
+						this.$fire.$emit('refresh',{});
+						uni.navigateBack({delta: 1});
 					}else{
 						this.$api.msg(result.msg);
 					}
