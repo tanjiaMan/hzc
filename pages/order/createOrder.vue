@@ -117,6 +117,7 @@
 	export default {
 		data() {
 			return {
+				
 				maskState: 0, //优惠券面板显示状态
 				desc: '', //备注
 				couponList: [], //优惠券列表
@@ -125,10 +126,13 @@
 				data:{}, //价格信息
 				productInfos:[], //商品信息
 				
-				productparam:{}
+				productparam:{
+					source:'', //购买来源 agent（代理商转货）
+				}
 			}
 		},
 		onLoad(option){
+			this.productparam.source = option.source;
 			//商品数据
 			let data = JSON.parse(option.order);
 			this.productparam.orderProducts = data;
@@ -170,9 +174,13 @@
 				this.productparam.addressId = this.addressData.id;
 				let result = await this.$request.ModelOrder.createOrder(this.productparam);
 				if(result.orderNum){
-					uni.redirectTo({
-						url: '/pages/money/pay?orderNum='+result.orderNum
-					})
+					if(this.productparam.source == 'agent'){
+						uni.navigateBack({delta: 1});
+					}else{
+						uni.redirectTo({
+							url: '/pages/money/pay?orderNum='+result.orderNum
+						})
+					}
 				}else{
 					this.$api.msg('创建订单失败');
 				}

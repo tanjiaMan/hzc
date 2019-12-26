@@ -56,6 +56,7 @@
 							<view class="bt-box" @click.stop.prevent="stopPrevent">
 								<view class="bt1" @click="navToTrans(item.productId)">转货</view>
 								<view class="bt2" @click="navToReturn(item.productId)" v-if="transUserId == 0">退货</view>
+								<view class="bt3" @click="sendGoods(item)">发货</view>
 							</view>
 					 	</view>
 					 </view>
@@ -74,6 +75,7 @@
 			<view class="d-right" v-if="transUserId == 0">
 				<view class="bt-zh">转货<br/>记录</view>
 				<view class="bt-zh bt-th">退货<br/>记录</view>
+				<view class="bt-zh bt-th">发货<br/>记录</view>
 			</view>
 		</view>
 	</view>
@@ -255,6 +257,21 @@
 						url: `/pages/shop/goodstransconfirm?transUserId=${this.transUserId}&ids=`+JSON.stringify(ids)
 					})
 				}
+			},
+			sendGoods(item){
+				if(item.myStock <= 0){
+					this.$api.msg('没有库存,不可发货');
+					return;
+				}
+				let orderProducts = [];
+				orderProducts.push({
+					productId: item.productId,
+					productSpecId: item.productSpecId,
+					quantity: 1
+				})
+				uni.navigateTo({
+					url: '/pages/order/createOrder?source=agent&order=' + JSON.stringify(orderProducts)
+				})
 			}
 		}
 	}
@@ -333,7 +350,7 @@
 			display: flex;
 			
 			.bt1{
-				width:156rpx;
+				width:106rpx;
 				height:52rpx;
 				line-height:52rpx;
 				text-align: center;
@@ -346,7 +363,7 @@
 			}
 			
 			.bt2{
-				width:156rpx;
+				width:106rpx;
 				height:52rpx;
 				line-height:52rpx;
 				text-align: center;
@@ -356,7 +373,21 @@
 				color:rgba(0,163,144,1);
 				border:2rpx solid rgba(0,163,144,1);
 				border-radius:6rpx;
-				margin-left: 7rpx;
+				margin-left: 6rpx;
+			}
+			
+			.bt3{
+				width:106rpx;
+				height:52rpx;
+				line-height:52rpx;
+				text-align: center;
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:#FF443F;
+				border:2rpx solid #FF443F;
+				border-radius:6rpx;
+				margin-left: 6rpx;
 			}
 		}
 		
@@ -459,7 +490,6 @@
 		}
 		
 		.d-right{
-			width: 220rpx;
 			display: flex;
 			align-items: center;
 			
