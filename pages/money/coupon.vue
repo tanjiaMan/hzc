@@ -27,20 +27,22 @@
 						:class="tabItem.state == 0 ? 'order-item uni-flex uni-row':'order-item uni-flex uni-row gray'"
 					>
 						<view class="flex-item v1">
-							<view class="v11"><text class="tit2">20</text><text class="tit1">元</text></view>
-							<view class="tit3">满300可用</view>
+							<view class="v11"><text class="tit2">{{item.discountPrice}}</text><text class="tit1">元</text></view>
+							<view class="tit3">满{{item.priceThreshold}}可用</view>
 						</view>
 						<view class="flex-item v2">
 							<view class="tit4">
-								年终促销打折券<span class="tit4_1">平台</span>
+								{{item.name}}<span class="tit4_1">平台</span>
 							</view>
 							<view class="v2-2">
 								<view class="v2-2left">
-									<view class="tit5">使用分类：狗粮</view>
-									<view class="tit5">2019.05.22 - 2019.11.25</view>
+									<view class="tit5">使用分类：商品</view>
+									<view class="tit5">有效期至：{{item.expireDate?item.expireDate:'-'}}</view>
 								</view>
 								<view class="v2-2right">
-									<view class="bt_2" v-if="tabItem.state == 0">立即使用</view>
+									<view class="bt_2" v-if="tabItem.state == 0">
+										<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">立即使用</navigator>
+									</view>
 								</view>
 							</view>
 							<view class="d_status" v-if="tabItem.state == 1 || tabItem.state == 2">
@@ -75,7 +77,7 @@
 						text: '未使用',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 					{
@@ -83,7 +85,7 @@
 						text: '已使用',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 					{
@@ -91,7 +93,7 @@
 						text: '已过期',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 				],
@@ -129,9 +131,13 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let orderList = [{},{},{}];
+				// let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				let result = await this.$request.ModelHome.getCouponRedPackage(1);
+				let orderList = result;
 				orderList.forEach(item=>{
+					if(item.expireDate){
+						item.expireDate = item.expireDate.split(' ')[0];
+					}
 					navItem.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页

@@ -27,16 +27,16 @@
 						class="order-item uni-flex uni-row"
 					>
 						<view class="flex-item v1">
-							<view class="v11"><text class="tit1">¥</text><text class="tit2">20</text></view>
-							<view class="tit3">剩余 199 个</view>
+							<view class="v11"><text class="tit1">¥</text><text class="tit2">{{item.discountPrice}}</text></view>
+							<view class="tit3">剩余 {{item.leftStock}} 个</view>
 						</view>
 						<view class="flex-item v2">
 							<view class="tit4">
-								 满200可用
+								 满{{item.priceThreshold>0?item.priceThreshold:item.discountPrice}}可用
 							</view>
 							<view>
-								<text class="tit5">有效期至：2019-09-11</text>
-								<view class="btzz" @click="navTo('/pages/money/redPackagetrans')">转赠</view>
+								<text class="tit5">有效期至：{{item.expireDate.split(' ')[0]}}</text>
+								<view class="btzz" @click="redPackagetrans(item)">转赠</view>
 							</view>
 						</view>
 					</view>
@@ -61,13 +61,14 @@
 		},
 		data() {
 			return {
+				transUserId: null,
 				tabCurrentIndex: 0,
 				navList: [{
 						state: 0,
 						text: '待使用',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 					{
@@ -75,7 +76,7 @@
 						text: '已使用',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 					{
@@ -83,20 +84,29 @@
 						text: '已转增',
 						loadingType: 'more',
 						orderList: [],
-						pageSize: 10,
+						pageSize: 100,
 						pageIndex: 1
 					},
 				],
 			}
 		},
 		onLoad(options){
-			this.loadData()
+			this.transUserId = options.transUserId;
+			this.loadData();
 		},
 		methods: {
 			navTo(url){
 				uni.navigateTo({
 					url
 				})  
+			},
+			redPackagetrans(item){
+				if(this.transUserId){
+					this.navTo(`/pages/money/redPackagetransConfrim?transUserId=${this.transUserId}&redPackageId=${item.id}`);	
+				}else{
+					this.navTo(`/pages/money/redPackagetrans?id=${item.id}`);
+				}
+				
 			},
 			//获取订单列表
 			async loadData(source){
@@ -121,8 +131,9 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let orderList = [{},{},{}];
+				// let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				let result = await this.$request.ModelHome.getCouponRedPackage(2);
+				let orderList = result;
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
 				})

@@ -26,20 +26,21 @@
 						v-for="(item,index) in tabItem.orderList" :key="index"
 						class="eva-box uni-flex uni-row"
 					>
-						<image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image>
+						<image class="portrait" :src="item.avatarUrl" mode="aspectFill"></image>
 						<view class="right">
 							<view style="display: flex;">
-								<text class="name">Leo yo</text>
-								<text class="time">2019-08-25 13:20</text>
+								<text class="name">{{item.nickName}}</text>
+								<text class="time">{{item.createTime}}</text>
 							</view>
-							<text class="con">商品收到了，79元两件，质量不错，试了一下有点瘦，但是加个外罩很漂亮，我很喜欢</text>
-							<scroll-view class="floor-list" scroll-x>
+							<text class="con">{{item.message}}</text>
+							<scroll-view class="floor-list" scroll-x v-if="item.picUrlList.length > 0">
 								<view class="scoll-wrapper">
 									<view 
-										v-for="(item, index) in 6" :key="index"
+										v-for="(subimg, subin) in item.picUrlList" :key="subin"
 										class="floor-item"
+										@click="previewImage(subin,item.picUrlList)"
 									>
-										<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
+										<image :src="subimg" mode="aspectFill"></image>
 									</view>
 								</view>
 							</scroll-view>
@@ -79,25 +80,26 @@
 						orderList: [],
 						pageSize: 10,
 						pageIndex: 1,
-						total:10,
-					},{
-						state: 1,
-						text: '最新',
-						loadingType: 'more',
-						orderList: [],
-						pageSize: 10,
-						pageIndex: 1,
-						total:10,
-					},
-					{
-						state: 2,
-						text: '有图',
-						loadingType: 'more',
-						orderList: [],
-						pageSize: 10,
-						pageIndex: 1,
-						total:4,
+						total: '-',
 					}
+					// ,{
+					// 	state: 1,
+					// 	text: '最新',
+					// 	loadingType: 'more',
+					// 	orderList: [],
+					// 	pageSize: 10,
+					// 	pageIndex: 1,
+					// 	total: '-',
+					// },
+					// {
+					// 	state: 2,
+					// 	text: '有图',
+					// 	loadingType: 'more',
+					// 	orderList: [],
+					// 	pageSize: 10,
+					// 	pageIndex: 1,
+					// 	total: '-',
+					// }
 				],
 			}
 		},
@@ -134,8 +136,10 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let values = {flowType: 2,balanceFlow: navItem.balanceFlow,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let orderList = [{},{},{}];
+				let values = {productId: this.productId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				let result = await this.$request.ModelOrder.listComment(values);
+				let orderList = result.records;
+				navItem.total = result.total;
 				orderList.forEach(item=>{
 					navItem.orderList.push(item);
 				})
@@ -169,6 +173,13 @@
 				}
 				this.tabCurrentIndex = index;
 				this.loadData('tabChange');
+			},
+			previewImage(index,picUrlList){
+				uni.previewImage({
+					current: index,
+					urls: picUrlList,
+					loop: true,
+				})
 			},
 		}
 	}

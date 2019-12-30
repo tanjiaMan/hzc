@@ -140,31 +140,32 @@
 		</view>
 		
 		<!-- 评价 -->
-		<view class="eva-section">
+		<view class="eva-section" v-if="commentTotal > 0">
 			<view class="e-header">
-				<text class="tit">宝贝评价（86）</text>
+				<text class="tit">宝贝评价（{{commentTotal}}）</text>
 				<text class="tit1">好评率 100%</text>
 				<text class="tip" @click="navTo('/pages/product/commentlist?id='+goods.id)">查看全部</text>
 				<text class="yticon icon-you"></text>
 			</view> 
 			<view class="eva-box">
-				<image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image>
+				<image class="portrait" :src="comment.avatarUrl" mode="aspectFill"></image>
 				<view class="right">
-					<text class="name">Leo yo</text>
-					<text class="con">商品收到了，79元两件，质量不错，试了一下有点瘦，但是加个外罩很漂亮，我很喜欢</text>
-					<scroll-view class="floor-list" scroll-x>
+					<text class="name">{{comment.nickName}}</text>
+					<text class="con">{{comment.message}}</text>
+					<scroll-view class="floor-list" scroll-x v-if="comment.picUrlList.length > 0">
 						<view class="scoll-wrapper">
 							<view 
-								v-for="(item, index) in 3" :key="index"
+								v-for="(subpic, subin) in comment.picUrlList" :key="subin"
 								class="floor-item"
+								@click="previewImage(subin)"
 							>
-								<image src="https://pic.youx365.com/shop1.png" mode="aspectFill"></image>
+								<image :src="subpic" mode="aspectFill"></image>
 							</view>
 						</view>
 					</scroll-view>
 					<view class="bot">
-						<text class="attr">购买类型：XL 红色</text>
-						<text class="time">2019-04-01 19:21</text>
+						<text class="attr"><!-- 购买类型：XL 红色 --></text>
+						<text class="time">{{comment.createTime}}</text>
 					</view>
 				</view>
 			</view>
@@ -324,6 +325,10 @@
 				
 				//推荐商品
 				goodsList: [],
+				
+				//评论
+				comment: {},
+				commentTotal:0,
 			};
 		},
 		methods:{
@@ -495,6 +500,13 @@
 					}
 				})
 			},
+			previewImage(index){
+				uni.previewImage({
+					current: index,
+					urls: this.comment.picUrlList,
+					loop: true,
+				})
+			},
 			stopPrevent(){}
 		},
 		onShareAppMessage() { //设置分享
@@ -514,6 +526,14 @@
 			this.source = options.source;
 			let id = options.id;
 			this.dataLoad(id);
+			
+			//加载评论
+			let values = {productId: id,pageIndex: 1,pageSize: 1};
+			let result = await this.$request.ModelOrder.listComment(values);
+			if(result.records && result.records.length > 0){
+				this.comment = result.records[0];
+				this.commentTotal = result.total;
+			}
 		},
 	}
 </script>

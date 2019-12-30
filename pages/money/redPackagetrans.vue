@@ -37,6 +37,7 @@
 		},
 		data() {
 			return {
+				id:0,
 				phone: '',
 				options1: [{
 					text: '删除',
@@ -46,10 +47,23 @@
 				}],
 			}
 		},
+		onLoad(option){
+			this.id = option.id;
+		},
 		methods: {
-			confirm(){
-				console.log('confirm');
-				this.$api.msg(this.phone);
+			async confirm(){
+				if(this.phone == null || this.phone == ''){
+					return;
+				}
+				let userResult = await this.$request.ModelUser.searchUser({mobile: this.phone})
+				if(userResult.records == null || userResult.records.length == 0){
+					this.$api.msg('用户不存在!');
+					return;
+				}
+				let user = userResult.records[0];
+				uni.navigateTo({
+					url: `/pages/money/redPackagetransConfrim?transUserId=${user.id}&redPackageId=${this.id}`
+				})
 			},
 			bindClick(index){
 				console.log(index);

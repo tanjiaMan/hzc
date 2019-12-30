@@ -40,7 +40,7 @@
 					<img class="img" src="https://pic.youx365.com/uhome-2.png" @click="navTo('/pages/withdraw/transconfirm?transUserId='+ userId)" />
 					<view class="tit1">转账</view>
 				</view>
-				<view class="flex-item d-1">
+				<view class="flex-item d-1" @click="navTo('/pages/money/redPackage?transUserId='+ userId)">
 					<img class="img" src="https://pic.youx365.com/uhome-1.png" />
 					<view class="tit1">转红包</view>
 				</view>

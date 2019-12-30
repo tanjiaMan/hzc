@@ -334,6 +334,11 @@
 				"navigationBarTitleText": "红包转账"
 			}
         },{
+            "path" : "pages/money/redPackagetransConfrim",
+            "style" : {
+				"navigationBarTitleText": "红包转账确认"
+			}
+        },{
 		    "path" : "pages/other/aboutus",
 		    "style" : {
 				"navigationBarTitleText": "关于我们"

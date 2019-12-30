@@ -185,4 +185,17 @@ export default{
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
+	
+	//优惠活动
+	async getCouponRedPackage(type){
+		let url = config.api + '/h5/act/discounts/my-coupons?type=' + type;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async transCouponRedPackage(data){
+		let url = config.api + '/h5/act/transfer-coupon';
+		let result = await request.post(url,data,{});
+		return result;
+	},
 }

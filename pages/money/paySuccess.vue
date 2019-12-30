@@ -10,7 +10,7 @@
 
 		<view class="btn-group">
 			<view>
-				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>		
+				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
 			</view>
 			<view class="bt-rule">
 				抽奖规则
