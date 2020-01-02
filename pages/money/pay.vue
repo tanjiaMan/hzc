@@ -42,7 +42,7 @@
 			</view>
 			<view class="input-row">
 				<view :class="['item',{'item-active':codeLength==index}]" v-for="(k,index) in lengthArr" :key="index">
-					{{code.charAt(index)}}
+					{{code.charAt(index)?'*':''}}
 				</view>
 			</view>
 			<view class="bt" @click="mmpay">确认支付</view>

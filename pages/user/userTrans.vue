@@ -56,7 +56,7 @@
 							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />收账人：<img class="header" :src="item.avatarUrl" /> {{item.nickName}} {{item.mobile || ''}}
 						</view>
 						<view class="tit-border-none tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />转账时间：2019-09-10 16:42:10
+							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />转账时间：{{item.createTime}}
 						</view>
 					</view>
 					
@@ -64,26 +64,26 @@
 					<view class="tans-item" v-for="(item,index) in tabItem.orderList" :key="index" v-if="tabItem.state == 2">
 						<view class="order-item uni-flex uni-row">
 							<view class="flex-item v1">
-								<view class="v11"><text class="tit1">¥</text><text class="tit2">20</text></view>
-								<view class="tit3">剩余 199 个</view>
+								<view class="v11"><text class="tit1">¥</text><text class="tit2">{{item.couponInfo.discountPrice}}</text></view>
+								<!-- <view class="tit3">剩余 {{item.couponInfo.leftStock}} 个</view> -->
 							</view>
 							<view class="flex-item v2">
 								<view class="tit4">
-									 满200可用
+									 满{{item.couponInfo.priceThreshold>0?item.couponInfo.priceThreshold:item.couponInfo.discountPrice}}可用
 								</view>
 								<view>
-									<text class="tit5">有效期至：2019-09-11</text>
+									<text class="tit5">有效期至：{{item.couponInfo.expireDate}}</text>
 								</view>
 							</view>
 						</view>
 						<view class="tit-num tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转赠数量：5
+							<img class="logo" src="https://pic.youx365.com/utrans-num.png" />转赠数量：{{item.num}}
 						</view>
 						<view class="tit-name tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />受赠人：<img class="header" src="https://pic.youx365.com/0/03eec1250836d3c566d2645842c8495b.png" /> 张三 15200942946
+							<img class="logo" src="https://pic.youx365.com/utrans-people.png" />受赠人：<img class="header" :src="item.refAvatarUrl" /> {{item.refNickName}}
 						</view>
 						<view class="tit-border-none tit-item">
-							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />受赠时间：2019-09-10 16:42:10
+							<img class="logo" src="https://pic.youx365.com/utrans-time.png" />受赠时间：{{item.createTime}}
 						</view>
 					</view>
 					
@@ -180,9 +180,17 @@
 					let result = await this.$request.ModelUser.pageTransLog(values);
 					result = result || {};
 					orderList = result.records || [];
+				}else if(navItem.state == 2){ //转红包记录
+					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+					let result = await this.$request.ModelHome.logCouponRedPackage(values);
+					result = result || {};
+					orderList = result.records || [];
 				}
 				
 				orderList.forEach(item=>{
+					if(item.couponInfo && item.couponInfo.expireDate){
+						item.couponInfo.expireDate = item.couponInfo.expireDate.split(' ')[0];
+					}
 					navItem.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页

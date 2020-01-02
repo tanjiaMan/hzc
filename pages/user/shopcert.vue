@@ -71,7 +71,8 @@
 		
 		<view class="d-1">
 			<label @click="agreeXy">
-			    <checkbox value="" :checked="agree" class="ck3" /><text class="tit3">请勾选同意</text><text class="tit4">《开店协议》</text>
+			    <checkbox value="" :checked="agree" class="ck3" /><text class="tit3">请勾选同意</text>
+				<text class="tit4" @click.stop="stopPrevent" @click="gotoShopProtocol">《开店协议》</text>
 			</label>
 		</view>
 		
@@ -116,6 +117,7 @@
 			}
 		},
         methods: {
+			stopPrevent(){},
 			chooseAddress(){
 				this.$refs.mpvueCityPicker.show()
 			},
@@ -177,6 +179,11 @@
 			},
 			agreeXy(e){
 				this.agree = !this.agree;
+			},
+			gotoShopProtocol(){
+				uni.navigateTo({
+					url: `/pages/other/shopProtocol`
+				})
 			},
 			chooseImage(type){
 				var that = this;

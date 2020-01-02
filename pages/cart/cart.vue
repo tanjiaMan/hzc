@@ -23,7 +23,7 @@
 			 <view class="cart-header uni-flex uni-row" v-if="empty != true">
 				 <view class="flex-item d-1">
 					<view class="tit1">购物车</view>
-					<view class="tit2">共{{cartList.length}}件宝贝</view>
+					<view class="tit2">共{{totalNum}}件宝贝</view>
 				 </view>
 				 <view class="flex-item d-2">
 					<view class="bt" @click="deleteAll">删除</view>		 
@@ -148,6 +148,7 @@
 		data() {
 			return {
 				total: 0, //总价格
+				totalNum:0,//商品总数
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
 				cartList: [],
@@ -326,6 +327,7 @@
 					return;
 				}
 				let total = 0;
+				let totalNum = 0;
 				let checked = true;
 				list.forEach(item=>{
 					if(item.checked === true){
@@ -333,9 +335,11 @@
 					}else if(checked === true){
 						checked = false;
 					}
+					totalNum = totalNum + item.number;
 				})
 				this.allChecked = checked;
 				this.total = Number(total.toFixed(2));
+				this.totalNum = totalNum;
 			},
 			//创建订单
 			createOrder(){

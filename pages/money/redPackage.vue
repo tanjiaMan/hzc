@@ -27,16 +27,16 @@
 						class="order-item uni-flex uni-row"
 					>
 						<view class="flex-item v1">
-							<view class="v11"><text class="tit1">¥</text><text class="tit2">{{item.discountPrice}}</text></view>
-							<view class="tit3">剩余 {{item.leftStock}} 个</view>
+							<view class="v11"><text class="tit1">¥</text><text class="tit2">{{item.couponInfo.discountPrice}}</text></view>
+							<view class="tit3">剩余 {{item.curLeftNum}} 个</view>
 						</view>
 						<view class="flex-item v2">
 							<view class="tit4">
-								 满{{item.priceThreshold>0?item.priceThreshold:item.discountPrice}}可用
+								 满{{item.couponInfo.priceThreshold>0?item.couponInfo.priceThreshold:item.couponInfo.discountPrice}}可用
 							</view>
 							<view>
-								<text class="tit5">有效期至：{{item.expireDate.split(' ')[0]}}</text>
-								<view class="btzz" @click="redPackagetrans(item)">转赠</view>
+								<text class="tit5">有效期至：{{item.couponInfo.expireDate?item.couponInfo.expireDate:'-'}}</text>
+								<view class="btzz" @click="redPackagetrans(item.couponInfo)">转赠</view>
 							</view>
 						</view>
 					</view>
@@ -64,7 +64,7 @@
 				transUserId: null,
 				tabCurrentIndex: 0,
 				navList: [{
-						state: 0,
+						state: 1,
 						text: '待使用',
 						loadingType: 'more',
 						orderList: [],
@@ -72,7 +72,7 @@
 						pageIndex: 1
 					},
 					{
-						state: 1,
+						state: 2,
 						text: '已使用',
 						loadingType: 'more',
 						orderList: [],
@@ -80,7 +80,7 @@
 						pageIndex: 1
 					},
 					{
-						state: 2,
+						state: 3,
 						text: '已转增',
 						loadingType: 'more',
 						orderList: [],
@@ -131,10 +131,12 @@
 				
 				navItem.loadingType = 'loading';
 				
-				// let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let result = await this.$request.ModelHome.getCouponRedPackage(2);
+				let result = await this.$request.ModelHome.getCouponRedPackage(2,navItem.state);
 				let orderList = result;
 				orderList.forEach(item=>{
+					if(item.couponInfo && item.couponInfo.expireDate){
+						item.couponInfo.expireDate = item.couponInfo.expireDate.split(' ')[0];
+					}
 					navItem.orderList.push(item);
 				})
 				//loaded新字段用于表示数据加载完毕，如果为空可以显示空白页

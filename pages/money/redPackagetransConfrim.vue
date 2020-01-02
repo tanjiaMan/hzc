@@ -12,15 +12,15 @@
 		
 		<view class="order-item uni-flex uni-row">
 			<view class="flex-item v1">
-				<view class="v11"><text class="tit1">¥</text><text class="tit2">20</text></view>
-				<view class="tit3">剩余 199 个</view>
+				<view class="v11"><text class="tit1">¥</text><text class="tit2">{{coupon.discountPrice}}</text></view>
+				<view class="tit3">剩余 {{coupon.leftStock}} 个</view>
 			</view>
 			<view class="flex-item v2">
 				<view class="tit4">
-					 满20可用
+					 满{{coupon.priceThreshold>0?coupon.priceThreshold:coupon.discountPrice}}可用
 				</view>
 				<view>
-					<text class="tit5">有效期至：2020-01-01</text>
+					<text class="tit5">有效期至：{{coupon.expireDate.split(' ')[0]}}</text>
 				</view>
 			</view>
 		</view>
@@ -39,6 +39,7 @@
 				redPackageId: null,
 				transUserId: 0,
 				transUser:{},
+				coupon:{},
 			};
 		},
 		onLoad(option){
@@ -50,6 +51,9 @@
 					return;
 				}
 				this.transUser = result.records[0];
+			})
+			this.$request.ModelHome.infoCouponRedPackage(this.redPackageId).then(result => {
+				this.coupon = result;
 			})
 		},
 		methods:{

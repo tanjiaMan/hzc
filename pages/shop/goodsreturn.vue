@@ -83,6 +83,7 @@
 				            that.$request.ModelHome.withdrawStock(values).then(result => {
 								if(result.code == 'ok'){
 									that.$api.msg('退货成功');
+									uni.navigateBack({delta: 1});
 								}else{
 									that.$api.msg(result.msg);
 								}

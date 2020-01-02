@@ -128,7 +128,7 @@
 							<swiper :style="kjFrameHeight" class="swiper-box-tg" @change="kjSwitch">
 								<swiper-item v-for="(item, index) in newsitems[TabCur].bargin" :key="index">
 									<view class="tg-list">
-										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'bargain')">
+										<view class="tg-goods-item uni-flex uni-row line-top" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'bargain')">
 											<view class="tg-img flex-item">
 												<img :src="o.coverPicUrl" />
 											</view>
@@ -176,7 +176,7 @@
 													<view class="flex-item tit2">￥ {{o.groupbuyPrice}}</view>
 													<view class="flex-item tit3">已拼{{o.joinOpenedCount}}件</view>
 												</view>
-												<view class="uni-flex uni-row">
+												<view class="uni-flex uni-row" v-if="o.latestJoinedAvatars && o.latestJoinedAvatars.length > 0">
 													<view class="flex-item pic1">
 														<view class="cu-avatar round" v-for="(item,index) in o.latestJoinedAvatars" :key="index" :style="[{ backgroundImage:'url(' + item + ')' }]"></view>
 													</view>
@@ -1056,13 +1056,19 @@
 	}
 	
 	.tg-list{
+		width: 627rpx;
+		margin: 0 auto;
+		
+		.line-top{
+			border-top: solid 1px #E2E2E2;
+		}
 		
 		.tg-goods-item{
-			margin-top: 16rpx;
+			padding-top: 10rpx;
+			margin-bottom: 10rpx;
 		}
 		
 		.tg-img{
-			margin-left:21rpx;
 			height:220rpx;
 			line-height:220rpx;
 			

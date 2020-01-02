@@ -22,8 +22,8 @@
 		
 		<view class="row b-b"> 
 			<text class="tit">详细地址</text>
-			<!-- <input class="input" type="text" v-model="addressData.address" placeholder="楼号、门牌" placeholder-class="placeholder" /> -->
-			 <textarea placeholder="楼号、门牌"  v-model="addressData.address" placeholder-class="placeholder" style="height: 60px;" />
+			<input class="input" type="text" v-model="addressData.address" placeholder="楼号、门牌" placeholder-class="placeholder" />
+			 <!-- <textarea placeholder="楼号、门牌"  v-model="addressData.address" placeholder-class="placeholder" style="height: 60px;" /> -->
 		</view>
 		<view class="row b-b">
 			<text class="tit">设为默认</text>

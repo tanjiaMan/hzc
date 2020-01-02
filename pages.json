@@ -353,6 +353,11 @@
 		    "style" : {
 				"navigationBarTitleText": "帮助中心"
 			}
+		},{
+		    "path" : "pages/other/shopProtocol",
+		    "style" : {
+				"navigationBarTitleText": "开店协议"
+			}
 		}
     ],
 	"globalStyle": {

@@ -187,8 +187,14 @@ export default{
 	},
 	
 	//优惠活动
-	async getCouponRedPackage(type){
-		let url = config.api + '/h5/act/discounts/my-coupons?type=' + type;
+	async getCouponRedPackage(type,status){
+		let url = config.api + '/h5/act/discounts/my-coupons?type=' + type + '&status=' + status;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async infoCouponRedPackage(couponId){
+		let url = config.api + '/h5/act/discounts/info?couponId=' + couponId;
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
@@ -197,5 +203,11 @@ export default{
 		let url = config.api + '/h5/act/transfer-coupon';
 		let result = await request.post(url,data,{});
 		return result;
+	},
+	
+	async logCouponRedPackage(data){
+		let url = config.api + '/h5/act/transfer-coupon-log';
+		let result = await request.post(url,data,{});
+		return result && result.data;
 	},
 }

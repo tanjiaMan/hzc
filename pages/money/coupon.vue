@@ -24,29 +24,29 @@
 					<!-- 订单列表 -->
 					<view 
 						v-for="(item,index) in tabItem.orderList" :key="index"
-						:class="tabItem.state == 0 ? 'order-item uni-flex uni-row':'order-item uni-flex uni-row gray'"
+						:class="tabItem.state == 1 ? 'order-item uni-flex uni-row':'order-item uni-flex uni-row gray'"
 					>
 						<view class="flex-item v1">
-							<view class="v11"><text class="tit2">{{item.discountPrice}}</text><text class="tit1">元</text></view>
-							<view class="tit3">满{{item.priceThreshold}}可用</view>
+							<view class="v11"><text class="tit2">{{item.couponInfo.discountPrice}}</text><text class="tit1">元</text></view>
+							<view class="tit3">满{{item.couponInfo.priceThreshold}}可用</view>
 						</view>
 						<view class="flex-item v2">
 							<view class="tit4">
-								{{item.name}}<span class="tit4_1">平台</span>
+								{{item.couponInfo.name}}<span class="tit4_1">平台</span>
 							</view>
 							<view class="v2-2">
 								<view class="v2-2left">
 									<view class="tit5">使用分类：商品</view>
-									<view class="tit5">有效期至：{{item.expireDate?item.expireDate:'-'}}</view>
+									<view class="tit5">有效期至：{{item.couponInfo.expireDate?item.couponInfo.expireDate:'-'}}</view>
 								</view>
 								<view class="v2-2right">
-									<view class="bt_2" v-if="tabItem.state == 0">
+									<view class="bt_2" v-if="tabItem.state == 1">
 										<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">立即使用</navigator>
 									</view>
 								</view>
 							</view>
-							<view class="d_status" v-if="tabItem.state == 1 || tabItem.state == 2">
-								<view class="titstatus">{{tabItem.state == 1?'已使用':'已过期'}}</view>
+							<view class="d_status" v-if="tabItem.state == 2 || tabItem.state == 0">
+								<view class="titstatus">{{tabItem.state == 2?'已使用':'已过期'}}</view>
 							</view>
 						</view>
 					</view>
@@ -73,7 +73,7 @@
 			return {
 				tabCurrentIndex: 0,
 				navList: [{
-						state: 0,
+						state: 1,
 						text: '未使用',
 						loadingType: 'more',
 						orderList: [],
@@ -81,7 +81,7 @@
 						pageIndex: 1
 					},
 					{
-						state: 1,
+						state: 2,
 						text: '已使用',
 						loadingType: 'more',
 						orderList: [],
@@ -89,7 +89,7 @@
 						pageIndex: 1
 					},
 					{
-						state: 2,
+						state: 0,
 						text: '已过期',
 						loadingType: 'more',
 						orderList: [],
@@ -131,12 +131,11 @@
 				
 				navItem.loadingType = 'loading';
 				
-				// let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-				let result = await this.$request.ModelHome.getCouponRedPackage(1);
+				let result = await this.$request.ModelHome.getCouponRedPackage(1,navItem.state);
 				let orderList = result;
 				orderList.forEach(item=>{
-					if(item.expireDate){
-						item.expireDate = item.expireDate.split(' ')[0];
+					if(item.couponInfo.expireDate){
+						item.couponInfo.expireDate = item.couponInfo.expireDate.split(' ')[0];
 					}
 					navItem.orderList.push(item);
 				})
