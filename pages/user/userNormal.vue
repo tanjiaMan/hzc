@@ -109,9 +109,12 @@
 					<view class="tit1">我的收藏</view>
 					<view class="tit2">{{fullUser.collectInfo && fullUser.collectInfo.totalCount || 0}}</view>
 				</view>
-				<view class="flex-item d_1">
-					<view class="tit3" @click="signToday">
+				<view class="flex-item d_1" v-if="hasLogin">
+					<view class="tit3" @click="signToday" v-if="fullUser.signInfo.canSign == true">
 						签到
+					</view>
+					<view class="tit3" v-else>
+						已签到
 					</view>
 				</view>
 			</view>

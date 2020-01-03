@@ -50,7 +50,8 @@
 					state: 2,
 				}],
 				loadingType: 'more',
-				pageIndex:1,
+				pageIndex: 1,
+				pageSize: 100,
 				records:[],
 			}
 		},

@@ -231,7 +231,7 @@
 			    <view class="flex-item d_2">
 					<view class="username">
 						{{userInfo.nickname || '游客'}}
-						<span class="user-vip"><img src="https://pic.youx365.com/user_vip_s.png"/> 代理商V2</span>
+						<span class="user-vip"><img src="https://pic.youx365.com/user_vip_s.png"/> 代理商V{{fullUser.userInfo && fullUser.userInfo.agentLevel}}</span>
 					</view>
 				</view>
 			</view>

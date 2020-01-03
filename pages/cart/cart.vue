@@ -290,6 +290,7 @@
 					}
 				})
 				if(ids.length == 0){
+					this.$api.msg('没有选择需要删除的商品');
 					return;
 				}
 				uni.showModal({

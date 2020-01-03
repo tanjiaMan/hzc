@@ -67,7 +67,7 @@
 				this.payType = type;
 			},
 			recharge(){
-				if(this.amount == null || this.amount < 0){
+				if(this.amount == null || this.amount < 0.01){
 					this.$api.msg('请输入正确的金额');
 					return;
 				}

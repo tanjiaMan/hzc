@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
-				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index">
+				<swiper-item class="swiper-item" v-for="(item,index) in goods.picUrlList" :key="index" @click="previewImage(index,goods.picUrlList)">
 					<view class="image-wrapper">
 						<image
 							:src="item" 
@@ -157,7 +157,7 @@
 							<view 
 								v-for="(subpic, subin) in comment.picUrlList" :key="subin"
 								class="floor-item"
-								@click="previewImage(subin)"
+								@click="previewImage(subin,comment.picUrlList)"
 							>
 								<image :src="subpic" mode="aspectFill"></image>
 							</view>
@@ -470,7 +470,7 @@
 					quantity: 1
 				})
 				uni.navigateTo({
-					url: '/pages/order/createOrder?order=' + JSON.stringify(orderProducts)
+					url: '/pages/order/createOrder?source='+this.source+'&order=' + JSON.stringify(orderProducts)
 				})
 			},
 			addCart(){ //加入购物车
@@ -500,10 +500,10 @@
 					}
 				})
 			},
-			previewImage(index){
+			previewImage(index,list){
 				uni.previewImage({
 					current: index,
-					urls: this.comment.picUrlList,
+					urls: list,
 					loop: true,
 				})
 			},

@@ -100,6 +100,10 @@
 						});
 					}
 				})
+				if(values.length == 0){
+					this.$api.msg('转货数量必须大于0');
+					return;	
+				};
 				uni.showModal({
 				    content: '确定转货',
 				    success: function (res) {

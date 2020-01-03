@@ -1,7 +1,11 @@
 <template>
 	<view>
+		<view v-if="errorMsg" style="text-align: center;font-size: 15px;">
+			{{errorMsg}},不能购买!
+		</view>
+		
 		<!-- 地址 -->
-		<navigator url="/pages/address/address?source=1" class="address-section">
+		<navigator url="/pages/address/address?source=1" class="address-section" v-if="!errorMsg">
 			<view class="order-content">
 				<view class="cen" v-if="addressData.id">
 					<view class="address-box">
@@ -21,7 +25,7 @@
 			</view>
 		</navigator>
 
-		<view class="goods-section">
+		<view class="goods-section" v-if="!errorMsg">
 			<!-- 商品列表 -->
 			<view class="g-item" v-for="(item,index) in productInfos" :key="index">
 				<image :src="item.coverPicUrl"></image>
@@ -46,9 +50,9 @@
 				</view>
 			</view>
 		</view>
-		<uni-number-box></uni-number-box>
+		<uni-number-box v-if="!errorMsg"></uni-number-box>
 		<!-- 金额明细 -->
-		<view class="yt-list">
+		<view class="yt-list" v-if="!errorMsg">
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
 				<text class="cell-tip" v-if="data.logisticsPrice != 0">￥{{data.logisticsPrice}}</text>
@@ -67,22 +71,30 @@
 				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view> -->
 			<view class="yt-list-cell b-b" @click="toggleMask('show')">
-				<!-- <view class="cell-icon">
-					券
-				</view> -->
 				<text class="cell-tit clamp">优惠券</text>
-				<text class="cell-tip">
+				<text class="cell-tip" v-if="couponList.length == 0">暂无优惠券</text>
+				<text class="cell-tip" v-if="couponList.length > 0 && couponIndex == -1">
 					选择优惠券 >
 				</text>
+				<text class="cell-tip" v-if="couponList.length > 0 &&couponIndex > -1">
+					-{{couponList[couponIndex].discountPrice}}
+				</text>
 			</view>
-			<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b" @click="toggleRedMask('show')">
 				<text class="cell-tit clamp">红包</text>
-				<text class="cell-tip">暂无红包</text>
+				<text class="cell-tip" v-if="redList.length == 0">暂无红包</text>
+				
+				<text class="cell-tip" v-if="redList.length > 0 && redIndex == -1">
+					选择红包 >
+				</text>
+				<text class="cell-tip" v-if="redList.length > 0 && redIndex > -1">
+					-{{redList[redIndex].discountPrice}}
+				</text>
 			</view>
 		</view>
 		
 		<!-- 底部 -->
-		<view class="footer">
+		<view class="footer" v-if="!errorMsg">
 			<view class="price-content">
 				<text>总计</text>
 				<text class="price-tip">￥</text>
@@ -98,21 +110,45 @@
 					暂无可用优惠券
 				</view>
 				<!-- 优惠券页面，仿mt -->
-				<view class="coupon-item" v-for="(item,index) in couponList" :key="index">
+				<view class="coupon-item" v-for="(item,index) in couponList" :key="index" @click="selectCoupon(index)">
 					<view class="con">
 						<view class="left">
-							<text class="title">{{item.title}}</text>
+							<text class="title">{{item.name}}</text>
 							<text class="time">有效期至2019-06-30</text>
 						</view>
 						<view class="right">
-							<text class="price">{{item.price}}</text>
-							<text>满30可用</text>
+							<text class="price">{{item.discountPrice}}</text>
+							<text>满{{item.priceThreshold>0?item.priceThreshold:item.discountPrice}}可用</text>
 						</view>
 						
 						<view class="circle l"></view>
 						<view class="circle r"></view>
 					</view>
-					<text class="tips">限新用户使用</text>
+				</view>
+			</view>
+		</view>
+		
+		<!-- 红包面板 -->
+		<view class="mask" :class="maskRedState===0 ? 'none' : maskRedState===1 ? 'show' : ''" @click="toggleRedMask">
+			<view class="mask-content" @click.stop.prevent="stopPrevent">
+				<view v-if="redList.length == 0" style="text-align:center;padding-top: 30rpx;">
+					暂无可用优惠券
+				</view>
+				<!-- 优惠券页面，仿mt -->
+				<view class="coupon-item" v-for="(item,index) in redList" :key="index" @click="selectRed(index)">
+					<view class="con">
+						<view class="left">
+							<text class="title">{{item.name}}</text>
+							<text class="time">有效期至2019-06-30</text>
+						</view>
+						<view class="right">
+							<text class="price">{{item.discountPrice}}</text>
+							<text>满{{item.priceThreshold>0?item.priceThreshold:item.discountPrice}}可用</text>
+						</view>
+						
+						<view class="circle l"></view>
+						<view class="circle r"></view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -129,10 +165,15 @@
 		},
 		data() {
 			return {
-				
+				//优惠券
 				maskState: 0, //优惠券面板显示状态
-				desc: '', //备注
 				couponList: [], //优惠券列表
+				couponIndex: -1,
+				
+				//红包
+				maskRedState: 0, //优惠券面板显示状态
+				redList: [], //优惠券列表
+				redIndex: -1,
 				
 				addressData: {}, //地址信息
 				data:{}, //价格信息
@@ -140,7 +181,9 @@
 				
 				productparam:{
 					source:'', //购买来源 agent（代理商转货）
-				}
+				},
+				
+				errorMsg: '',
 			}
 		},
 		onLoad(option){
@@ -151,6 +194,10 @@
 		},
 		onShow(){
 			this.calute();
+			this.$request.ModelOrder.getOrderCoupons({productDesc:this.productparam.orderProducts}).then(result => {
+				this.couponList = result.filter(item => item.type == 1);
+				this.redList = result.filter(item => item.type == 2);
+			})
 		},
 		methods: {
 			async calute(){
@@ -159,6 +206,7 @@
 				}
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
 				if(result.code == 'ok'){
+					this.errorMsg = '';
 					result = result.data;
 					if(result.orderDetails){
 						this.productInfos = result.orderDetails;
@@ -166,7 +214,7 @@
 						this.data = result.priceInfo;
 					}
 				}else{
-					this.$api.msg(result.msg);
+					this.errorMsg = result.msg;
 				}
 			},
 			//显示优惠券面板
@@ -177,6 +225,26 @@
 				setTimeout(()=>{
 					this.maskState = state;
 				}, timer)
+			},
+			toggleRedMask(type){
+				let timer = type === 'show' ? 10 : 300;
+				let	state = type === 'show' ? 1 : 0;
+				this.maskRedState = 2;
+				setTimeout(()=>{
+					this.maskRedState = state;
+				}, timer)
+			},
+			selectCoupon(index){
+				this.couponIndex = index;
+				this.redIndex = -1;
+				this.maskState = 0;
+				this.calute();
+			},
+			selectRed(index){
+				this.redIndex = index;
+				this.couponIndex = -1;
+				this.maskRedState = 0;
+				this.calute();
 			},
 			async submit(){
 				if(!this.addressData.id){
