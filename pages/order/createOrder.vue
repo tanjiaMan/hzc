@@ -204,6 +204,9 @@
 				if(this.addressData.id){
 					this.productparam.addressId = this.addressData.id;
 				}
+				if(this.productparam.source == ''){
+					this.productparam.source = null;
+				}
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
 				if(result.code == 'ok'){
 					this.errorMsg = '';

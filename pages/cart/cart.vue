@@ -325,6 +325,9 @@
 				let list = this.cartList;
 				if(list.length === 0){
 					this.empty = true;
+					this.allChecked = false;
+					this.total = 0;
+					this.totalNum = 0;
 					return;
 				}
 				let total = 0;
