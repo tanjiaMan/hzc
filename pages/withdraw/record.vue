@@ -81,7 +81,7 @@
 				this.loadData('refresh');
 			},
 			async loadData(loadType){
-				if(loadType == 'fresh'){
+				if(loadType == 'refresh'){
 					this.pageIndex = 1;
 					this.loadingType = 'more';
 					this.records = [];
@@ -103,6 +103,7 @@
 					this.loadingType = 'more'; 
 				}
 				this.pageIndex = this.pageIndex + 1;
+				console.log('this.records',this.records);
 			},
 		}
 	}

@@ -85,6 +85,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async getTransLog(type){ // 获取转货记录人员
+		let url = config.api + '/h5/user/transfer-log?type=' + type;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	async widthdraw(amount){ //提现
 		let url = config.api + '/h5/user/withdraw?amount=' + amount;
 		let result = await request.post(url,{},{});
@@ -94,7 +100,7 @@ export default{
 	async widthdrawLog(status){ //提现记录
 		let url = config.api + '/h5/user/withdraw-log?status='+status;
 		let result = await request.get(url,{});
-		return result;
+		return result && result.data;
 	},
 	
 	//消息

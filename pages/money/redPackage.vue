@@ -132,7 +132,10 @@
 				navItem.loadingType = 'loading';
 				
 				let result = await this.$request.ModelHome.getCouponRedPackage(2,navItem.state);
-				let orderList = result;
+				let orderList = [];
+				if(result){
+					orderList = result;
+				}
 				orderList.forEach(item=>{
 					if(item.couponInfo && item.couponInfo.expireDate){
 						item.couponInfo.expireDate = item.couponInfo.expireDate.split(' ')[0];

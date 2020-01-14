@@ -17,7 +17,7 @@
 				<view class="flex-item d_4">
 					<view class="d_4_item">
 						<span class="user-vip"><img src="https://pic.youx365.com/user-vip.png"/> 普通会员</span>
-						<span class="shopper" @click="navTo('/pages/user/shopcert')">申请店主</span>
+						<span class="shopper" v-if="!(fullUser.userInfo && fullUser.userInfo.shopId)" @click="navTo('/pages/user/shopcert')">申请店主</span>
 					</view>
 					<view class="d_4_item">
 						<span class="user-score" @click="navTo('/pages/user/myScore')"><img src="https://pic.youx365.com/user-vip.png"/> 我的积分：{{fullUser.accountInfo.userPoints || 0}} ></span>
@@ -269,8 +269,8 @@
 						<view class="tit2">订单管理</view>
 					</view>
 				</uni-grid-item>
-				<uni-grid-item>
-					<view @click="navTo('/pages/shop/commentMsg')" style="line-height: initial;text-align: center;">
+				<uni-grid-item v-if="shopId">
+					<view @click="navTo('/pages/shop/commentMsg?shopId=' + shopId)" style="line-height: initial;text-align: center;">
 						<img class="tit1" src="https://pic.youx365.com/uvip_m_4.png" />
 						<view class="tit2">评价管理</view>
 					</view>
@@ -313,6 +313,7 @@
 			return {
 				unreadmsg:0,//未读消息
 				fullUser:{},
+				shopId: null,
 			}
 		},
         methods: {
@@ -322,6 +323,9 @@
 				}
 				this.$request.ModelUser.getFullUser().then(result => {
 					this.fullUser = result;
+					if(result.userInfo.shopId){
+						this.shopId = this.fullUser.userInfo.shopId;
+					}
 				})
 				//未读消息
 				this.$request.ModelHome.getConfig(0).then(result => {
@@ -437,7 +441,8 @@
 				}
 				
 				.user-vip{
-					height:30rpx;
+					height:64rpx;
+					line-height: 64rpx;
 					border:1px solid rgba(255,210,0,1);
 					opacity:0.8;
 					border-radius:3rpx;

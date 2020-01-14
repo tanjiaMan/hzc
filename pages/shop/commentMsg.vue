@@ -1,76 +1,157 @@
 <template>
 	<view class="container">
 		<view class="d_header">
-			<view :class="type == 0?'d_header_item active':'d_header_item'" @click="change(0)">好评</view>
-			<view :class="type == 1?'d_header_item active':'d_header_item'" @click="change(1)">中评</view>
-			<view :class="type == 2?'d_header_item active':'d_header_item'" @click="change(2)">差评</view>
-			<view :class="type == 3?'d_header_item active':'d_header_item'" @click="change(3)">待回复</view>
+			<view :class="type == 3?'d_header_item active':'d_header_item'" @click="change(3)">好评</view>
+			<view :class="type == 2?'d_header_item active':'d_header_item'" @click="change(2)">中评</view>
+			<view :class="type == 1?'d_header_item active':'d_header_item'" @click="change(1)">差评</view>
+			<view :class="type == 0?'d_header_item active':'d_header_item'" @click="change(0)">待回复</view>
 		</view>
 		<view class="d_content">
-			<view class="d_content_item" v-for="(item,index) in 4" :key="index">
+			<view class="d_content_item" v-for="(item,index) in orderList" :key="index">
 				<view class="d_content_left">
-					<img class="img_avar" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
+					<img class="img_avar" :src="item.avatarUrl" />
 				</view>
 				<view class="d_content_right">
 					<view class="d_1">
-						<view class="tit1">神器的大嘴</view>
-						<view class="tit2">2019-05-25</view>
+						<view class="tit1">{{item.nickName}}</view>
+						<view class="tit2">{{item.createTime}}</view>
 					</view>
 					<scroll-view class="floor-list" scroll-x>
 						<view class="scoll-wrapper">
 							<view 
-								v-for="(item, index) in 5" :key="index"
+								v-for="(subitem, subindex) in item.picUrlList" :key="subindex"
 								class="floor-item"
 							>
-								<image src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" mode="aspectFill"></image>
+								<image :src="subitem" mode="aspectFill"></image>
 							</view>
 						</view>
 					</scroll-view>
 					<view class="d_2">
-						衣收到了，大小刚合适，是棉的，质量不错，我很喜欢！
+						{{item.message}}
 					</view>
 					<view class="line"></view>
 					<view class="d_3">
 						<view class="d_3_1">
-							<image class="img_3_1" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" mode="aspectFill"></image>
+							<image class="img_3_1" :src="item.productCoverPicUrl" mode="aspectFill"></image>
 						</view>
 						<view class="d_3_2">
-							<view class="tit_3_2">打底衫女士t恤初 春装打底衫女士t恤初 春装</view>
+							<view class="tit_3_2">{{item.productName}}</view>
 						</view>
-						<view v-if="selectId == -1 || selectId != index" class="d_3_3" @click="selectComment(index)">
-							回复
-						</view>
-						<view v-else class="d_3_3" @click="commitCommet(index)">
-							提交
+						<view v-if="!item.reply">
+							<view v-if="selectId == -1 || selectId != index" class="d_3_3" @click="selectComment(index)">
+								回复
+							</view>
+							<view v-else class="d_3_3" @click="commitCommet(index)">
+								提交
+							</view>
 						</view>
 					</view>
 					<view class="d_5" v-if="selectId == index">
 						<textarea v-model="commentStr" class="textare_5" placeholder="请输入回复内容" placeholder-style='placeholderclass'></textarea>
 					</view>
-					<!-- <view class="line"></view>
-					<view class="d_4">
-						<text class="tit_4_1">店主回复：</text><text class="tit_4_2">感谢亲的支持，生活愉快</text>
-					</view> -->
+					
+					<view class="line" v-if="item.reply"></view>
+					<view class="d_4" v-if="item.reply">
+						<text class="tit_4_1">店主回复：</text><text class="tit_4_2">{{item.reply}}</text>
+					</view>
 					<view class="empty1"></view>
 				</view>
 			</view>
 		</view>
+		<uni-load-more :status="loadingType"></uni-load-more>
 		<view class="empty"></view>
 	</view>
 </template>
 
 <script>
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
+		components: {
+			uniLoadMore
+		},
 		data() {
 			return {
-				type:0,
+				type: 3,
 				selectId:-1,
 				commentStr:'',
+				shopId: null,
+				
+				loadingType: 'more',
+				orderList: [],
+				pageSize: 10,
+				pageIndex: 1,
 			}
 		},
+		onPageScroll(e){
+			//兼容iOS端下拉时顶部漂移
+			if(e.scrollTop>=0){
+				this.headerPosition = "fixed";
+			}else{
+				this.headerPosition = "absolute";
+			}
+		},
+		//下拉刷新
+		onPullDownRefresh(){
+			this.loadData('refresh');
+		},
+		//加载更多
+		onReachBottom(){
+			this.loadData();
+		},
 		methods: {
+			async loadData(source){
+				if(this.loadingType === 'loading'){
+					return;
+				}
+				if('refresh' == source){
+					this.pageIndex = 1;
+					this.orderList = [];
+					this.loadingType = 'more';
+					this.selectId = -1;
+				}
+				if(this.loadingType == 'noMore'){
+					return;
+				}
+				
+				this.loadingType = 'loading';
+				
+				// let shopId = this.shopId;
+				let shopId = 1002;
+				let evalLvl = null;
+				let needReply = null;
+				if(this.type > 0){
+					evalLvl = this.type;
+				}else{
+					needReply = true;
+				}
+				let value = {pageIndex:this.pageIndex,pageSize:this.pageSize,shopId};
+				if(evalLvl){
+					value['evalLvl'] = evalLvl;
+				}
+				if(needReply){
+					value['needReply'] = needReply;
+				}
+				let result = await this.$request.ModelOrder.listComment(value);
+				let orderList = result.records;
+				orderList.forEach(item=>{
+					this.orderList.push(item);
+				})
+				
+				//判断是否还有数据， 有改为 more， 没有改为noMore 
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
+				}else{
+					this.loadingType = 'more'; 
+				}
+				
+				this.pageIndex = this.pageIndex + 1;
+			},
 			change(type){
+				if(this.type == type){
+					return;
+				}
 				this.type = type;
+				this.loadData('refresh');
 			},
 			selectComment(id){
 				this.selectId = id;
@@ -78,6 +159,10 @@
 			commitCommet(){
 				console.log({commentStr:this.commentStr,selectId:this.selectId})
 			}
+		},
+		onLoad(option){
+			this.shopId = option.shopId;
+			this.loadData('refresh');
 		}
 	}
 </script>

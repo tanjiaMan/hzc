@@ -7,7 +7,7 @@
 				:class="{current: tabCurrentIndex == index}"
 				@click="tabClick(index)"
 			>
-				{{item.text}}({{item.total}})
+				{{item.text}}<span v-if="item.total">({{item.total}})</span>
 			</view>
 		</view>
 		
@@ -80,8 +80,8 @@
 						orderList: [],
 						pageSize: 10,
 						pageIndex: 1,
-						total: '-',
-					}
+						total: null,
+					},
 					// ,{
 					// 	state: 1,
 					// 	text: '最新',
@@ -91,15 +91,15 @@
 					// 	pageIndex: 1,
 					// 	total: '-',
 					// },
-					// {
-					// 	state: 2,
-					// 	text: '有图',
-					// 	loadingType: 'more',
-					// 	orderList: [],
-					// 	pageSize: 10,
-					// 	pageIndex: 1,
-					// 	total: '-',
-					// }
+					{
+						state: 2,
+						text: '有图',
+						loadingType: 'more',
+						orderList: [],
+						pageSize: 10,
+						pageIndex: 1,
+						total: null,
+					}
 				],
 			}
 		},
@@ -137,6 +137,10 @@
 				navItem.loadingType = 'loading';
 				
 				let values = {productId: this.productId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+				if(navItem.state == 2){
+					values['hasPic'] = true;
+				}
+				
 				let result = await this.$request.ModelOrder.listComment(values);
 				let orderList = result.records;
 				navItem.total = result.total;
@@ -155,7 +159,6 @@
 				
 				navItem.pageIndex = navItem.pageIndex + 1;
 				this.navList[index] = navItem;
-				console.log('this.navList[index]',this.navList[index]);
 			}, 
 			
 			//swiper 切换

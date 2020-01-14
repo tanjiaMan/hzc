@@ -12,17 +12,15 @@
 				历史转增列表
 			</view>
 			<view class="v-cotent">
-				<uni-swipe-action :options="options1" @click="bindClick(index)" v-for="(item,index) in 4" :key="index">
-					<view class="uni-flex uni-row">
-						<view class="flex-item d-img">
-							<img class="img" src="https://pic.youx365.com/withdraw_money.png"  />
-						</view>
-						<view class="flex-item" style="margin-left: 15px;">
-							<view class="tit1">主打也有春天</view>
-							<view class="tit2">15266254352</view>
-						</view>
+				<view class="uni-flex uni-row d_item" @click="bindClick(item)" v-for="(item,index) in records" :key="index">
+					<view class="flex-item d-img">
+						<img class="img" :src="item.avatarUrl"  />
 					</view>
-				</uni-swipe-action>	
+					<view class="flex-item" style="margin-left: 15px;">
+						<view class="tit1">{{item.nickName}}</view>
+						<view class="tit2">{{item.mobile}}</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -39,16 +37,14 @@
 			return {
 				id:0,
 				phone: '',
-				options1: [{
-					text: '删除',
-					style: {
-						backgroundColor: 'rgb(255,58,49)'
-					}
-				}],
+				records:[],
 			}
 		},
 		onLoad(option){
 			this.id = option.id;
+			this.$request.ModelUser.getTransLog(2).then(result => {
+				this.records = result;
+			});
 		},
 		methods: {
 			async confirm(){
@@ -65,8 +61,10 @@
 					url: `/pages/money/redPackagetransConfrim?transUserId=${user.id}&redPackageId=${this.id}`
 				})
 			},
-			bindClick(index){
-				console.log(index);
+			bindClick(item){
+				uni.navigateTo({
+					url: `/pages/money/redPackagetransConfrim?transUserId=`+item.id+`&redPackageId=${this.id}`
+				})
 			}
 		}
 	}
@@ -104,7 +102,7 @@
 		width: 690rpx;
 		margin: 0 auto;
 		
-		/deep/ .uni-swipe-action{
+		.d_item{
 			margin-top: 20rpx;
 			padding-bottom: 20rpx;
 			border-bottom: solid 1px #E5E5E5;
@@ -124,6 +122,7 @@
 		.img{
 			height: 66rpx;
 			width: 66rpx;
+			border-radius: 50%;
 		}
 		
 		.tit1{
