@@ -1,10 +1,11 @@
 <template>
 	<view class="container">
-		<view class="header uni-flex uni-row">
-			<view class="title flex-item">{{info.title}}</view>
-			<view class="d-img flex-item">
+		<view class="header" @click.stop="stopPrevent">
+			<view class="title">{{info.title}}</view>
+			<view class="d-img" @click.stop="stopPrevent" @click="addCollect">
 				<img class="img" style="margin-right: 31rpx;" src="https://pic.youx365.com/article-sc.png" />
-				
+			</view>
+			<view class="d_button">
 				<button class="p-b-btn" open-type="share">
 					<img class="img" src="https://pic.youx365.com/article-zf.png" />
 				</button>
@@ -28,6 +29,19 @@
 		},
 		computed: {
 			...mapState(['hasLogin','userInfo'])
+		},
+		methods:{
+			stopPrevent(){},
+			addCollect(){
+				let values = {refId: this.id,type:4};
+				this.$request.ModelOrder.addCollect(values).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('收藏成功');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},	
 		},
 		onLoad(options) {
 			if(options.inviteUserId){
@@ -62,35 +76,52 @@
 	
 	.header{
 		margin-top: 40rpx;
+		display: flex;
+		align-items: flex-start;
+		padding: 20rpx;
 		
 		.title{
-			width: 510rpx;
 			font-size:28rpx;
 			font-family:SourceHanSansCN;
 			font-weight:500;
 			color:rgba(0,0,0,1);
+			flex: 1;
 		}
 		
 		.d-img{
-			width: 200rpx;
-			text-align: right;
-			display: flex;
-			justify-content: center;
+			width: 36rpx;
+			height: 36rpx;
+			margin-left: 20rpx;
 			
 			.img{
-				width: 40rpx;
-				height: 40rpx;
+				width: 100%;
+				height: 100%;
 			}
+		}
+		
+		.d_button{
+			width: 36rpx;
+			height: 36rpx;
+			margin-left: 30rpx;
 			
 			.p-b-btn{
-				position: unset;
+				width: 36rpx;
+				height: 36rpx;
 				background-color: unset;
 				padding-left: unset;
 				padding-right: unset;
 				font-size: unset;
-				height: 40rpx;
-				line-height: 40rpx;
+				line-height: 36rpx;
 				margin: 0 !important;
+			}
+			
+			.p-b-btn:after{
+				border: 0;
+			}
+			
+			.img{
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}

@@ -28,6 +28,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async addCollect(data){
+		let url = config.api + '/h5/oper/add-collect';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
 	//收货地址
 	async addOrUpdateAddress(data){
 		let url = config.api + '/h5/user/shopping-address/addOrUpdate';
@@ -130,6 +136,12 @@ export default{
 	
 	async listOrder(data){ //订单列表
 		let url = config.api + `/h5/order/page-template`;
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async listOrderMsg(data){ //订单管理列表
+		let url = config.api + `/h5/order/order-manage`;
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},

@@ -20,7 +20,7 @@
 						<view class="scoll-wrapper">
 							<view 
 								v-for="(subitem, subindex) in item.picUrlList" :key="subindex"
-								class="floor-item"
+								class="floor-item" @click="previewImage(subindex,item.picUrlList)"
 							>
 								<image :src="subitem" mode="aspectFill"></image>
 							</view>
@@ -115,8 +115,7 @@
 				
 				this.loadingType = 'loading';
 				
-				// let shopId = this.shopId;
-				let shopId = 1002;
+				let shopId = this.shopId;
 				let evalLvl = null;
 				let needReply = null;
 				if(this.type > 0){
@@ -157,8 +156,28 @@
 				this.selectId = id;
 			},
 			commitCommet(){
-				console.log({commentStr:this.commentStr,selectId:this.selectId})
-			}
+				if(this.commentStr == null || this.commentStr == ''){
+					this.$api.msg('请输入回复内容!');
+					return;
+				}
+				let comment = this.orderList[this.selectId];
+				let value  = {reply: this.commentStr,id: comment.id};
+				this.$request.ModelOrder.comment(value).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('评价成功');
+						this.commentStr = null;
+						this.loadData('refresh');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
+			previewImage(index,imgs) {
+			    uni.previewImage({
+			        current: index,
+			        urls: imgs
+			    })
+			},
 		},
 		onLoad(option){
 			this.shopId = option.shopId;

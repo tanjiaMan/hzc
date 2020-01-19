@@ -1,5 +1,5 @@
 /* 后端访问地址 */
-const api =  'https://shop-api.idovear.info';
+const api =  'https://api.youx365.com';
 const shopId = '1001';
 
 export default{

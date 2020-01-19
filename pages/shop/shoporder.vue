@@ -23,7 +23,7 @@
 						<img class="img" src="https://pic.youx365.com/calendar-logo.png" />
 					</picker>
 				</view>
-				<view class="flex-item d-3">查询</view>
+				<view class="flex-item d-3" @click="search">查询</view>
 			</view>
 		</view>
 		<view class="navbar">
@@ -161,7 +161,7 @@
 						text: '退款',
 						loadingType: 'more',
 						orderList: [],
-						payState: 60,
+						payState: 80,
 						pageSize: 10,
 						pageIndex: 1
 					}
@@ -182,10 +182,23 @@
 				})  
 			},
 			bindStartDateChange: function(e) {
-				this.startDate = e.target.value
+				this.startDate = e.target.value;
+				this.dayTabCur = -1;
 			},
 			bindEndDateChange: function(e) {
 				this.endDate = e.target.value
+				this.dayTabCur = -1;
+			},
+			funData(aa){
+				var date1 = new Date();
+				var time1 = date1.getFullYear()+ "-" + (date1.getMonth()+1) + "-" + date1.getDate();
+				if(aa == 0){
+					return time1;
+				}
+				var date2 = new Date(date1);
+				date2.setDate(date1.getDate() + aa);
+				var time2 = date2.getFullYear() + "-" + (date2.getMonth()+1) + "-" + date2.getDate();
+				return time2;
 			},
 			//菜单切换
 			dayTabSelect(e){
@@ -193,6 +206,19 @@
 					return;
 				}
 				this.dayTabCur = e.currentTarget.dataset.id;
+				if(this.dayTabCur == 1){ //今天
+					this.startDate = this.funData(-1);
+					this.endDate = this.funData(-1);
+				}else if(this.dayTabCur == 2){ //昨天
+					this.startDate = this.funData(0);
+					this.endDate = this.funData(0);
+				}else if(this.dayTabCur == 3){ //近7天
+					this.endDate = this.funData(0);
+					this.startDate = this.funData(-7);
+				}else{ //全部
+					this.startDate = null;
+					this.endDate = null;
+				}
 				this.loadData('tabChange');
 			},
 			tabClick(index){
@@ -200,6 +226,9 @@
 					return;
 				}
 				this.tabCurrentIndex = index;
+				this.loadData('tabChange');
+			},
+			search(){ //时间查询
 				this.loadData('tabChange');
 			},
 			changeTab(e){
@@ -235,7 +264,13 @@
 				if(navItem.payState != null){
 					values['orderStatus'] = navItem.payState;
 				}
-				let result = await this.$request.ModelOrder.listOrder(values);
+				if(this.startDate){
+					values['startT'] = this.startDate + ' 00:00:00';
+				}
+				if(this.endDate){
+					values['endT'] = this.endDate + ' 23:23:23';
+				}
+				let result = await this.$request.ModelOrder.listOrderMsg(values);
 				let orderList = result.records || {};
 				navItem.total = result.total || 0;
 				orderList.forEach(item=>{
@@ -340,10 +375,6 @@
 				width: 32rpx;
 				height: 32rpx;
 				margin-left: 16rpx;
-				vertical-align: middle;
-			}
-			
-			.tit{
 				vertical-align: middle;
 			}
 		}

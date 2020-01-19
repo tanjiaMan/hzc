@@ -12,7 +12,7 @@
 					</view>
 				</swiper-item>
 			</swiper>
-			<view class="d_sc">
+			<view class="d_sc" @click="addCollect">
 				<image class="img2" src="https://pic.youx365.com/collection_z.png" mode="aspectFit"></image>
 				<view class="titsc">收藏</view>
 			</view>
@@ -507,7 +507,17 @@
 					loop: true,
 				})
 			},
-			stopPrevent(){}
+			stopPrevent(){},
+			addCollect(){
+				let values = {refId: this.goods.id,type:1};
+				this.$request.ModelOrder.addCollect(values).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('收藏成功');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
 		},
 		onShareAppMessage() { //设置分享
 			return {
