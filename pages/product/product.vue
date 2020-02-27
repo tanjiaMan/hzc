@@ -69,7 +69,7 @@
 				<view class="flex-item title">{{goods.name}}</view>
 				
 				<view class="flex-item share">
-					<button class="p-b-btn" open-type="share">
+					<button class="p-b-btn" @click="initData"> <!-- open-type="share" -->
 						<img src="https://pic.youx365.com/share.png" /><span>分享</span>
 					</button>
 				</view>
@@ -300,16 +300,35 @@
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
+		
+		<!-- 海报 -->
+		<uni-popup ref="showimage" class="haibao" type="center" :mask-click="false">
+			<view class="uni-image" v-if="template.views">
+				<scroll-view class="d_frame">
+					<view class="painter">
+						<painter :palette="template" @imgErr="imgErr" @imgOK="onImgOK" />
+					</view>
+					<view class="bt" @click="saveImage">保存到手机</view>
+				</scroll-view>
+				<view class="uni-image-close" @click="cancel()">
+					<uni-icons type="clear" color="#fff" size="30" />
+				</view>
+			</view>
+		</uni-popup>
+		
 	</view>
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uParse from '@/components/uParse/src/wxParse.vue';
-	import {mapState} from 'vuex';  
+	import {mapState} from 'vuex';
+	import Card from './card.js';
 	
 	export default{
 		components: {
-			uParse
+			uParse,uniPopup,uniIcons
 		},
 		computed: {
 			...mapState(['hasLogin','userInfo'])
@@ -333,6 +352,8 @@
 				//评论
 				comment: {},
 				commentTotal:0,
+				
+				template: {},
 			};
 		},
 		methods:{
@@ -533,7 +554,52 @@
 						this.$api.msg(result.msg);
 					}
 				})
-			}
+			},
+			//海报接口
+			initData(){
+				if(!this.template.views){
+					uni.showLoading({
+					    title: "拼命生成中...",
+					    mask: true,
+					});
+					this.template = new Card().palette(this.goods.coverPicUrl,this.goods.name,this.goods.originPrice,this.goods.price);
+				}
+				this.$refs['showimage'].open();
+			},
+			cancel(type) {
+				this.$refs['showimage'].close()
+			},
+			onImgOK(e) {
+			    this.imagePath = e.detail.path;
+			    uni.hideLoading();
+			},
+			imgErr(e){
+			    uni.hideLoading();
+			    uni.showModal({
+			        title:'提示',
+			        content:"生成海报失败",
+			        showCancel:false,
+			    })
+			    console.log(e);
+			},
+			saveImage() {  //长按保存
+			        var _this = this;
+			        uni.authorize({
+			            scope:"scope.writePhotosAlbum",
+			            success() {
+			                uni.saveImageToPhotosAlbum({
+			                    filePath: _this.imagePath,
+			                    success(){
+			                        uni.showModal({
+			                            title:"保存成功",
+			                            content:"图片已成功保存到相册，快去分享到您的圈子吧",
+			                            showCancel:false
+			                        })
+			                    }
+			                });
+			            }
+			        })
+			},
 		},
 		onShareAppMessage() { //设置分享
 			return {
@@ -569,6 +635,45 @@
 		background: #FFFFFF;
 		padding-bottom: 160upx;
 	}
+	
+	.haibao{
+		/deep/ .uni-popup__wrapper-box{
+			padding: 0 !important;
+			background: unset !important;
+			max-width: unset !important;
+			max-height: unset !important;
+		}
+		
+		.uni-popup__wrapper-box{
+			padding: 0 !important;
+			background: unset !important;
+			max-width: unset !important;
+			max-height: unset !important;
+		}
+		.bt{
+			width:551rpx;
+			height:84rpx;
+			line-height:84rpx;
+			background:rgba(255,68,63,1);
+			border-radius:6rpx;
+			margin: 0 auto;
+			font-size:28rpx;
+			font-family:Source Han Sans CN;
+			font-weight:400;
+			color:rgba(254,254,254,1);
+			text-align: center;
+		}
+		.d_frame{
+			width:620rpx;
+			height:819rpx;
+			background:rgba(255,255,255,1);
+			border-radius:10rpx;
+			position: relative;
+		}
+	}
+	
+	
+	
 	.icon-you{
 		font-size: $font-base + 2upx;
 		color: #888;

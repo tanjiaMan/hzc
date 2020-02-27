@@ -30,12 +30,17 @@
 		{
 			"path": "pages/product/product",
 			"style": {
-				"navigationBarTitleText": "商品详情"
+				"navigationBarTitleText": "商品详情",
 				// "app-plus": {
 				// 	"titleNView": {
 				// 		"type": "transparent"
 				// 	}
-				// }
+				// },
+				"mp-weixin":{
+					"usingComponents":{
+						"painter":"/static/painter/painter"
+					}
+				}
 			}
 		}, {
 			"path": "pages/set/set",

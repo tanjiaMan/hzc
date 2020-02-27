@@ -1,6 +1,6 @@
 <template>
-	<view v-if="showPopup" class="uni-popup">
-		<view :class="[ani, animation ? 'ani' : '', !custom ? 'uni-custom' : '']" class="uni-popup__mask" @click="close(true)" />
+	<view v-if="showPopup" class="uni-popup" catchtouchmove="handleMove">
+		<view :class="[ani, animation ? 'ani' : '', !custom ? 'uni-custom' : '']" class="uni-popup__mask" @click="close(true)" catchtouchmove="handleMove" />
 		<view :class="[type, ani, animation ? 'ani' : '', !custom ? 'uni-custom' : '']" class="uni-popup__wrapper" @click="close(true)">
 			<view class="uni-popup__wrapper-box" @click.stop="clear">
 				<slot />
@@ -78,6 +78,9 @@
 						this.showPopup = false
 					}, 300)
 				})
+			},
+			handleMove(e){
+				//不做任何处理
 			}
 		}
 	}
