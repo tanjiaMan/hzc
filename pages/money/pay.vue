@@ -65,6 +65,7 @@
 				orderInfo: {},
 				orderNum: null,
 				amount: 0,
+				hasPwd: false,
 				
 				//倒计时
 				timer: null,
@@ -81,6 +82,16 @@
 				length:6,
 			};
 		},
+		onShow(){
+			this.$request.ModelUser.getAmount().then(result => {
+				if(result && result.userBalance){
+					this.amount = result.userBalance;
+					if(result.bankInfo){
+						this.hasPwd = true;
+					}
+				}
+			})
+		},
 		onLoad(options) {
 			let orderNum = options.orderNum;
 			this.orderNum = orderNum;
@@ -88,11 +99,6 @@
 				this.orderInfo = result || {};
 				if(result && result.leftPaySeconds && result.leftPaySeconds>0){
 					this.seconds = result.leftPaySeconds;
-				}
-			})
-			this.$request.ModelUser.getAmount().then(result => {
-				if(result && result.userBalance){
-					this.amount = result.userBalance;
 				}
 			})
 		},
@@ -187,9 +193,22 @@
 			},
 			//支付密码
 			zfshow(){
-				this.code = '';
-				this.codeLength = 0;
-				this.$refs.popup.open();
+				if(this.hasPwd == false){
+					uni.showModal({
+					    title: '请先设置支付密码',
+					    success: function (res) {
+					        if (res.confirm) {
+								uni.navigateTo({
+									url: `/pages/set/vfphone`
+								}) 
+					        }
+					    }
+					});
+				}else{
+					this.code = '';
+					this.codeLength = 0;
+					this.$refs.popup.open();
+				}
 			},
 			zfclose(){
 				this.$refs.popup.close();

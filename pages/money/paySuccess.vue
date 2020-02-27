@@ -6,16 +6,21 @@
 		<text class="tit" v-else>支付失败</text>
 		
 		<!-- 大转盘 -->
-		<adventures />
+		<!-- <adventures /> -->
 
 		<view class="btn-group">
 			<view>
 				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
 			</view>
+			<view class="mix-btn hollow1" @click="transStock()">
+				转入库存
+			</view>
+		</view>
+		<!-- <view class="btn-group">
 			<view class="bt-rule">
 				抽奖规则
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -40,7 +45,20 @@
 			})
 		},
 		methods: {
-			
+			transStock(){
+				var that = this;
+				uni.showModal({
+				    title: '提示',
+					content: '确定转入库存吗?',
+				    success: function (res) {
+				        if (res.confirm) {
+				           that.$request.ModelHome.transStock(that.orderInfo.id).then(result => {
+				           	that.$api.msg('转入库存成功!');
+				           })
+				        }
+				    }
+				});
+			}
 		}
 	}
 </script>
@@ -78,7 +96,7 @@
 	}
 	.btn-group{
 		padding-top: 40rpx;
-		padding-bottom: 73rpx;
+		display: flex;
 		
 		.bt-rule{
 			width: 268rpx;
@@ -89,6 +107,7 @@
 			font-family:SourceHanSansCN;
 			font-weight:400;
 			color:rgba(124,124,124,1);
+			margin-bottom: 80rpx;
 		}
 	}
 	.mix-btn {
@@ -107,6 +126,11 @@
 		
 		&.hollow{
 			background: url(https://pic.youx365.com/bt_blue.png);
+			background-size: contain;
+		}
+		
+		&.hollow1{
+			background: url(https://pic.youx365.com/bt_red.png);
 			background-size: contain;
 		}
 	}

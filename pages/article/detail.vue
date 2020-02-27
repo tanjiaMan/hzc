@@ -41,7 +41,17 @@
 						this.$api.msg(result.msg);
 					}
 				})
-			},	
+			},
+			removeCollect(){
+				let values = {refId: this.id,type:4};
+				this.$request.ModelOrder.removeCollect(values).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('取消收藏');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			}
 		},
 		onLoad(options) {
 			if(options.inviteUserId){

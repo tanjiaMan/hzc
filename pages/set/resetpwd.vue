@@ -24,7 +24,13 @@
 			return {
 				pwd:'',
 				rePwd:'',
+				mobile:'',
+				verifycode:'',
 			}
+		},
+		onLoad(option){
+			this.mobile = option.mobile;
+			this.verifycode = option.verifycode;
 		},
 		methods: {
 			async submit(){
@@ -44,11 +50,12 @@
 					this.$api.msg('请输入6位数字密码');
 					return;
 				}
-				let result = await this.$request.ModelUser.setPwd(this.pwd);
+				let result = await this.$request.ModelUser.setPwd(this.pwd,this.mobile,this.verifycode);
 				if(result.code == 'ok'){
 					this.pwd = '';
 					this.rePwd = '';
 					this.$api.msg("设置密码成功");
+					uni.navigateBack();
 				}else{
 					this.$api.msg(result.msg);
 				}

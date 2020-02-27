@@ -34,6 +34,12 @@ export default{
 		return result;
 	},
 	
+	async removeCollect(data){
+		let url = config.api + '/h5/oper/remove-collect';
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
 	//收货地址
 	async addOrUpdateAddress(data){
 		let url = config.api + '/h5/user/shopping-address/addOrUpdate';

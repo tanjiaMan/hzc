@@ -29,7 +29,7 @@
 		
 		<view class="notice-detail">
 			<empty v-if="records.length === 0"></empty>
-			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item">
+			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item" @click="gotoDetail(item)">
 				<view class="flex-item d_1">
 					<img class="img" :src="item.avatarUrl"  />
 				</view>
@@ -110,6 +110,11 @@
 				}
 				this.type = type;
 				this.loadData('fresh');
+			},
+			gotoDetail(item){
+				uni.navigateTo({
+				    url: '/pages/notice/messageDetail?detail=' + JSON.stringify(item)
+				});
 			}
 		}
 	}

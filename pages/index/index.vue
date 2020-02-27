@@ -43,7 +43,7 @@
 						<swiper class="carousel" circular 
 						indicator-dots='true' indicator-active-color="#00A08E" indicator-color="#fff" 
 						autoplay="true" interval="3000" duration="1000">
-							<swiper-item v-for="(item, index) in newsitems[TabCur].banner" :key="index" class="carousel-item">
+							<swiper-item v-for="(item, index) in newsitems[TabCur].banner" :key="index" class="carousel-item" @click="bannerClick(item)">
 								<image :src="item.picUrl" />
 							</swiper-item>
 						</swiper>
@@ -531,6 +531,11 @@
 			getnewsMore(){
 				let firstCat = this.tabBars[this.TabCur];
 				this.navTo('/pages/article/list?id=' + firstCat.id);
+			},
+			bannerClick(item){
+				if(item.href){
+					this.navTo(item.href);	
+				}
 			}
 		},
 		// #ifndef MP

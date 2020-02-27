@@ -154,6 +154,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async transStock(id){//转入库存
+		let url = config.api + '/h5/agent/shift-order-stock?orderId=' + id;
+		let result = await request.get(url,{});
+		return result;
+	},
+	
 	//团队
 	async pageAgentTeam(data){
 		let url = config.api + '/h5/agent/agent-team';
@@ -175,13 +181,13 @@ export default{
 	},
 	
 	async pageArtice(data){
-		let url = config.api + '/h5/index/artice/page';
+		let url = config.api + '/h5/index/media/page';
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
 	
 	async getArticeInfo(id){
-		let url = config.api + '/h5/index/artice/detail?articleId=' + id;
+		let url = config.api + '/h5/index/media/detail?mediaId=' + id;
 		let result = await request.get(url,{});
 		return result && result.data;
 	},

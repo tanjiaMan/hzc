@@ -228,6 +228,11 @@
             "style" : {
 				"navigationBarTitleText": "消息"
 			}
+        },{
+            "path" : "pages/notice/messageDetail",
+            "style" : {
+				"navigationBarTitleText": "消息"
+			}
         }
 		,{
 		    "path" : "pages/notice/message",

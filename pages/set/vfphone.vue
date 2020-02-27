@@ -59,7 +59,12 @@
 			},
 			send(){
 				console.log('给手机号发送验证码：',this.userInfo.mobile);
-				this.countDown();
+				var that = this;
+				this.$request.ModelCommons.sendVerify(this.userInfo.mobile,'setPwd').then(result => {
+					if(result.code == 'ok'){
+						that.countDown();
+					}
+				});
 			},
 			async next(){
 				//验证码确认
@@ -68,9 +73,11 @@
 					return;
 				}
 				
+				let mobile = this.userInfo.mobile;
+				let verifycode = this.verifycode;
 				//跳转到密码修改
 				uni.redirectTo({
-					url: '/pages/set/resetpwd'
+					url: `/pages/set/resetpwd?mobile=${mobile}&verifycode=${verifycode}`
 				})  
 			}
 		}

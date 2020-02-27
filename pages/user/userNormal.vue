@@ -324,6 +324,9 @@
 					font-family:SourceHanSansCN;
 					font-weight:500;
 					color:rgba(255,255,255,1);
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 				}
 				
 				.mobile{

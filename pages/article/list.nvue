@@ -201,7 +201,7 @@
 				if(activeTab.hasMore == false){
 					return;
 				}
-				let values = {classId: activeTab.classId,pageIndex:activeTab.pageIndex,pageSize: activeTab.pageSize};
+				let values = {classId: activeTab.classId,type:2,pageIndex:activeTab.pageIndex,pageSize: activeTab.pageSize};
 				let result = await this.$request.ModelHome.pageArtice(values);
 				result = result || {};
 				let articleList = result.records || [];

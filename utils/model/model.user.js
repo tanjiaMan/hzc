@@ -110,6 +110,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async readMsg(data){
+		let url = config.api + '/h5/user/read-msg';
+		let result = await request.post(url ,data ,{});
+		return result;
+	},
+	
 	//统计报表
 	async getSts(){ //提现记录
 		let url = config.api + '/h5/user/sts-page';
@@ -124,9 +130,9 @@ export default{
 	},
 	
 	//密码
-	async setPwd(pwd){
-		let url = config.api + '/h5/user/set-bank-pwd?pwd='+pwd;
-		let result = await request.post(url ,{} ,{});
+	async setPwd(pwd,mobile,verifyCode){
+		let url = config.api + `/h5/user/set-bank-pwd?pwd=${pwd}&mobile=${mobile}&verifyCode=${verifyCode}`;
+		let result = await request.get(url ,{});
 		return result;
 	},
 	

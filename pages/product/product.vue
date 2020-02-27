@@ -12,7 +12,11 @@
 					</view>
 				</swiper-item>
 			</swiper>
-			<view class="d_sc" @click="addCollect">
+			<view v-if="goods.collected" class="d_sc" @click="removeCollect">
+				<image class="img2" src="https://pic.youx365.com/collection_z.png" mode="aspectFit"></image>
+				<view class="titsc">取消收藏</view>
+			</view>
+			<view v-else class="d_sc d_sc1" @click="addCollect">
 				<image class="img2" src="https://pic.youx365.com/collection_z.png" mode="aspectFit"></image>
 				<view class="titsc">收藏</view>
 			</view>
@@ -513,11 +517,23 @@
 				this.$request.ModelOrder.addCollect(values).then(result => {
 					if(result.code == 'ok'){
 						this.$api.msg('收藏成功');
+						this.goods.collected = true;
 					}else{
 						this.$api.msg(result.msg);
 					}
 				})
 			},
+			removeCollect(){
+				let values = {refId: this.goods.id,type:1};
+				this.$request.ModelOrder.removeCollect(values).then(result => {
+					if(result.code == 'ok'){
+						this.$api.msg('取消收藏');
+						this.goods.collected = false;
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			}
 		},
 		onShareAppMessage() { //设置分享
 			return {
@@ -578,6 +594,10 @@
 				width: 100%;
 				height: 100%;
 			}
+		}
+		
+		.d_sc1{
+			filter: grayscale(100%);
 		}
 		
 		.d_sc{
