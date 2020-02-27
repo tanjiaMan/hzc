@@ -530,7 +530,7 @@
 			},
 			getnewsMore(){
 				let firstCat = this.tabBars[this.TabCur];
-				this.navTo('/pages/article/list?id=' + firstCat.id);
+				this.navTo('/pages/article/list');
 			},
 			bannerClick(item){
 				if(item.href){

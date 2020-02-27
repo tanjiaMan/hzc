@@ -73,9 +73,9 @@
 				<view v-if="batchOper == true && transUserId == 0" class="bt-th" @click="navToReturn()">退货</view>
 			</view>
 			<view class="d-right" v-if="transUserId == 0">
-				<view class="bt-zh">转货<br/>记录</view>
-				<view class="bt-zh bt-th">退货<br/>记录</view>
-				<view class="bt-zh bt-th">发货<br/>记录</view>
+				<view @click="tranrecord(0)" class="bt-zh">转货<br/>记录</view>
+				<view @click="tranrecord(1)" class="bt-zh bt-th">退货<br/>记录</view>
+				<view @click="tranrecord(2)" class="bt-zh bt-th">发货<br/>记录</view>
 			</view>
 		</view>
 	</view>
@@ -112,6 +112,11 @@
 				uni.navigateTo({
 					url
 				})  
+			},
+			tranrecord(type){
+				uni.navigateTo({
+					url:`/pages/shop/transrecords?active=${type}`
+				})
 			},
 			async loadMenu() {
 				//加载一级分类

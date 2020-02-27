@@ -169,7 +169,7 @@
 				
 				navItem.loadingType = 'loading';
 				
-				let orderList = [{},{},{}];
+				let orderList = [];
 				if(navItem.state == 0){ //转货记录
 					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
 					let result = await this.$request.ModelHome.getTransStockLog(values);

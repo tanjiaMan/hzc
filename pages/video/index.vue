@@ -1,25 +1,26 @@
 <template>
 	<view class="container">
-		<view class="d-header">
+		<view class="d-header" v-if="defalutBanner && banner.length>0">
 			<scroll-view class="scroll-view_H" scroll-x="true">
 				<view class="scroll-view-item_H" v-for="(item,index) in 4" :key="index" @click="navTo('/pages/video/detail')">
-					<video :id="'video-header-'+index" :controls="false" class="header-video" objectFit="cover" :show-center-play-btn="false"
-						src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video>
+					<!-- <video :id="'video-header-'+index" :controls="false" class="header-video" objectFit="cover" :show-center-play-btn="false"
+						src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video> -->
+					<image class="header-video" :src="item.coverUrl" mode="aspectFill"></image>
 					<view class="d-1">
 						<img class="img" src="https://pic.youx365.com/video-bf.png" />
 						<view class="d-2 uni-flex uni-row">
 							<view class="flex-item" style="width: 70%;text-align: left;padding-left: 45rpx;margin-top: 15rpx;">
 								<view class="d-avr">
-									<img class="imgavr" src="https://pic.youx365.com/wazi2.JPG" />
+									<img class="imgavr" :src="item.avatarUrl" />
 									<text class="tit2">官方短视频</text>
 								</view>
 								<view class="tit">
-									人民日报官方短视频
+									{{item.nickName}}
 								</view>
 							</view>
 							<view class="flex-item" style="width:30%">
 								<img class="imgsc" src="https://pic.youx365.com/video-sc.png" />
-								<view class="tit1">202</view>
+								<view class="tit1">{{item.praiseCount}}</view>
 							</view>
 						</view>
 					</view>
@@ -42,7 +43,7 @@
 		
 		<!-- 详情 -->
 		<view class="d-body">
-			<view class="d-content" v-for="(item,index) in 10" :key="index" @click="navTo('/pages/video/detail')">
+			<view class="d-content" v-for="(item,index) in records" :key="index" @click="navTo('/pages/video/detail')">
 				<video :id="'video-body-'+index" :controls="false" class="video" objectFit="cover" :show-center-play-btn="false"
 					src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video>
 				<view style="width: 100%;position: absolute;text-align: center;top: 0;left: 0;">
@@ -62,6 +63,7 @@
 					</view>
 				</view>
 			</view>
+			<uni-load-more :status="loadingType" style="width: 100%;"></uni-load-more>
 		</view>
 		
 		<view style="height: 70rpx;"></view>
@@ -69,40 +71,44 @@
 </template>
 
 <script>
+	
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	
 	export default {
+		components: {
+			uniLoadMore	
+		},
 		data() {
 			return {
-				picUrl: '',
-				videoUrl: '',
 				//
 				TabCur: 0,
 				scrollLeft: 0,
-				tabBars: [{
-					name: '女神专区',
-					id: 0
-				}, {
-					name: '男神专区',
-					id: 1
-				}, {
-					name: '妈咪宝贝',
-					id: 10
-				}, {
-					name: '解忧杂货店',
-					id: 3
-				}]
+				defalutBanner:{},
+				tabBars: [],
+				
+				banner:[],
+				//翻页
+				loadingType: 'more',
+				pageIndex: 1,
+				pageSize: 20,
+				records:[],
 			}
 		},
-		onLoad(){//第一次加载
-			console.log('on load');
-		},
-		onShow(){
-			console.log('onshow');
-		},
-		onHide(){
-			console.log('onHide')
-		},
-		onTabItemTap(){ //点击tab进入
-			console.log('onTabItemTap')
+		async onLoad(){//第一次加载
+			let result = await this.$request.ModelHome.getMediaCategoryByPid(1);
+			result.map(item => {
+				if(item.type == 0){
+					this.defalutBanner = item;
+				}else{
+					this.tabBars.push(item);
+				}
+			});
+			if(this.defalutBanner && this.defalutBanner.id){
+				this.$request.ModelHome.pageArtice({classId: this.defalutBanner.id,type:1,pageIndex:1,pageSize: 10}).then(result => {
+					this.banner = result.records || [];
+				})
+			}
+			this.loadData('refresh');
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -111,10 +117,6 @@
 			}else{
 				this.headerPosition = "absolute";
 			}
-		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
 		},
 		//加载更多
 		onReachBottom(){
@@ -128,13 +130,38 @@
 			},
 			// 头部菜单切换
 			async tabSelect(e) {
-				this.TabCur = e.currentTarget.dataset.id;
+				let index = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
-				this.isClickChange = true;
-				
-				// if(this.newsitems[tabIndex].data.length === 0){ //加载数据
-				// 	this.addData(tabIndex)
-				// }
+				if(this.TabCur == index){
+					return;
+				}
+				this.TabCur = index;
+				this.loadData('refresh');
+			},
+			async loadData(loadType){
+				if(loadType == 'refresh'){
+					this.pageIndex = 1;
+					this.loadingType = 'more';
+					this.records = [];
+				}
+				if(this.loadingType === 'loading' || this.loadingType == 'noMore'){
+					return;
+				}
+				let navItem = this.tabBars[this.TabCur];
+				this.loadingType = 'loading'
+				let values = {classId: navItem.id,type:1,pageIndex:this.pageIndex,pageSize: this.pageSize};
+				let result = await this.$request.ModelHome.pageArtice(values);
+				result = result || {};
+				let orderList = result.records || [];
+				orderList.forEach(item=>{
+					this.records.push(item);
+				})
+				if(orderList.length < this.pageSize){
+					this.loadingType = 'noMore';
+				}else{
+					this.loadingType = 'more'; 
+				}
+				this.pageIndex = this.pageIndex + 1;
 			},
 		}
 	}
@@ -150,6 +177,7 @@
 		.scroll-view_H {
 			white-space: nowrap;
 			width: 100%;
+			padding: 0 20rpx;
 		}
 		
 		.scroll-view-item_H {

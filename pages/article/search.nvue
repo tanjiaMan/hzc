@@ -1,5 +1,10 @@
 <template>
 	<view class="container">
+		
+		<view>
+			<uni-search-bar @confirm="search" @cancel="cancel" fgColor="#ededed" bgColor="#ffffff" />
+		</view>
+		
 		<!-- 头部菜单 -->
 		<view style="width: 710rpx; margin: 0 auto;flex-direction: row;">
 			<view class="d-tabar">
@@ -8,12 +13,6 @@
 				        <text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
 				    </view>
 				</scroll-view>
-			</view>
-			<view class="d-search-frame">
-				<view class="bt-search" @click="gotoSearch">
-					<img class="img" src="https://pic.youx365.com/icon-search.png" />
-					<text class="tit">搜索</text>
-				</view>
 			</view>
 		</view>
 		
@@ -74,6 +73,8 @@
 </template>
 
 <script>
+	
+	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import mediaItem from './news-item.nvue';
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue';
 	
@@ -82,52 +83,9 @@
 	// 缓存页签数量
 	const MAX_CACHE_PAGE = 3;
 	
-	const newsData = {
-	    data0: {
-	       "datetime": "2小时前",
-	       "article_type": 2,
-	       "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
-	       "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
-	       "source": "DCloud",
-	       "comment_count": 69
-	    },
-	    data1: {
-	        "datetime": "一天前",
-	        "article_type": 1,
-	        "title": "DCloud完成B2轮融资，uni-app震撼发布!",
-	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg?imageView2/3/w/200/h/100/q/90",
-	        "source": "DCloud",
-	        "comment_count": 11395
-	    },
-	    data2: {
-	        "datetime": "一天前",
-	        "article_type": 2,
-	        "title": "中国技术界小奇迹：HBuilder开发者突破200万",
-	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg?imageView2/3/w/200/h/100/q/90",
-	        "source": "DCloud",
-	        "comment_count": 11395
-	    },
-	    data3: {
-	        "datetime": "2小时前",
-	        "article_type": 2,
-	        "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
-	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
-	        "source": "DCloud",
-	        "comment_count": 69
-	    },
-	    data4: {
-	        "datetime": "2小时前",
-	        "article_type": 2,
-	        "title": "uni-app 支持原生小程序自定义组件，更开放、更自由",
-	        "image_url": "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90",
-	        "source": "DCloud",
-	        "comment_count": 69
-	    }
-	};
-	
 	export default {
 		components: {
-		    mediaItem,uniSwiperDot
+		    mediaItem,uniSwiperDot,uniSearchBar
 		},
 		data() {
 			return {
@@ -142,21 +100,6 @@
 				refreshIcon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAB5QTFRFcHBw3Nzct7e39vb2ycnJioqK7e3tpqam29vb////D8oK7wAAAAp0Uk5T////////////ALLMLM8AAABxSURBVHja7JVBDoAgDASrjqj//7CJBi90iyYeOHTPMwmFZrHjYyyFYYUy1bwUZqtJIYVxhf1a6u0R7iUvWsCcrEtwJHp8MwMdvh2amHduiZD3rpWId9+BgPd7Cc2LIkPyqvlQvKxKBJ//Qwq/CacAAwDUv0a0YuKhzgAAAABJRU5ErkJggg==",
 				loadingIcon: "data:image/gif;base64,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",
 				
-				//广告
-				info: [
-					// {
-					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
-					// 	content: '冰雪漂浮，星云移动，萤火虫纷飞'
-					// },
-					// {
-					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
-					// 	content: '内容 B'
-					// },
-					// {
-					// 	url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
-					// 	content: '内容 C'
-					// }
-				],
 				dotsStyles: {
 					backgroundColor: 'rgba(0, 0, 0, .3)',
 					border: '1px rgba(0, 0, 0, .3) solid',
@@ -164,7 +107,8 @@
 					selectedBackgroundColor: 'rgba(0, 0, 0, .9)',
 					selectedBorder: '1px rgba(0, 0, 0, .9) solid'
 				},
-				adCurrent:0
+				adCurrent:0,
+				keyword: null,
 			}
 		},
 		onLoad(options) {
@@ -190,6 +134,20 @@
 			})
 		},
 		methods: {
+			search(res) {
+				this.keyword = res.value;
+				uni.showToast({
+					title: '搜索：' + res.value,
+					icon: 'none'
+				});
+				this.getList('refresh');
+			},
+			cancel(res) {
+				uni.showToast({
+					title: '点击取消，输入值为：' + res.value,
+					icon: 'none'
+				})
+			},
 			async getList(type) {
 			    let activeTab = this.newsList[this.tabIndex];
 				
@@ -203,7 +161,12 @@
 				if(activeTab.hasMore == false){
 					return;
 				}
-				let values = {classId: activeTab.classId,type:2,pageIndex:activeTab.pageIndex,pageSize: activeTab.pageSize};
+				if(this.keyword == null || this.keyword == ''){
+					activeTab.hasMore = false;
+					activeTab.loadingText = '当前没有数据';
+					return;
+				}
+				let values = {classId: activeTab.classId,type:2,pageIndex:activeTab.pageIndex,pageSize: activeTab.pageSize,titleLike:this.keyword};
 				let result = await this.$request.ModelHome.pageArtice(values);
 				result = result || {};
 				let articleList = result.records || [];
@@ -320,11 +283,6 @@
 			},
 			adChange(e) {
 				this.adCurrent = e.detail.current
-			},
-			gotoSearch(){
-				uni.navigateTo({
-					url: `/pages/article/search`
-				})
 			}
 		}
 	}
@@ -348,7 +306,7 @@
 	}
 	
 	.d-tabar{
-		width: 564rpx;
+		width: 100%;
 	}
 	
 	.d-search-frame{
@@ -632,4 +590,5 @@
 			}
 		}
 	}
+	
 </style>

@@ -2,7 +2,10 @@
 	<view class="container">
 		<view class="header" @click.stop="stopPrevent">
 			<view class="title">{{info.title}}</view>
-			<view class="d-img" @click.stop="stopPrevent" @click="addCollect">
+			<view v-if="info.collected" class="d-img" @click.stop="stopPrevent" @click="removeCollect">
+				<img class="img" style="margin-right: 31rpx;" src="https://pic.youx365.com/article-sc.png" />
+			</view>
+			<view v-else class="d-img gray" @click.stop="stopPrevent" @click="addCollect">
 				<img class="img" style="margin-right: 31rpx;" src="https://pic.youx365.com/article-sc.png" />
 			</view>
 			<view class="d_button">
@@ -37,6 +40,7 @@
 				this.$request.ModelOrder.addCollect(values).then(result => {
 					if(result.code == 'ok'){
 						this.$api.msg('收藏成功');
+						this.info.collected = true;
 					}else{
 						this.$api.msg(result.msg);
 					}
@@ -47,6 +51,7 @@
 				this.$request.ModelOrder.removeCollect(values).then(result => {
 					if(result.code == 'ok'){
 						this.$api.msg('取消收藏');
+						this.info.collected = false;
 					}else{
 						this.$api.msg(result.msg);
 					}
@@ -147,5 +152,9 @@
 		font-family:SourceHanSansCN;
 		font-weight:400;
 		color:rgba(82,82,82,1);
+	}
+	
+	.gray{
+		filter: grayscale(100%);
 	}
 </style>

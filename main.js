@@ -9,6 +9,7 @@ import ModelCommons from './utils/model/model.commons.js';
 import ModelUser from './utils/model/model.user.js';
 import ModelHome from './utils/model/model.home.js';
 import ModelOrder from './utils/model/model.order.js';
+import ModelVideo from './utils/model/model.video.js';
 
 import cuCustom from './colorui/components/cu-custom.vue'
 import cuSearch from './colorui/components/cu-search.vue'
