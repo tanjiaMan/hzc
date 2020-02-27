@@ -70,7 +70,7 @@
 				
 				<view class="flex-item share">
 					<button class="p-b-btn" @click="initData"> <!-- open-type="share" -->
-						<img src="https://pic.youx365.com/share.png" /><span>分享</span>
+						<img src="https://pic.youx365.com/share.png" /><span>海报</span>
 					</button>
 				</view>
 			</view>
