@@ -149,12 +149,12 @@ export default{
 	},
 	
 	async getTransStockLog(data){//转货记录
-		let url = config.api + '/h5/agent/transfer-stock-log';
+		let url = config.api + '/h5/agent/agent-stock-log';
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
 	
-	async transStock(id){//转入库存
+	async transOrderStock(id){//转入库存
 		let url = config.api + '/h5/agent/shift-order-stock?orderId=' + id;
 		let result = await request.get(url,{});
 		return result;

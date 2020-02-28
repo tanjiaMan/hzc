@@ -171,7 +171,7 @@
 				
 				let orderList = [];
 				if(navItem.state == 0){ //转货记录
-					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
+					let values = {refUserId: this.transUserId,pageIndex: navItem.pageIndex,pageSize: navItem.pageSize,type:5};
 					let result = await this.$request.ModelHome.getTransStockLog(values);
 					result = result || {};
 					orderList = result.records || [];

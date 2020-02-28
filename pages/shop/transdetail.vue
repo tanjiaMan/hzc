@@ -6,9 +6,15 @@
 				<view class="tit2">{{info.nickName}}</view>
 			</view>
 			<view class="d_item">
-				<view class="tit1">转货时间</view>
+				<view class="tit1" v-if="state == 1">转货时间</view>
+				<view class="tit1" v-if="state == 2">退货时间</view>
+				<view class="tit1" v-if="state == 3">发货时间</view>
 				<view class="tit2">{{info.createTime}}</view>
 			</view>
+			<!-- <view class="d_item  bottom_line" v-if="state == 2">
+				<view class="tit1">退货原因</view>
+				<view class="tit2">{{info.nickName}}</view>
+			</view> -->
 		</view>
 		<view class="d_body">
 			<view class="tit_title">转货商品/个数</view>
@@ -33,10 +39,12 @@
 	export default {
 		data() {
 			return {
-				info:{}
+				info:{},
+				state:1,
 			}
 		},
 		onLoad(option){
+			this.state = option.state;
 			let detail = option.detail;
 			this.info = JSON.parse(detail);
 		},

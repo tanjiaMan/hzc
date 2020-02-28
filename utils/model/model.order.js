@@ -28,6 +28,12 @@ export default{
 		return result && result.data;
 	},
 	
+	async pageCollect(data){
+		let url = config.api + '/h5/oper/page-collect';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
 	async addCollect(data){
 		let url = config.api + '/h5/oper/add-collect';
 		let result = await request.post(url,data,{});

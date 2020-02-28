@@ -1,19 +1,19 @@
 <template>  
     <view class="container">
 		<view class="tab_detail">
-			<view class="tab_item uni-flex uni-row" v-for="item in 10" :key="item">
+			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item">
 				<view class="flex-item d_1">
-					<img class="img" src="https://pic.youx365.com/wazi2.JPG"  />
+					<img class="img" :src="item.iconUrl"  />
 				</view>
 				<view class="flex-item d_2">
 					<view class="d_4">
-						<text class="tit1">朱三{{item}}</text>
-						<text class="tit3">2017-01-23</text>
+						<text class="tit1">{{item.title}}</text>
+						<text class="tit3">{{item.createTime && item.createTime.split(' ')[0]}}</text>
 					</view>
-					<view class="tit2">《走在乡间的小路上》</view>
+					<view class="tit2">{{item.content}}</view>
 				</view>
 				<view class="flex-item d_3">
-					<image :class="item % 2 == 0?'img1':'img2'" :src=" item % 2 == 0?'https://pic.youx365.com/collection_s_1.png': 'https://pic.youx365.com/collection_z.png'" mode="aspectFit"></image>
+					<image :class="item.operType == 2?'img1':'img2'" :src="item.operType == 2?'https://pic.youx365.com/collection_s_1.png': 'https://pic.youx365.com/collection_z.png'" mode="aspectFit"></image>
 				</view>
 			</view>
 		</view>
@@ -31,6 +31,9 @@
 		data(){
 			return {
 				loadingType: 'more',
+				records: [],
+				pageSize: 20,
+				pageIndex: 1
 			}
 		},
 		onPageScroll(e){
@@ -41,16 +44,50 @@
 				this.headerPosition = "absolute";
 			}
 		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
-		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.loadData();
+		},
+		onLoad(){
+			this.loadData('tabChange');
 		},
         methods: {
-			 
+			 async loadData(source){
+			 	if(this.loadingType === 'loading'){
+			 		//防止重复加载
+			 		return;
+			 	}
+			 	
+			 	if(source === 'tabChange'){ //切换重新刷新
+			 		this.pageIndex = 1;
+			 		this.records = [];
+			 		this.loadingType = 'more';
+			 	}
+			 	
+			 	if(this.loadingType == 'noMore'){
+			 		return;
+			 	}
+			 	
+			 	this.loadingType = 'loading';
+			 	
+			 	let orderList = [];
+			 	let values = {pageIndex: this.pageIndex,pageSize: this.pageSize};
+			 	let result = await this.$request.ModelOrder.pageCollect(values);
+			 	result = result || {};
+			 	orderList = result.records || [];
+			 	orderList.forEach(item=>{
+			 		this.records.push(item);
+			 	})
+			 	
+			 	//判断是否还有数据， 有改为 more， 没有改为noMore 
+			 	if(orderList.length < this.pageSize){
+			 		this.loadingType = 'noMore';
+			 	}else{
+			 		this.loadingType = 'more'; 
+			 	}
+			 	
+			 	this.pageIndex = this.pageIndex + 1;
+			 }, 
         }  
     }  
 </script>  
@@ -64,7 +101,6 @@
 		
 		.tab_item{
 			width: 100%;
-			height: 172rpx;
 			border-bottom: 1px solid #E8E8E8;
 			
 			.img{

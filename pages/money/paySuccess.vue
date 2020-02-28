@@ -12,7 +12,7 @@
 			<view>
 				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
 			</view>
-			<view class="mix-btn hollow1" @click="transStock()">
+			<view class="mix-btn hollow1" @click="transOrderStock()">
 				转入库存
 			</view>
 		</view>
@@ -45,14 +45,14 @@
 			})
 		},
 		methods: {
-			transStock(){
+			transOrderStock(){
 				var that = this;
 				uni.showModal({
 				    title: '提示',
 					content: '确定转入库存吗?',
 				    success: function (res) {
 				        if (res.confirm) {
-				           that.$request.ModelHome.transStock(that.orderInfo.id).then(result => {
+				           that.$request.ModelHome.transOrderStock(that.orderInfo.id).then(result => {
 				           	that.$api.msg('转入库存成功!');
 				           })
 				        }

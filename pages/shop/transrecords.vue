@@ -44,8 +44,10 @@
 							</scroll-view>
 						</view>
 						<view class="d_bottom">
-							<view class="tit2">转货时间 : {{item.createTime}}</view>
-							<view class="bt1" @click="transDetail(item)">查看详情</view>
+							<view v-if="tabItem.state == 1" class="tit2">转货时间 : {{item.createTime}}</view>
+							<view v-if="tabItem.state == 2" class="tit2">退货时间 : {{item.createTime}}</view>
+							<view v-if="tabItem.state == 3" class="tit2">发货时间 : {{item.createTime}}</view>
+							<view class="bt1" @click="transDetail(item,tabItem.state)">查看详情</view>
 						</view>
 					</view>
 					 
@@ -131,16 +133,17 @@
 				navItem.loadingType = 'loading';
 				
 				let orderList = [];
+				let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
 				if(navItem.state == 1){ //转货记录
-					let values = {pageIndex: navItem.pageIndex,pageSize: navItem.pageSize};
-					let result = await this.$request.ModelHome.getTransStockLog(values);
-					result = result || {};
-					orderList = result.records || [];
+					values.type = 5;
 				}else if(navItem.state == 2){ //退货记录
-					
+					values.type = 3;
 				}else if(navItem.state == 3){ //发货记录
-				
+					values.type = 8;
 				}
+				let result = await this.$request.ModelHome.getTransStockLog(values);
+				result = result || {};
+				orderList = result.records || [];
 				orderList.forEach(item=>{
 					if(item.couponInfo && item.couponInfo.expireDate){
 						item.couponInfo.expireDate = item.couponInfo.expireDate.split(' ')[0];
@@ -180,9 +183,9 @@
 				this.tabCurrentIndex = index;
 				this.loadData('tabChange');
 			},
-			transDetail(item){
+			transDetail(item,state){
 				uni.navigateTo({
-					url: `/pages/shop/transdetail?detail=`+JSON.stringify(item)
+					url: `/pages/shop/transdetail?state=${state}&detail=`+JSON.stringify(item)
 				})
 			}
 		}
