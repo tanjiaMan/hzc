@@ -28,11 +28,11 @@
 					<view class="d_seckill_img">
 						<image class="img_seckill" src="https://pic.youx365.com/product_seckill.png" mode="aspectFill"></image>
 					</view>
-					<span class="now_price">¥ {{goods.price}}</span>
+					<span class="now_price">¥ {{goods.seckillPrice}}</span>
 					<span class="org_price">¥ {{goods.originPrice}}</span>
 				</view>
 				<view class="kill_right">
-					今日 20:30开抢
+					今日 {{goods.seckillStart}}开抢
 				</view>
 			</view>
 			<view class="tg_frame" v-else-if="source == 'groupbuy'">

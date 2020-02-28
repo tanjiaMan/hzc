@@ -33,11 +33,8 @@
 				<view class="tit-2">
 					<uni-number-box
 						class="step"
-						:min="0" 
-						:max="item.myStock"
+						:min="0"
 						:value="item.number"
-						:isMax="item.number>=item.myStock?true:false"
-						:isMin="item.number===0"
 						:index="index"
 						@eventChange="numberChange"
 					></uni-number-box>
