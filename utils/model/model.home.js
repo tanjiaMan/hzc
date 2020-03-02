@@ -216,4 +216,16 @@ export default{
 		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
+	
+	async getSekillList(){
+		let url = config.api + '/h5/act/seckill-list';
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async remind(data){
+		let url = config.api + '/h5/act/act-remind';
+		let result = await request.post(url,data,{});
+		return result;
+	},
 }

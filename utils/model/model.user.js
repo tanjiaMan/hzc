@@ -141,4 +141,10 @@ export default{
 		let result = await request.post(url ,{} ,{});
 		return result && result.data;
 	},
+	
+	async addSuggestion(data){
+		let url = config.api + '/h5/user/add-suggestion';
+		let result = await request.post(url ,data ,{});
+		return result;
+	},
 }

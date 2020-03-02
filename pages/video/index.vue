@@ -2,14 +2,12 @@
 	<view class="container">
 		<view class="d-header" v-if="defalutBanner && banner.length>0">
 			<scroll-view class="scroll-view_H" scroll-x="true">
-				<view class="scroll-view-item_H" v-for="(item,index) in 4" :key="index" @click="navTo('/pages/video/detail')">
-					<!-- <video :id="'video-header-'+index" :controls="false" class="header-video" objectFit="cover" :show-center-play-btn="false"
-						src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video> -->
+				<view class="scroll-view-item_H" v-for="(item,index) in banner" :key="index" @click="navTo('/pages/video/detail?id='+item.id)">
 					<image class="header-video" :src="item.coverUrl" mode="aspectFill"></image>
 					<view class="d-1">
 						<img class="img" src="https://pic.youx365.com/video-bf.png" />
 						<view class="d-2 uni-flex uni-row">
-							<view class="flex-item" style="width: 70%;text-align: left;padding-left: 45rpx;margin-top: 15rpx;">
+							<view class="flex-item" style="width: 80%;text-align: left;padding-left: 45rpx;margin-top: 15rpx;">
 								<view class="d-avr">
 									<img class="imgavr" :src="item.avatarUrl" />
 									<text class="tit2">官方短视频</text>
@@ -18,8 +16,10 @@
 									{{item.nickName}}
 								</view>
 							</view>
-							<view class="flex-item" style="width:30%">
-								<img class="imgsc" src="https://pic.youx365.com/video-sc.png" />
+							<view class="flex-item" style="width:20%">
+								<img class="imgsc" :class="item.collected?'':'gray'" 
+									@click.stop="stopPrevent" @click="doCollect(item,'header')"
+									src="https://pic.youx365.com/video-sc.png" />
 								<view class="tit1">{{item.praiseCount}}</view>
 							</view>
 						</view>
@@ -43,23 +43,25 @@
 		
 		<!-- 详情 -->
 		<view class="d-body">
-			<view class="d-content" v-for="(item,index) in records" :key="index" @click="navTo('/pages/video/detail')">
-				<video :id="'video-body-'+index" :controls="false" class="video" objectFit="cover" :show-center-play-btn="false"
-					src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video>
+			<view class="d-content" v-for="(item,index) in records" :key="index" @click="navTo('/pages/video/detail?id='+item.id)">
+				
+				<image class="video" :src="item.coverUrl" mode="aspectFill"></image>
 				<view style="width: 100%;position: absolute;text-align: center;top: 0;left: 0;">
 					<img class="img" src="https://pic.youx365.com/video-bf.png" />
 				</view>
 				<view class="tit1">
-					来自大自然孕育的牛羊奶，鲜奶无添加，健康更放心，更适合中国宝宝的优质奶源
+					{{item.title}}
 				</view>
 				<view class="uni-flex uni-row" style="width: 100%;">
 					<view class="flex-item d-avr">
-						<img class="imgavr" src="https://pic.youx365.com/wazi2.JPG" />
-						<text class="tit2">小晨晨陈陈陈</text>
+						<img class="imgavr" :src="item.avatarUrl" />
+						<text class="tit2">{{item.nickName}}</text>
 					</view>
 					<view class="flex-item d-sc">
-						<img class="imgsc" src="https://pic.youx365.com/video-sc.png" />
-						<text class="tit3">8493</text>
+						<img class="imgsc" :class="item.collected?'':'gray'" 
+							@click.stop="stopPrevent" @click="doCollect(item,'header')"
+							src="https://pic.youx365.com/video-sc.png" />
+						<text class="tit3">{{item.praiseCount}}</text>
 					</view>
 				</view>
 			</view>
@@ -123,11 +125,8 @@
 			this.$api.msg('加载更多');
 		},
 		methods: {
-			navTo(url){
-				uni.navigateTo({
-					url
-				})
-			},
+			stopPrevent(){},
+			navTo(url){uni.navigateTo({url})},
 			// 头部菜单切换
 			async tabSelect(e) {
 				let index = e.currentTarget.dataset.id;
@@ -163,6 +162,28 @@
 				}
 				this.pageIndex = this.pageIndex + 1;
 			},
+			doCollect(item,type){
+				let values = {refId: item.id,type:3};
+				if(item.collected){ //取消收藏
+					this.$request.ModelOrder.removeCollect(values).then(result => {
+						if(result.code == 'ok'){
+							this.$api.msg('取消收藏');
+							item.collected = !item.collected;
+						}else{
+							this.$api.msg(result.msg);
+						}
+					})
+				}else{
+					this.$request.ModelOrder.addCollect(values).then(result => {
+						if(result.code == 'ok'){
+							this.$api.msg('收藏成功');
+							item.collected = !item.collected;
+						}else{
+							this.$api.msg(result.msg);
+						}
+					})
+				}
+			}
 		}
 	}
 </script>
@@ -267,6 +288,7 @@
 
 	.d-fenlei{
 		height: 70rpx;
+		margin-top: 10rpx;
 		
 		.d-nav-tab{
 			width:100%;
@@ -277,10 +299,25 @@
 				font-family:SourceHanSansCN;
 				font-weight:500;
 				color:rgba(0,0,0,1);
+				position: relative;
+				height: 70rpx !important;
+				line-height: 70rpx !important;
 			}
 			
 			.text-white{
 				color:rgba(0,163,144,1) !important;
+			}
+			
+			.text-white:after{
+				content: '';
+				position: absolute;
+				left: 50%;
+				bottom: 0;
+				-webkit-transform: translateX(-50%);
+				transform: translateX(-50%);
+				width: 80%;
+				height: 0;
+				border-bottom: 5rpx solid #00a390;
 			}
 		}
 	}
@@ -326,6 +363,7 @@
 				display: -webkit-box;
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
+				height: 90rpx;
 			}
 			
 			.d-avr{
@@ -377,5 +415,9 @@
 				}
 			}
 		}
+	}
+	
+	.gray{
+		filter: grayscale(100%);
 	}
 </style>

@@ -3,11 +3,11 @@
 		<view class="d_content">
 			<view class="tit1">请详细描述您的投诉/建议</view>
 			<view>
-				<textarea class="textareaclas" placeholder="请输入内容" placeholder-class="placeholderClass" />
+				<textarea v-model="data.content" class="textareaclas" placeholder="请输入内容" placeholder-class="placeholderClass" />
 			</view>
 			<view class="d_input">
 				<view class="d_name">您的姓名</view>
-				<view class="d_input1"><input class="uni-input" placeholder-class="placeholderClass1" placeholder="请输入您的真实姓名" /></view>
+				<view class="d_input1"><input v-model="data.contact" class="uni-input" placeholder-class="placeholderClass1" placeholder="请输入您的真实姓名" /></view>
 			</view>
 			<!-- <view class="d_input">
 				<view class="d_name">手机号码</view>
@@ -20,7 +20,7 @@
 			</view> -->
 		</view>
 		
-		<view class="bt_submit">提交</view>
+		<view class="bt_submit" @click="submit">提交</view>
 	</view>
 </template>
 
@@ -35,6 +35,11 @@
 				sendSmsdisabled: false,
 				totalTime: 60,
 				content: '获取验证码',
+				
+				data:{
+					content: null,
+					contact: null,
+				}
 			}
 		},
 		methods: {
@@ -55,6 +60,15 @@
 			send(){
 				console.log('给手机号发送验证码：',this.mobile);
 				this.countDown();
+			},
+			submit(){
+				this.$request.ModelUser.addSuggestion(this.data).then(res => {
+					this.$api.msg('提交成功');
+					this.data = {
+						content: null,
+						contact: null,
+					};
+				})
 			}
 		}
 	}

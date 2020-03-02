@@ -105,6 +105,7 @@
 			this.loadMenu();
 		},
 		onShow(){
+			this.loadData('tabChange');
 			this.$fire.$off('refresh');	
 		},
 		methods: {

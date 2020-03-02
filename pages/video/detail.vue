@@ -2,27 +2,27 @@
 	<view>
 		<view class="d-top" @click="playvideo">
 			<video id="video" :controls="false" class="header-video" objectFit="cover" 
-			:show-center-play-btn="false" :show-play-btn="false" :enable-progress-gesture="false"
-				src="https://video.youx365.com/8/ebdbf987809ca0678bcb8a11e84c498b.mp4"></video>
+			:poster="info.coverUrl" :src="info.videoUrl" @ended="ended"
+			:show-center-play-btn="false" :show-play-btn="false" :enable-progress-gesture="false"></video>
 			<view class="d-1" v-if="play == false">
 				<img class="img" src="https://pic.youx365.com/video-bf.png" />
 			</view>
 		</view>
 		<view class="uni-flex uni-row d-avr">
 			<view class="flex-item d-1">
-				<image class="img" src="https://pic.youx365.com/wazi2.JPG"></image>
+				<image class="img" :src="info.avatarUrl"></image>
 			</view>
 			<view class="flex-item d-2">
-				<view><text class="tit1">小蝶服装店</text><text class="tit2">长沙市</text></view>
-				<view class="tit3">365次播放</view>
+				<view><text class="tit1">{{info.nickName}}</text><!-- <text class="tit2">长沙市</text> --></view>
+				<view class="tit3">{{info.viewCount}}次播放</view>
 			</view>
 			<view class="flex-item d-3">
 				<view class="bt-1">关注</view>
 			</view>
 		</view>
 		<view class="d-desc">
-			<view class="tit1">我的新宠~真丝上衣女2019夏季宽松气质连衣裙</view>
-			<view class="tit2">图片或文字形式标注的一口价、促销价、优惠价等价格可能是在使用优惠券、满减或特定优惠活动和时段等情形下的价格，具体请以结算页面的标价、优惠条件或活动规则为</view>
+			<view class="tit1">{{info.title}}</view>
+			<view class="tit2">{{info.desc}}</view>
 		</view>
 		<view class="line"></view>
 		<view class="day-nav-tab flex-item">
@@ -56,22 +56,25 @@
 		
 		<view style="height: 135rpx;"></view>
 		<view class="d-bottom uni-flex uni-row">
-			<view class="uni-flex d-frame">
-				<img class="img" src="https://pic.youx365.com/video-praise.png" />
-				<text class="tit">赞.2013</text>
+			<view class="uni-flex d-frame" @click.stop="stopPrevent" @click="doCollect(info)">
+				<img class="img" :class="info.collected?'':'gray'" src="https://pic.youx365.com/video-praise.png" />
+				<text class="tit">赞.{{info.praiseCount}}</text>
 			</view>
 			<view>
 				<view class="line"></view>
 			</view>
 			<view class="uni-flex d-frame">
-				<img class="img" src="https://pic.youx365.com/video-share.png" />
-				<text class="tit">分享</text>
+				<button class="p-b-btn" open-type="share">
+					<img class="img" src="https://pic.youx365.com/video-share.png" />
+					<text class="tit">分享</text>
+				</button>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {mapState} from 'vuex';
 	
 	export default {
 		data() {
@@ -79,6 +82,31 @@
 				play: false,
 				
 				dayTabCur:0,
+				
+				info:{},
+				id:0,
+			}
+		},
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
+		onLoad(options) {
+			if(options.inviteUserId){
+				uni.setStorage({//缓存用户登陆状态
+				    key: 'inviteUserId',  
+				    data: options.inviteUserId  
+				})
+			}
+			
+			this.id = options.id;
+			this.$request.ModelHome.getArticeInfo(this.id).then(result => {
+				this.info = result;
+			})
+		},
+		onShareAppMessage() { //设置分享
+			return {
+				title: this.info.title,
+				path: '/pages/video/detail?id='+this.id + '&inviteUserId=' + this.userInfo.id
 			}
 		},
 		onPageScroll(e){
@@ -89,15 +117,15 @@
 				this.headerPosition = "absolute";
 			}
 		},
-		//下拉刷新
-		onPullDownRefresh(){
-			this.$api.msg('下拉刷新');
-		},
 		//加载更多
 		onReachBottom(){
 			this.$api.msg('加载更多');
 		},
 		methods: {
+			ended(){
+				console.log('ended');
+				this.play = false;
+			},
 			playvideo(){
 				this.play = !this.play;
 				let video = wx.createVideoContext('video');
@@ -109,6 +137,29 @@
 			},
 			async dayTabSelect(e){
 				this.dayTabCur = e.currentTarget.dataset.id;
+			},
+			stopPrevent(){},
+			doCollect(item){
+				let values = {refId: item.id,type:3};
+				if(item.collected){ //取消收藏
+					this.$request.ModelOrder.removeCollect(values).then(result => {
+						if(result.code == 'ok'){
+							this.$api.msg('取消收藏');
+							item.collected = !item.collected;
+						}else{
+							this.$api.msg(result.msg);
+						}
+					})
+				}else{
+					this.$request.ModelOrder.addCollect(values).then(result => {
+						if(result.code == 'ok'){
+							this.$api.msg('收藏成功');
+							item.collected = !item.collected;
+						}else{
+							this.$api.msg(result.msg);
+						}
+					})
+				}
 			}
 		}
 	}
@@ -204,7 +255,7 @@
 
 	.d-desc{
 		width: 710rpx;
-		margin: 47rpx auto 0;
+		margin: 45rpx auto;
 		
 		.tit1{
 			font-size:26rpx;
@@ -341,6 +392,13 @@
 			display: block;
 			height: 117rpx;
 			line-height: 117rpx;
+			button{
+				height: 117rpx !important;
+				line-height: 117rpx !important;
+			}
+			button:after{
+				border: unset !important;
+			}
 		}
 		
 		.img{
@@ -364,5 +422,9 @@
 			border-radius:1px;
 			margin-top: 40rpx;
 		}
+	}
+	
+	.gray{
+		filter: grayscale(100%);
 	}
 </style>

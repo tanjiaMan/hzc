@@ -81,9 +81,9 @@
 						<view class="s-header">
 							<img src='https://pic.youx365.com/time.png' />
 							<text class="tip">距离结束时间：</text>
-							<text class="hour timer">07</text>
-							<text class="minute timer">13</text>
-							<text class="second timer">55</text>
+							<text class="hour timer">{{sekilltime.hour}}</text>
+							<text class="minute timer">{{sekilltime.min}}</text>
+							<text class="second timer">{{sekilltime.sec}}</text>
 						</view>
 						<scroll-view class="floor-list" scroll-x>
 							<view class="scoll-wrapper">
@@ -307,6 +307,16 @@
 				scrollLeft: 0,
 				newsitems: [], //每页加载的数据
 				tabBars: this.firstMenu,
+				
+				//秒杀倒计时
+				sekilltime:{
+					hour: '00',
+					min: '00',
+					sec: '00',
+				},
+				timer: null,
+				seconds: 0, //剩余支付时间
+				
 			};
 		},
 		methods: {
@@ -334,6 +344,8 @@
 				// 加载配置项
 				let config = await this.$request.ModelHome.getConfig(pid);
 				subData.config = config;
+				//秒杀倒计时
+				this.startTimeup(config.seckillLeftSec);
 				
 				//加载子菜单
 				let menu = await this.$request.ModelHome.getCategoryByPid(pid);
@@ -536,7 +548,57 @@
 				if(item.href){
 					this.navTo(item.href);	
 				}
+			},
+			countDown() {
+				let seconds = this.seconds
+				let [day, hour, minute, second] = [0, 0, 0, 0]
+				if (seconds > 0) {
+					day = Math.floor(seconds / (60 * 60 * 24))
+					hour = Math.floor(seconds / (60 * 60)) - day * 24
+					minute = Math.floor(seconds / 60) - day * 24 * 60 - hour * 60
+					second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
+				} else {
+					clearInterval(this.timer);
+				}
+				if (day < 10) {
+					day = '0' + day
+				}
+				if (hour < 10) {
+					hour = '0' + hour
+				}
+				if (minute < 10) {
+					minute = '0' + minute
+				}
+				if (second < 10) {
+					second = '0' + second
+				}
+				// this.d = day
+				this.sekilltime.hour = hour;
+				this.sekilltime.min = minute;
+				this.sekilltime.sec = second;
+			},
+			startTimeup(timeup){
+				console.log('timeup',timeup);
+				if(timeup == null || timeup <= 0){
+					return;
+				}
+				this.seconds = timeup;
+				this.countDown()
+				if(this.timer){
+					clearInterval(this.timer);
+				}
+				this.timer = setInterval(() => {
+					this.seconds--
+					if (this.seconds < 0) {
+						this.timeUp()
+						return
+					}
+					this.countDown()
+				}, 1000)
 			}
+		},
+		beforeDestroy() {
+			clearInterval(this.timer);
 		},
 		// #ifndef MP
 		// 标题栏input搜索框点击
@@ -1440,6 +1502,13 @@
 			
 			.uni-icon{
 				font-size: 25rpx !important;
+			}
+			
+			.uni-noticebar__content-text{
+				flex: 1;
+			}
+			/deep/ .uni-noticebar__content-text{
+				flex: 1;
 			}
 		}
 	}
