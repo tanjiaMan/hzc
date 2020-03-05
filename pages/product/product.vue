@@ -692,12 +692,15 @@
 			                        })
 			                    },
 								fail:function(res){
-									this.$api.msg('保存到相册失败:'+JSON.stringify(res));
+									if(res.errMsg.indexOf('cancel') != -1){
+									}else{
+										_this.$api.msg('保存到相册失败:'+res.errMsg);
+									}
 								}
 			                });
 			            },
 						fail:function(res){
-							this.$api.msg('授权失败:'+JSON.stringify(res));
+							_this.$api.msg('授权失败:'+res.errMsg);
 						}
 			        })
 			},
