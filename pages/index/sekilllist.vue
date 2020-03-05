@@ -22,10 +22,10 @@
 					<view class="tit2"><!-- 德国空气净化器负离子除甲醛净化器 --></view>
 					<view class="d-detail uni-flex uni-row">
 						<view class="flex-item d-num">
-							<view class="tit3">限量 80件</view>
+							<view class="tit3">限量 {{item.sellQuantity}}件</view>
 							<view><text class="tit4">¥</text><text class="tit5">{{item.seckillPrice}}</text>  <text class="tit6">¥{{item.productPrice}}</text></view>
 						</view>
-						<view class="flex-item d-bt">
+						<view class="flex-item d-bt" v-if="tabBars[tabCur].status != 1">
 							<view class="bt" :class="item.reminded?'gray':''" @click="remind(item)">提醒我</view>
 						</view>
 					</view>
@@ -54,9 +54,10 @@
 				if(goods.reminded == true){
 					return;
 				}
-				let values = {busId:goods.id,busType:1};
-				this.$request.ModelHome.remind().then(res => {
+				let values = {busId:goods.productId,busType:1};
+				this.$request.ModelHome.remind(values).then(res => {
 					if(res.code == 'ok'){
+						goods.reminded = true;
 						this.$api.msg('设置提醒成功');
 					}else{
 						this.$api.msg('接口异常');
@@ -71,6 +72,7 @@
 						id:index,
 						name:item.hourStr,
 						desc:item.statusStr,
+						status: item.status,
 						seckills:item.seckills,
 					});
 				});

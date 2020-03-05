@@ -165,6 +165,7 @@
 		},
 		data() {
 			return {
+				initLoading: false,
 				//优惠券
 				maskState: 0, //优惠券面板显示状态
 				couponList: [], //优惠券列表
@@ -191,6 +192,9 @@
 			//商品数据
 			let data = JSON.parse(option.order);
 			this.productparam.orderProducts = data;
+			if(option.joinId){
+				this.productparam.joinId = option.joinId;
+			}
 		},
 		onShow(){
 			this.calute();
@@ -208,6 +212,7 @@
 					this.productparam.source = null;
 				}
 				let result = await this.$request.ModelOrder.getOrderCaculate(this.productparam);
+				this.initLoading = true;
 				if(result.code == 'ok'){
 					this.errorMsg = '';
 					result = result.data;
@@ -217,7 +222,11 @@
 						this.data = result.priceInfo;
 					}
 				}else{
-					this.errorMsg = result.msg;
+					if(this.initLoading){
+						this.$api.msg(result.msg);
+					}else{
+						this.errorMsg = result.msg;
+					}
 				}
 			},
 			//显示优惠券面板

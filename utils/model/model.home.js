@@ -228,4 +228,13 @@ export default{
 		let result = await request.post(url,data,{});
 		return result;
 	},
+	
+	async getGroupBuyLog(productId,productSpecId,pageIndex,pageSize){
+		let url = config.api + `/h5/act/join-groupbuy-log?productId=${productId}&pageIndex=${pageIndex}&pageSize=${pageSize}`;
+		if(productSpecId){
+			url += '&productSpecId=' + productSpecId;
+		}
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
 }

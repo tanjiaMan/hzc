@@ -143,6 +143,36 @@
 			</view>
 		</view>
 		
+		<view class="frame_groupbuy" v-if="groupbuylog.total && groupbuylog.total>0">
+			<view class="e-header">
+				<text class="tit">{{groupbuylog.total}}人在拼单，可直接参与</text>
+				<!-- <text class="tip" @click="navTo('/pages/product/commentlist?id='+goods.id)">查看全部</text>
+				<text class="yticon icon-you"></text> -->
+			</view> 
+			<view v-for="item in groupbuylog.records" class="d_groupbuy_item">
+				<view class="tit_avatar">
+					<image class="img" :src="item.sponsorAvatarUrl"></image>
+				</view>
+				<view class="tit_nickname">
+					{{item.sponsorNickName}}
+				</view>
+				<view class="d_wenan">
+					<view class="tit1">还差<span>{{item.leftOpenNum}}人</span>拼成</view>
+					<view class="tit2">剩余 {{item.timestr}}</view>
+				</view>
+				<view class="groupbuy_bt" @click="buyNow('groupbuy',{type:2,joinId:item.joinId})">去拼单</view>
+			</view>
+			<view class="group_buy_bottom">
+				<view class="tit_avatar">
+					<image class="img" :src="noticeGroupbuy.sponsorAvatarUrl"></image>
+				</view>
+				<view class="d_wenan">
+					剩余<span>{{noticeGroupbuy.timestr}}</span>还差{{noticeGroupbuy.leftOpenNum}}人拼成
+				</view>
+				<view class="groupbuy_bt" @click="buyNow('groupbuy',{type:2,joinId:noticeGroupbuy.joinId})">参与拼单</view>
+			</view>
+		</view>
+		
 		<!-- 评价 -->
 		<view class="eva-section" v-if="commentTotal > 0">
 			<view class="e-header">
@@ -229,12 +259,36 @@
 					<text>客服</text>
 				</button>
 				<view class="d_bargin_price">
-					￥32.66
+					￥{{goods.price}}
 				</view>
 			</view>
 		    <view class="flex-item" style="width: 50%;">
 				<view class="action-btn-group">
 					<button type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
+				</view>
+			</view>
+		</view>
+		<view class="page-bottom uni-flex uni-row" v-else-if="source == 'groupbuy'">
+			<view class="flex-item frame1">
+				<button class="p-b-btn" open-type="contact" @contact="handleContact">
+					<img src="https://pic.youx365.com/kf.png" />
+					<text>客服</text>
+				</button>
+			</view>
+			<view class="flex-item" style="width: 35%;">
+				<view class="action-btn-group opacity">
+					<button type="primary" class=" action-btn no-border buy-now-btn flexcolumn" @click="buyNow('groupbuy',{type:1})">
+						<span>￥{{goods.originPrice}}</span>
+						<div>单独购买</div>
+					</button>
+				</view>
+			</view>
+			<view class="flex-item" style="width: 35%;">
+				<view class="action-btn-group">
+					<button type="primary" class=" action-btn no-border buy-now-btn flexcolumn" @click="buyNow('groupbuy',{type:2})">
+						<span>￥{{goods.groupbuyPrice}}</span>
+						<div>发起拼单</div>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -354,6 +408,14 @@
 				commentTotal:0,
 				
 				template: {},
+				
+				//团购
+				groupbuylog:{},
+				noticeGroupbuy:{},
+				
+				//倒计时
+				timer: null,
+				seconds: 0, //剩余支付时间
 			};
 		},
 		methods:{
@@ -472,8 +534,19 @@
 				//推荐商品列表
 				let goodsList = await this.$request.ModelHome.getGoodsRecommend();
 				this.goodsList = goodsList.records || [];
+				
+				//加载 团购记录
+				if(this.source == 'groupbuy'){
+					this.$request.ModelHome.getGroupBuyLog(id,null,1,5).then(res => {
+						this.groupbuylog = res;
+						this.startTimeup();
+						if(res.records.length>0){
+							this.noticeGroupbuy = res.records[res.records.length-1];
+						}
+					})
+				}
 			},
-			async buyNow(){
+			async buyNow(type,typedate){
 				if(this.navToLogin()){return};
 				let goods = this.goods;
 				if(goods.realLeftStock <= 0){
@@ -494,9 +567,18 @@
 					productSpecId: productSpecId,
 					quantity: 1
 				})
-				uni.navigateTo({
-					url: '/pages/order/createOrder?source='+this.source+'&order=' + JSON.stringify(orderProducts)
-				})
+				
+				//类型判断
+				let url = '/pages/order/createOrder?source='+this.source+'&order=' + JSON.stringify(orderProducts);
+				if(type == 'groupbuy'){
+					if(typedate.type == 1){ //直接购买
+						url = '/pages/order/createOrder?order=' + JSON.stringify(orderProducts);
+					}else if(typedate.joinId){
+						url = url + '&joinId=' + typedate.joinId;
+					}
+				}
+				
+				uni.navigateTo({url: url});
 			},
 			addCart(){ //加入购物车
 				if(this.navToLogin()){return};
@@ -600,6 +682,58 @@
 			            }
 			        })
 			},
+			countDown() {
+				
+				function getTimestr(lefttime){
+					if(lefttime<=0){
+						return '00:00:00';
+					}
+					let [day, hour, minute, second] = [0, 0, 0, 0]
+					day = Math.floor(lefttime / (60 * 60 * 24))
+					hour = Math.floor(lefttime / (60 * 60)) - day * 24
+					minute = Math.floor(lefttime / 60) - day * 24 * 60 - hour * 60
+					second = Math.floor(lefttime) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
+					if (day < 10) {
+						day = '0' + day
+					}
+					if (hour < 10) {
+						hour = '0' + hour
+					}
+					if (minute < 10) {
+						minute = '0' + minute
+					}
+					if (second < 10) {
+						second = '0' + second
+					}
+					return hour + ':' + minute + ':' + second;
+				}
+				
+				if(this.groupbuylog && this.groupbuylog.records && this.groupbuylog.records.length > 0){
+					this.groupbuylog.records.forEach(o => {
+						if(o.leftExpireSec - this.seconds > 0){
+							o.timestr = getTimestr(o.leftExpireSec - this.seconds);
+						}else{
+							o.timestr = '00:00:00';
+						}
+					});
+				}
+			},
+			startTimeup(){
+				this.seconds = 0;
+				this.countDown()
+				if(this.timer){
+					clearInterval(this.timer);
+				}
+				this.timer = setInterval(() => {
+					this.seconds++;
+					this.countDown()
+				}, 1000)
+			}
+		},
+		beforeDestroy() {
+			if(this.timer){
+				clearInterval(this.timer);
+			}
 		},
 		onShareAppMessage() { //设置分享
 			return {
@@ -1470,12 +1604,22 @@
 				font-size: 46upx;
 			}
 		}
+		
+		.opacity{
+			opacity:0.38;
+		}
+		
 		.action-btn-group{
 			display: flex;
 			height: 100%;
 			overflow: hidden;
 			background: #FF443F;
 			margin-right: 0;
+			
+			.flexcolumn{
+				flex-direction: column;
+				line-height: 1;
+			}
 			
 			&:after{
 				content: '';
@@ -1498,6 +1642,153 @@
 				border-radius: 0;
 				background: transparent;
 			}
+		}
+	}
+	
+	.frame_groupbuy{
+		display: flex;
+		flex-direction: column;
+		padding: 20upx 30upx;
+		background: #fff;
+		border-top: 5px solid #F2F2F2;
+		.e-header{
+			display: flex;
+			align-items: center;
+			height: 70upx;
+			font-size: $font-sm + 2upx;
+			color: $font-color-light;
+			border-bottom: solid 1px #EAEAEA;
+			
+			.tit{
+				font-size:26rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:#FF443F;
+			}
+			.tip{
+				flex: 1;
+				text-align: right;
+				font-size:22rpx;
+				font-family:SourceHanSansCN;
+				font-weight:500;
+				color:#888888;
+			}
+			.icon-you{
+				margin-left: 10upx;
+				color:#888888;
+			}
+		}
+		.d_groupbuy_item:last-child{
+			border-bottom: unset !important;
+		}
+		.d_groupbuy_item{
+			display: flex;
+			align-items: center;
+			padding: 10rpx 0;
+			border-bottom: solid 1px #EAEAEA;
+			
+			.tit_avatar{
+				width:53rpx;
+				height:53rpx;
+				border-radius:50%;
+				.img{
+					height: 100%;
+					width: 100%;
+					border-radius: 50%;
+				}
+			}
+			.tit_nickname{
+				font-size:26rpx;
+				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(0,0,0,1);
+				margin-left: 20rpx;
+				flex: 1;
+			}
+			
+			.groupbuy_bt{
+				width:126rpx;
+				height:54rpx;
+				line-height:54rpx;
+				background:rgba(255,68,63,1);
+				border-radius:4rpx;
+				font-size:26rpx;
+				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(255,255,255,1);
+				text-align: center;
+				margin-left: 10rpx;
+			}
+			
+			.d_wenan{
+				.tit1{
+					font-size:22rpx;
+					font-family:Source Han Sans CN;
+					font-weight:400;
+					color:rgba(51,51,51,1);
+					
+					span{
+						color: #FF443F !important;
+					}
+				}
+				.tit2{
+					font-size:22rpx;
+					font-family:Source Han Sans CN;
+					font-weight:400;
+					color:rgba(102,102,102,1);
+				}
+			}
+		}
+	}
+	
+	.group_buy_bottom{
+		position: fixed;
+		bottom: 93rpx;
+		width: 750rpx;
+		height: 60rpx;
+		background: #ffcb2b;
+		padding: 0 30rpx;
+		z-index: 999999;
+		display: flex;
+		left: 0;
+		align-items: center;
+		opacity: 0.8;
+
+		.tit_avatar{
+			width:36rpx;
+			height:37rpx;
+			border-radius:50%;
+			.img{
+				height: 100%;
+				width: 100%;
+				border-radius: 50%;
+			}
+		}
+		
+		.d_wenan{
+			margin-left: 23rpx;
+			font-size:22rpx;
+			font-family:Source Han Sans CN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			flex: 1;
+			span{
+				color: #FF443F !important;
+				margin: 0 10rpx 0 5rpx;
+			}
+		}
+		.groupbuy_bt{
+			width:113rpx;
+			height:42rpx;
+			line-height:42rpx;
+			background:rgba(255,68,63,1);
+			border-radius:4rpx;
+			font-size:22rpx;
+			font-family:Source Han Sans CN;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+			text-align: center;
+			margin-left: 10rpx;
 		}
 	}
 	
