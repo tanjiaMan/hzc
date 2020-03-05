@@ -639,6 +639,19 @@
 			},
 			//海报接口
 			initData(){
+				if(!this.hasLogin){
+					uni.showModal({
+					    title: '请先登陆',
+					    success: function (res) {
+					        if (res.confirm) {
+					            uni.navigateTo({
+					            	url: '/pages/public/login'
+					            })
+					        }
+					    }
+					});
+					return;
+				}
 				if(!this.template.views){
 					uni.showLoading({
 					    title: "拼命生成中...",
@@ -677,9 +690,15 @@
 			                            content:"图片已成功保存到相册，快去分享到您的圈子吧",
 			                            showCancel:false
 			                        })
-			                    }
+			                    },
+								fail:function(res){
+									this.$api.msg('保存到相册失败:'+JSON.stringify(res));
+								}
 			                });
-			            }
+			            },
+						fail:function(res){
+							this.$api.msg('授权失败:'+JSON.stringify(res));
+						}
 			        })
 			},
 			countDown() {
