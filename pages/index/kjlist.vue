@@ -47,18 +47,18 @@
 				<text>砍价列表</text>
 				<img src="https://pic.youx365.com/split-1.png" />
 			</view>
-			<view class="goods-list uni-flex uni-row" v-for="(item,index) in 7" :key="index">
+			<view class="goods-list uni-flex uni-row" v-for="(item,index) in records" :key="index">
 				<view class="flex-item dleft">
-					<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
+					<img class="img" :src="item.coverPicUrl" />
 				</view>
 				<view class="flex-item dright">
-					<view class="tit3">林氏木业北欧懒人沙发阳台林氏木业北欧懒人沙发阳台...</view>
+					<view class="tit3">{{item.productName}}</view>
 					<view class="uni-flex uni-row price">
 						<view style="width: 50%;">
-							<text class="tit1">¥</text><text class="tit2">1000.00</text>
+							<text class="tit1">¥</text><text class="tit2">{{item.productPrice}}</text>
 						</view>
 						<view style="width: 50%;">
-							<view class="bt1">我要砍价</view>
+							<view class="bt1" @click="navToDetailPage(item.productId,'bargain')">我要砍价</view>
 						</view>
 					</view>
 				</view>
@@ -72,14 +72,33 @@
 	export default {
 		data() {
 			return {
-				
+				classifyPid: 0,
+				records:[],
 			}
 		},
+		onLoad(option){
+			this.classifyPid = option.classifyPid;
+			this.init();
+		},
 		methods: {
+			init(){
+				this.$request.ModelHome.getBargin({classifyPid: this.classifyPid,pageSize: 20}).then(res => {
+					if(res.records && res.records.length>0){
+						this.records = res.records;
+					}
+				})
+			},
 			navTo(url){
 				uni.navigateTo({  
 					url
 				})  
+			},
+			//详情页
+			navToDetailPage(id, source) {
+				source = source? source:'';
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}&source=${source}`
+				})
 			},
 		}
 	}

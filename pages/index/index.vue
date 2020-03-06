@@ -120,7 +120,7 @@
 						</view>
 						<img src="https://pic.youx365.com/goods.png" />
 						<view class="tit-frame">
-							<text class="tit3" @click="navToLogin('/pages/index/kjlist')">更多</text>
+							<text class="tit3" @click="navToLogin('/pages/index/kjlist?classifyPid='+item.id)">更多</text>
 						</view>
 					</view>
 					<view class="tg-floor" v-if="newsitems[TabCur] && newsitems[TabCur].bargin && newsitems[TabCur].bargin.length > 0">

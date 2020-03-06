@@ -49,13 +49,13 @@
 					<span class="bargain_desc">可砍至</span>
 					<span class="now_price">¥ {{goods.price}}</span>
 				</view>
-				<view class="bargin_right">
+				<view class="bargin_right" v-if="goods.timestr && goods.timestr != ''">
 					<view class="tit_bargin_1">距结束还剩：</view>
-					<view class="tit_bargin_2">00</view>
+					<view class="tit_bargin_2">{{goods.timestr.split(":")[0]}}</view>
 					<view class="tit_bargin_1">：</view>
-					<view class="tit_bargin_2">38</view>
+					<view class="tit_bargin_2">{{goods.timestr.split(":")[1]}}</view>
 					<view class="tit_bargin_1">：</view>
-					<view class="tit_bargin_2">52</view>
+					<view class="tit_bargin_2">{{goods.timestr.split(":")[2]}}</view>
 				</view>
 			</view>
 			<view class="tg_frame" v-else>
@@ -74,7 +74,6 @@
 					</button>
 				</view>
 			</view>
-			<view class="line"></view>
 			<!-- <view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">341.6</text>
@@ -102,6 +101,15 @@
 			</view>
 			
 		</view> -->
+		
+		<view class="frame_bargin" v-if="source == 'bargain' && goods.myBargain > 0">
+			<view class="tit_bargin_1">已砍 <span>{{goods.myBargain}}</span> 元，还差 <span>{{goods.myLeftBargain}}</span> 元</view>
+			<view class="line-bargin_1">
+				<view class="active" :style="'width: '+ (goods.myBargain*100/goods.myLeftBargain) +'%'"></view>
+			</view>
+			<view class="bt_bargin_2">继续砍价</view>
+			<view class="tit_bargin_3">砍价记录</view>
+		</view>
 		
 		<view class="c-list">
 			<view class="c-row b-b" @click="toggleSpec" v-if="goods.config && goods.config.specification && goods.config.specification == true">
@@ -278,18 +286,19 @@
 		
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom uni-flex uni-row" v-if="source == 'bargain'">
-		    <view class="flex-item frame1">
+		    <view class="flex-item frame1" style="width: 30%;">
 				<button class="p-b-btn" open-type="contact" @contact="handleContact">
 					<img src="https://pic.youx365.com/kf.png" />
 					<text>客服</text>
 				</button>
-				<view class="d_bargin_price">
-					￥{{goods.price}}
-				</view>
 			</view>
-		    <view class="flex-item" style="width: 50%;">
+			<view class="flex-item d_bargin_price" style="width: 30%;">
+				原价 ￥{{goods.price}}
+			</view>
+		    <view class="flex-item" style="width: 40%;">
 				<view class="action-btn-group">
-					<button type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
+					<button v-if="goods.myBargain == 0" type="primary" class=" action-btn no-border buy-now-btn" @click="joinBargin">参与砍价</button>
+					<button v-else type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
 				</view>
 			</view>
 		</view>
@@ -571,6 +580,12 @@
 							this.noticeGroupbuy = res.records[res.records.length-1];
 						}
 					})
+				}else if(this.source == 'bargain'){
+					this.startTimeup();
+					this.$request.ModelHome.getBargainLog(id,null,1,2).then(res => {
+						//TODO
+						
+					})
 				}
 			},
 			async buyNow(type,typedate){
@@ -775,6 +790,13 @@
 						}
 					});
 				}
+				if(this.goods.bargainLeftSec){
+					if(this.goods.bargainLeftSec - this.seconds > 0){
+						this.goods.timestr = getTimestr(this.goods.bargainLeftSec - this.seconds);
+					}else{
+						this.goods.timestr = '00:00:00';
+					}
+				}
 			},
 			startTimeup(){
 				this.seconds = 0;
@@ -796,6 +818,26 @@
 			},
 			cancelPT(){
 				this.$refs['showpintuan'].close();
+			},
+			joinBargin(){
+				let goods = this.goods;
+				let productSpecId = null;
+				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
+					if(!this.goodsStockSelectd.id){
+						this.$api.msg('请先选择规格');
+						return;
+					}
+					productSpecId = this.goodsStockSelectd.id;
+				}
+				let values = {productId:goods.id,productSpecId: productSpecId,quantity:1};
+				this.$request.ModelHome.joinBargin(values).then(res => {
+					if(res.code == 'ok'){
+						this.dataLoad(this.id);
+					}else{
+						this.$api.msg(res.msg);
+					}
+					
+				})
 			}
 			
 		},
@@ -1212,6 +1254,8 @@
 		font-size: 22rpx;
 		color: $font-color-base;
 		background: #fff;
+		border-top: 5px solid #F2F2F2;
+
 		.c-row{
 			display:flex;
 			align-items:center;
@@ -1625,13 +1669,18 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-
-			.d_bargin_price{
-				font-size:30rpx;
-				font-family:Source Han Sans CN;
-				font-weight:400;
-				color:rgba(0,0,0,1);
-			}
+		}
+		
+		.d_bargin_price{
+			font-size:30rpx;
+			font-family:Source Han Sans CN;
+			font-weight:400;
+			color:rgba(0,0,0,1);
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-left: solid 1px #D4D4D4;
 		}
 		
 		.p-b-btn:after{
@@ -1640,7 +1689,7 @@
 		
 		.p-b-btn{
 			display:flex;
-			flex-direction: column;
+			flex-direction: row;
 			align-items: center;
 			justify-content: center;
 			font-size: 22rpx;
@@ -1866,6 +1915,68 @@
 			color:rgba(255,255,255,1);
 			text-align: center;
 			margin-left: 10rpx;
+		}
+	}
+	
+	.frame_bargin{
+		border-top: 5px solid #F2F2F2;
+		
+		.tit_bargin_1{
+			font-size:32rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color: #000000;
+			text-align: center;
+			padding-top: 30rpx;
+			
+			span{
+				color:#FF443F;
+				margin: 0 10rpx;
+			}
+		}
+		
+		.line-bargin_1{
+			width:609rpx;
+			height:17rpx;
+			background:#E7E7E7;
+			border-radius:9rpx;
+			margin: 40rpx auto 0;
+			position: relative;
+			
+			.active{
+				height:17rpx;
+				position: absolute;
+				top: 0;
+				left: 0;
+				border-radius:9rpx;
+				background: #00A390;
+			}
+		}
+		
+		.bt_bargin_2{
+			width:643rpx;
+			height:92rpx;
+			line-height:92rpx;
+			text-align: center;
+			background:rgba(255,68,63,1);
+			border-radius:46rpx;
+			margin: 40rpx auto;
+			font-size:32rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(255,255,255,1);
+		}
+		
+		.tit_bargin_3{
+			width:750rpx;
+			height:92rpx;
+			line-height:92rpx;
+			text-align: center;
+			background:rgba(0,163,144,1);
+			font-size:32rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(255,255,255,1);
 		}
 	}
 	

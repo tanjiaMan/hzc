@@ -237,4 +237,19 @@ export default{
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
+	
+	async getBargainLog(productId,productSpecId,pageIndex,pageSize){
+		let url = config.api + `/h5/act/join-bargain-log?productId=${productId}&pageIndex=${pageIndex}&pageSize=${pageSize}`;
+		if(productSpecId){
+			url += '&productSpecId=' + productSpecId;
+		}
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async joinBargin(data){
+		let url = config.api + '/h5/act/join-bargain';
+		let result = await request.post(url,data,{});
+		return result;
+	},
 }
