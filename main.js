@@ -11,13 +11,9 @@ import ModelHome from './utils/model/model.home.js';
 import ModelOrder from './utils/model/model.order.js';
 import ModelVideo from './utils/model/model.video.js';
 
-import cuCustom from './colorui/components/cu-custom.vue'
 import cuSearch from './colorui/components/cu-search.vue'
-import cuLogin from './colorui/components/cu-login.vue'
 
-Vue.component('cu-custom',cuCustom)
 Vue.component('cu-search',cuSearch)
-Vue.component('cu-login',cuLogin)
 
 /**
  *  因工具函数属于公司资产, 所以直接在Vue实例挂载几个常用的函数
