@@ -146,10 +146,10 @@
 		<view class="frame_groupbuy" v-if="groupbuylog.total && groupbuylog.total>0">
 			<view class="e-header">
 				<text class="tit">{{groupbuylog.total}}人在拼单，可直接参与</text>
-				<!-- <text class="tip" @click="navTo('/pages/product/commentlist?id='+goods.id)">查看全部</text>
-				<text class="yticon icon-you"></text> -->
+				<text class="tip" @click="morePT()">查看全部</text>
+				<text class="yticon icon-you"></text>
 			</view> 
-			<view v-for="item in groupbuylog.records" class="d_groupbuy_item">
+			<view v-for="(item,index) in groupbuylog.records" :key="index" class="d_groupbuy_item">
 				<view class="tit_avatar">
 					<image class="img" :src="item.sponsorAvatarUrl"></image>
 				</view>
@@ -172,6 +172,31 @@
 				<view class="groupbuy_bt" @click="buyNow('groupbuy',{type:2,joinId:noticeGroupbuy.joinId})">参与拼单</view>
 			</view>
 		</view>
+		
+		
+		<!-- 所有拼团 -->
+		<uni-popup ref="showpintuan" class="groupbuy_show_mask haibao" type="center" :mask-click="false">
+			<view class="uni-image">
+				<scroll-view class="frame_groupbuy" scroll-y="true">
+					<view v-for="(item,index) in groupbuyAlllog.records" :key="index" class="d_groupbuy_item">
+						<view class="tit_avatar">
+							<image class="img" :src="item.sponsorAvatarUrl"></image>
+						</view>
+						<view class="tit_nickname">
+							{{item.sponsorNickName}}
+						</view>
+						<view class="d_wenan">
+							<view class="tit1">还差<span>{{item.leftOpenNum}}人</span>拼成</view>
+							<view class="tit2">剩余 {{item.timestr}}</view>
+						</view>
+						<view class="groupbuy_bt" @click="buyNow('groupbuy',{type:2,joinId:item.joinId})">去拼单</view>
+					</view>
+				</scroll-view>
+				<view class="uni-image-close" @click="cancelPT()">
+					<uni-icons type="clear" color="#fff" size="30" />
+				</view>
+			</view>
+		</uni-popup>
 		
 		<!-- 评价 -->
 		<view class="eva-section" v-if="commentTotal > 0">
@@ -389,6 +414,7 @@
 		},
 		data() {
 			return {
+				id:0,
 				goods:{},
 				source:'',
 				
@@ -411,6 +437,7 @@
 				
 				//团购
 				groupbuylog:{},
+				groupbuyAlllog:{},
 				noticeGroupbuy:{},
 				
 				//倒计时
@@ -739,6 +766,15 @@
 						}
 					});
 				}
+				if(this.groupbuyAlllog && this.groupbuyAlllog.records && this.groupbuyAlllog.records.length > 0){
+					this.groupbuyAlllog.records.forEach(o => {
+						if(o.leftExpireSec - this.seconds > 0){
+							o.timestr = getTimestr(o.leftExpireSec - this.seconds);
+						}else{
+							o.timestr = '00:00:00';
+						}
+					});
+				}
 			},
 			startTimeup(){
 				this.seconds = 0;
@@ -750,7 +786,18 @@
 					this.seconds++;
 					this.countDown()
 				}, 1000)
+			},
+			morePT(){
+				this.$request.ModelHome.getGroupBuyLog(this.id,null,1,100).then(res => {
+					this.groupbuyAlllog = res;
+					this.startTimeup();
+				})
+				this.$refs['showpintuan'].open();
+			},
+			cancelPT(){
+				this.$refs['showpintuan'].close();
 			}
+			
 		},
 		beforeDestroy() {
 			if(this.timer){
@@ -773,6 +820,7 @@
 			
 			this.source = options.source;
 			let id = options.id;
+			this.id = id;
 			this.dataLoad(id);
 			
 			//加载评论
@@ -1664,6 +1712,13 @@
 				border-radius: 0;
 				background: transparent;
 			}
+		}
+	}
+	
+	.groupbuy_show_mask{
+		.frame_groupbuy{
+			width: 650rpx;
+			height: 65vh;
 		}
 	}
 	
