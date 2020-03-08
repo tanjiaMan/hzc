@@ -238,11 +238,8 @@ export default{
 		return result && result.data;
 	},
 	
-	async getBargainLog(productId,productSpecId,pageIndex,pageSize){
-		let url = config.api + `/h5/act/join-bargain-log?productId=${productId}&pageIndex=${pageIndex}&pageSize=${pageSize}`;
-		if(productSpecId){
-			url += '&productSpecId=' + productSpecId;
-		}
+	async getBargainLog(joinId,pageIndex,pageSize){
+		let url = config.api + `/h5/act/join-bargain-log?joinId=${joinId}&pageIndex=${pageIndex}&pageSize=${pageSize}`;
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
@@ -251,5 +248,17 @@ export default{
 		let url = config.api + '/h5/act/join-bargain';
 		let result = await request.post(url,data,{});
 		return result;
+	},
+	
+	async pageBargain(pageIndex,pageSize){
+		let url = config.api + `/h5/act/bargain-page?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async infoBargainLog(joinId){
+		let url = config.api + `/h5/act/bargain-info?joinId=${joinId}`;
+		let result = await request.get(url,{});
+		return result && result.data;
 	},
 }

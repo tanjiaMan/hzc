@@ -32,7 +32,7 @@
 					<span class="org_price">¥ {{goods.originPrice}}</span>
 				</view>
 				<view class="kill_right">
-					今日 {{goods.seckillStart}}开抢
+					{{goods.seckillStatusStr}} {{goods.seckillHourStr}}开抢
 				</view>
 			</view>
 			<view class="tg_frame" v-else-if="source == 'groupbuy'">
@@ -86,30 +86,39 @@
 				<text>浏览量: 768</text>
 			</view> -->
 		</view>
-		
-		<!--  分享 -->
-		<!-- <view class="share-section" @click="share">
-			<view class="share-icon">
-				<text class="yticon icon-xingxing"></text>
-				 返
-			</view>
-			<text class="tit">该商品分享可领49减10红包</text>
-			<text class="yticon icon-bangzhu1"></text>
-			<view class="share-btn">
-				立即分享
-				<text class="yticon icon-you"></text>
-			</view>
-			
-		</view> -->
-		
-		<view class="frame_bargin" v-if="source == 'bargain' && goods.myBargain > 0">
+
+		<view class="frame_bargin" v-if="source == 'bargain' && goods.bargainJoinId">
 			<view class="tit_bargin_1">已砍 <span>{{goods.myBargain}}</span> 元，还差 <span>{{goods.myLeftBargain}}</span> 元</view>
 			<view class="line-bargin_1">
-				<view class="active" :style="'width: '+ (goods.myBargain*100/goods.myLeftBargain) +'%'"></view>
+				<view class="active" :style="'width: '+ (goods.myBargain*100/(goods.myLeftBargain+goods.myBargain)) +'%'"></view>
 			</view>
-			<view class="bt_bargin_2">继续砍价</view>
+			<view class="bt_bargin_2" @click="navTo('/pages/index/kjdetail?id='+ goods.bargainJoinId)">继续砍价</view>
 			<view class="tit_bargin_3">砍价记录</view>
+			<view class="d_bargin_item" v-if="barginlog.total && barginlog.total>0">
+				<view class="bargin_log" v-for="(log,index) in barginlog.records" :key="index">
+					<view class="bargin_log_1"><image class="img" :src="log.avatarUrl" /></view>
+					<view class="bargin_log_2">{{log.nickName}}</view>
+					<view class="bargin_log_3">砍掉{{log.bargainPrice}}元</view>
+				</view>
+			</view>
+			<view class="tit_bargin_5" @click="showBargin">查看更多 >></view>
 		</view>
+		
+		<!-- 所有砍价记录 -->
+		<uni-popup ref="showbargin" class="groupbuy_show_mask haibao" type="center" :mask-click="false">
+			<view class="uni-image">
+				<scroll-view class="d_bargin_item" scroll-y="true">
+					<view class="bargin_log" v-for="(log,index) in barginAlllog.records" :key="index">
+						<view class="bargin_log_1"><image class="img" :src="log.avatarUrl" /></view>
+						<view class="bargin_log_2">{{log.nickName}}</view>
+						<view class="bargin_log_3">砍掉{{log.bargainPrice}}元</view>
+					</view>
+				</scroll-view>
+				<view class="uni-image-close" @click="cancelBargin()">
+					<uni-icons type="clear" color="#fff" size="30" />
+				</view>
+			</view>
+		</uni-popup>
 		
 		<view class="c-list">
 			<view class="c-row b-b" @click="toggleSpec" v-if="goods.config && goods.config.specification && goods.config.specification == true">
@@ -180,7 +189,6 @@
 				<view class="groupbuy_bt" @click="buyNow('groupbuy',{type:2,joinId:noticeGroupbuy.joinId})">参与拼单</view>
 			</view>
 		</view>
-		
 		
 		<!-- 所有拼团 -->
 		<uni-popup ref="showpintuan" class="groupbuy_show_mask haibao" type="center" :mask-click="false">
@@ -285,7 +293,7 @@
 		</view>
 		
 		<!-- 底部操作菜单 -->
-		<view class="page-bottom uni-flex uni-row" v-if="source == 'bargain'">
+		<view class="page-bottom uni-flex uni-row bargain-bottom" v-if="source == 'bargain'">
 		    <view class="flex-item frame1" style="width: 30%;">
 				<button class="p-b-btn" open-type="contact" @contact="handleContact">
 					<img src="https://pic.youx365.com/kf.png" />
@@ -297,8 +305,8 @@
 			</view>
 		    <view class="flex-item" style="width: 40%;">
 				<view class="action-btn-group">
-					<button v-if="goods.myBargain == 0" type="primary" class=" action-btn no-border buy-now-btn" @click="joinBargin">参与砍价</button>
-					<button v-else type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
+					<button v-if="goods.bargainJoinId" type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即抢</button>
+					<button v-else type="primary" class=" action-btn no-border buy-now-btn" @click="joinBargin">参加砍价</button>
 				</view>
 			</view>
 		</view>
@@ -323,6 +331,25 @@
 						<span>￥{{goods.groupbuyPrice}}</span>
 						<div>发起拼单</div>
 					</button>
+				</view>
+			</view>
+		</view>
+		<view class="page-bottom uni-flex uni-row" v-else-if="source == 'seckill'">
+		    <view class="flex-item frame1">
+				<button class="p-b-btn" open-type="contact" @contact="handleContact">
+					<img src="https://pic.youx365.com/kf.png" />
+					<text>客服</text>
+				</button>
+				<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn">
+					<img src='https://pic.youx365.com/cart.png' />
+					<text>购物车</text>
+				</navigator>
+			</view>
+		    <view class="flex-item" style="width: 50%;">
+				<view class="action-btn-group">
+					<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCart" style="background: #00A390;">加入购物车</button>
+					<button v-if="goods.seckillStatus == 3" type="primary" class=" action-btn no-border buy-now-btn" @click="remind">{{goods.reminded==true?'已设置提醒':'到点提醒我'}}</button>
+					<button v-else type="primary" class=" action-btn no-border buy-now-btn" @click="buyNow">立即购买</button>
 				</view>
 			</view>
 		</view>
@@ -443,6 +470,10 @@
 				commentTotal:0,
 				
 				template: {},
+				
+				//砍价
+				barginlog:{},
+				barginAlllog:{},
 				
 				//团购
 				groupbuylog:{},
@@ -580,11 +611,10 @@
 							this.noticeGroupbuy = res.records[res.records.length-1];
 						}
 					})
-				}else if(this.source == 'bargain'){
+				}else if(this.source == 'bargain' && goods.bargainJoinId){
 					this.startTimeup();
-					this.$request.ModelHome.getBargainLog(id,null,1,2).then(res => {
-						//TODO
-						
+					this.$request.ModelHome.getBargainLog(goods.bargainJoinId,1,2).then(res => {
+						this.barginlog = res;
 					})
 				}
 			},
@@ -819,7 +849,21 @@
 			cancelPT(){
 				this.$refs['showpintuan'].close();
 			},
+			showBargin(){
+				this.$request.ModelHome.getBargainLog(this.goods.bargainJoinId,2,100).then(res => {
+					this.barginAlllog = res;
+				})
+				this.$refs['showbargin'].open();
+			},
+			cancelBargin(){
+					this.$refs['showbargin'].close();
+			},
 			joinBargin(){
+				if(!this.hasLogin){
+					uni.navigateTo({url: '/pages/public/login'})
+					return;
+				}
+				
 				let goods = this.goods;
 				let productSpecId = null;
 				if(goods.config && goods.config.specification && goods.config.specification == true){ //需要选择规格
@@ -838,8 +882,25 @@
 					}
 					
 				})
+			},
+			remind(){
+				if(this.goods.reminded == true){
+					return;
+				}
+				let values = {busId:this.goods.id,busType:1};
+				this.$request.ModelHome.remind(values).then(res => {
+					if(res.code == 'ok'){
+						this.goods.reminded = true;
+						this.$api.msg('设置提醒成功');
+					}else{
+						this.$api.msg(res.msg);
+						if(res.code == '10710702'){
+							this.goods.reminded = true;
+							this.$forceUpdate();
+						}
+					}
+				});
 			}
-			
 		},
 		beforeDestroy() {
 			if(this.timer){
@@ -847,9 +908,14 @@
 			}
 		},
 		onShareAppMessage() { //设置分享
-			return {
-				title: '欢迎来到社集优选',
-				path: '/pages/product/product?id='+this.goods.id + '&inviteUserId=' + this.userInfo.id
+			if(!this.hasLogin){
+				uni.navigateTo({url: '/pages/public/login'})
+				return false;
+			}else{
+				return {
+					title: '欢迎来到社集优选',
+					path: '/pages/product/product?id='+this.goods.id + '&inviteUserId=' + this.userInfo.id
+				}
 			}
 		},
 		async onLoad(options){
@@ -1655,6 +1721,11 @@
 	}
 	
 	/* 底部操作菜单 */
+	.bargain-bottom{
+		.p-b-btn{
+			flex-direction: row !important;
+		}
+	}
 	.page-bottom{
 		position:fixed;
 		bottom:0;
@@ -1689,7 +1760,7 @@
 		
 		.p-b-btn{
 			display:flex;
-			flex-direction: row;
+			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 			font-size: 22rpx;
@@ -1768,6 +1839,13 @@
 		.frame_groupbuy{
 			width: 650rpx;
 			height: 65vh;
+			border-top: unset !important;
+		}
+		.d_bargin_item{
+			width: 650rpx;
+			height: 65vh;
+			border-top: unset !important;
+			background-color: #ffffff;
 		}
 	}
 	
@@ -1978,6 +2056,49 @@
 			font-weight:400;
 			color:rgba(255,255,255,1);
 		}
+		
+		.tit_bargin_5{
+			font-size:22rpx;
+			font-family:Microsoft YaHei;
+			font-weight:400;
+			color:rgba(51,51,51,1);
+			text-align: center;
+			padding: 20rpx 0 50rpx;
+		}
 	}
 	
+	.d_bargin_item{
+		
+		.bargin_log{
+			display: flex;
+			align-items: center;
+			padding: 20rpx 60rpx 0;
+			
+			.bargin_log_1{
+				width:60rpx;
+				height:60rpx;
+				border-radius:50%;
+				.img{
+					width:60rpx;
+					height:60rpx;
+					border-radius:50%;
+				}
+			}
+			.bargin_log_2{
+				font-size:24rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+				flex: 1;
+				margin-left: 30rpx;
+			}
+			
+			.bargin_log_3{
+				font-size:24rpx;
+				font-family:Microsoft YaHei;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+			}
+		}
+	}
 </style>

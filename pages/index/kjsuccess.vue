@@ -11,21 +11,40 @@
 			<text class="tit3">285.22 元</text>
 		</view>
 		
-		<view class="bt">
+		<button class="bt" open-type="share">
 			分享给好友，帮我砍价
-		</view>
+		</button>
 	</view>
 </template>
 
 <script>
+	import {mapState} from 'vuex';
 	export default {
+		computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		data() {
 			return {
-				
+				joinId: null,
+				info:{},
+			}
+		},
+		onLoad(option){
+			this.joinId = option.id;
+			this.loadData();
+		},
+		onShareAppMessage() { //设置分享
+			return {
+				title: this.info.nickName + '正在参与社集优选砍价活动，邀请您来帮忙砍价',
+				path: '/pages/index/kjdetail?id='+this.joinId + '&inviteUserId=' + this.userInfo.id
 			}
 		},
 		methods: {
-			
+			loadData(){
+				this.$request.ModelHome.infoBargainLog(this.joinId).then(res => {
+					this.info = res;
+				})
+			}
 		}
 	}
 </script>
