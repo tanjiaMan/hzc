@@ -20,10 +20,10 @@
 			</view>
 		</view>
 		
-		<view class="bt-kj" @click="kanjia">
+		<view v-if="!info.loginUserBargained" class="bt-kj" @click="kanjia">
 			帮砍一刀
 		</view>
-		<button class="bt" open-type="share">
+		<button v-else class="bt" open-type="share">
 			分享给好友，帮我砍价
 		</button>
 		
@@ -222,7 +222,14 @@
 				}, 1000)
 			},
 			kanjia(){
-				uni.navigateTo({url: '/pages/index/kjsuccess?joinId='+this.joinId})
+				let values = {bargainId: this.joinId,sponsorUserId: this.userInfo.id};
+				this.$request.ModelHome.bargainFor(values).then(res => {
+					if(res.code == 'ok'){
+						uni.navigateTo({url: '/pages/index/kjsuccess?joinId='+ this.joinId})	
+					}else{
+						this.$api.msg(res.msg);
+					}
+				})
 			},
 			//详情页
 			navToDetailPage(id, source) {

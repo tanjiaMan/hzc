@@ -20,22 +20,22 @@
 				<text class="tit1">正在进行中...</text>
 			</view>
 			<view class="d-goods">
-				<view class="goods-item uni-flex uni-row" v-for="(item,index) in 1" :key="index">
+				<view class="goods-item uni-flex uni-row" v-for="(item,index) in mylist" :key="index">
 					<view class="flex-item dright">
-						<img class="img" src="https://pic.youx365.com/9/54072d9802a0d64ac3f5210af7fe5a10.jpg" />
+						<img class="img" :src="item.productCoverPicUrl" />
 					</view>
 					<view class="flex-item dleft">
 						<view class="tit1">
-							已砍 <text style="color: #FF3C00;">254</text> 元，还可砍 <text style="color: #FF3C00;">500</text> 元
+							已砍 <text style="color: #FF3C00;">{{item.bargained}}</text> 元，还可砍 <text style="color: #FF3C00;">{{item.leftBargain}}</text> 元
 						</view>
-						<view class="s-header">
-							<text class="hour timer">23</text>
-							<text class="minute timer">15</text>
-							<text class="second timer">23</text>
+						<view class="s-header" v-if="item.timestr && item.timestr != ''">
+							<text class="hour timer">{{item.timestr.split(":")[0]}}</text>
+							<text class="minute timer">{{item.timestr.split(":")[1]}}</text>
+							<text class="second timer">{{item.timestr.split(":")[2]}}</text>
 							<text class="tip">后结束</text>
 						</view>
 						<view class="d-bt">
-							<view class="bt" @click="navTo('/pages/index/kjdetail')">继续砍价</view>
+							<view class="bt" @click="navTo('/pages/index/kjdetail?id='+ item.bargainId)">继续砍价</view>
 						</view>
 					</view>
 				</view>
@@ -74,6 +74,10 @@
 			return {
 				classifyPid: 0,
 				records:[],
+				mylist:[],
+				
+				seconds:0,
+				timer:null,
 			}
 		},
 		onLoad(option){
@@ -87,11 +91,62 @@
 						this.records = res.records;
 					}
 				})
+				this.$request.ModelHome.listMyBargain().then(res => {
+					if(res.records && res.records.length>0){
+						this.mylist = res.records;
+						this.startTimeup();
+					}
+				})
 			},
 			navTo(url){
 				uni.navigateTo({  
 					url
 				})  
+			},
+			countDown() {
+				function getTimestr(lefttime){
+					if(lefttime<=0){
+						return '00:00:00';
+					}
+					let [day, hour, minute, second] = [0, 0, 0, 0]
+					day = Math.floor(lefttime / (60 * 60 * 24))
+					hour = Math.floor(lefttime / (60 * 60)) - day * 24
+					minute = Math.floor(lefttime / 60) - day * 24 * 60 - hour * 60
+					second = Math.floor(lefttime) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
+					if (day < 10) {
+						day = '0' + day
+					}
+					if (hour < 10) {
+						hour = '0' + hour
+					}
+					if (minute < 10) {
+						minute = '0' + minute
+					}
+					if (second < 10) {
+						second = '0' + second
+					}
+					return hour + ':' + minute + ':' + second;
+				}
+				if(this.mylist && this.mylist.length>0){
+					this.mylist.forEach(o => {
+						if(o.leftExpireSec - this.seconds > 0){
+							o.timestr = getTimestr(o.leftExpireSec - this.seconds);
+						}else{
+							o.timestr = '00:00:00';
+						}
+					})
+				}
+			},
+			startTimeup(){
+				this.seconds = 0;
+				this.countDown()
+				if(this.timer){
+					clearInterval(this.timer);
+				}
+				this.timer = setInterval(() => {
+					this.seconds++;
+					this.countDown()
+				}, 1000)
 			},
 			//详情页
 			navToDetailPage(id, source) {

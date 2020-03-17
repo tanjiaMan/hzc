@@ -6,9 +6,9 @@
 		
 		<view>
 			<text class="tit2">已砍</text>
-			<text class="tit3">745.23 元</text>
+			<text class="tit3">{{info.loginUserBargained}} 元</text>
 			<text class="tit2" style="margin-left: 10px;">还可以砍</text>
-			<text class="tit3">285.22 元</text>
+			<text class="tit3">{{info.leftBargain}} 元</text>
 		</view>
 		
 		<button class="bt" open-type="share">
@@ -30,7 +30,7 @@
 			}
 		},
 		onLoad(option){
-			this.joinId = option.id;
+			this.joinId = option.joinId;
 			this.loadData();
 		},
 		onShareAppMessage() { //设置分享

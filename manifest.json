@@ -8,7 +8,7 @@
     "app-plus" : {
         /* 5+App特有相关 */
         "usingComponents" : true,
-		"nvueCompiler":"uni-app",
+        "nvueCompiler" : "uni-app",
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -96,7 +96,9 @@
         "setting" : {
             "urlCheck" : true,
             "postcss" : true,
-            "minified" : true
-        }
+            "minified" : true,
+            "es6" : true
+        },
+        "permission" : {}
     }
 }

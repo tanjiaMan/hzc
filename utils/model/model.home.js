@@ -261,4 +261,16 @@ export default{
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
+	
+	async bargainFor(data){
+		let url = config.api + `/h5/act/bargain-for`;
+		let result = await request.post(url,data,{});
+		return result;
+	},
+	
+	async listMyBargain(){
+		let url = config.api + `/h5/act/my-bargain-log?pageIndex=1&pageSize=5`;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
 }
