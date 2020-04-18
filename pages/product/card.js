@@ -1,6 +1,6 @@
 
     export default class LastMayday {
-      palette(conver,name,originPrice,price) {
+      palette(conver,name,originPrice,price,qrcode) {
         return (
 {
   "width": "620rpx",
@@ -77,7 +77,7 @@
     },
     {
       "type": "image",
-      "url": "https://pic.youx365.com/wx-qrcode.jpg",
+      "url": qrcode,
       "css": {
         "width": "180rpx",
         "height": "190rpx",

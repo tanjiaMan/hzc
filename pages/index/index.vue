@@ -44,7 +44,7 @@
 						indicator-dots='true' indicator-active-color="#00A08E" indicator-color="#fff" 
 						autoplay="true" interval="3000" duration="1000">
 							<swiper-item v-for="(item, index) in newsitems[TabCur].banner" :key="index" class="carousel-item" @click="bannerClick(item)">
-								<image :src="item.picUrl" />
+								<image :src="item.picUrl+'?imageView2/1/w/400/h/200'" />
 							</swiper-item>
 						</swiper>
 					</view>
@@ -53,7 +53,7 @@
 					<scroll-view class="cate-section1" scroll-x >
 						<view class="scoll-wrapper" v-if="newsitems[TabCur] && newsitems[TabCur].menu && newsitems[TabCur].menu.length > 0">
 							<view class="cate-item" @click="navTo('/pages/product/list?id='+item.id + '&name='+item.name)" v-for="(item,index) in newsitems[TabCur].menu" :key="index">
-								<image :src="item.picUrl"></image>
+								<image :src="item.picUrl+'?imageView2/1/w/100/h/100'"></image>
 								<text>{{item.name}}</text>
 							</view>
 						</view>
@@ -92,7 +92,7 @@
 									class="floor-item"
 									@click="navToDetailPage(item.productId,'seckill')"
 								>
-									<image :src="item.coverPicUrl" mode="aspectFill"></image>
+									<image :src="item.coverPicUrl + '?imageView2/1/w/100/h/100'" mode="aspectFill"></image>
 									<text class="title clamp">{{item.productName}}</text>
 									<view class="uni-flex uni-row">
 										<view class="flex-item">
@@ -130,7 +130,7 @@
 									<view class="tg-list">
 										<view class="tg-goods-item uni-flex uni-row line-top" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'bargain')">
 											<view class="tg-img flex-item">
-												<img :src="o.coverPicUrl" />
+												<img :src="o.coverPicUrl + '?imageView2/1/w/100/h/100'" />
 											</view>
 											<view class="tg-text flex-item">
 												<view class="tit1">{{o.productName}}</view>
@@ -168,7 +168,7 @@
 									<view class="tg-list">
 										<view class="tg-goods-item uni-flex uni-row" v-for="o in item" :key="o.id" @click="navToDetailPage(o.productId,'groupbuy')">
 											<view class="tg-img flex-item">
-												<img :src="o.coverPicUrl" />
+												<img :src="o.coverPicUrl + '?imageView2/1/w/100/h/100'" />
 											</view>
 											<view class="tg-text flex-item">
 												<view class="tit1">{{o.productName}}</view>
@@ -215,7 +215,7 @@
 										    <view class="flex-item bk_frame" v-for="o in item" :key="o.id" @click="navToDetailPage(o.id)">
 												<view :class="'bk_index bk_index_' + (o.index%3) "></view>
 												<text class="bk_index_text">{{o.index}}</text>
-												<image :src="o.coverPicUrl" mode="aspectFill"></image>
+												<image :src="o.coverPicUrl + '?imageView2/1/w/200/h/200'" mode="aspectFill"></image>
 												<text class="title clamp">{{o.name}}</text>
 												<text class="price">￥{{o.price}}</text>
 											</view>
@@ -245,7 +245,7 @@
 							@click="navToDetailPage(item.id)"
 						>
 							<view class="image-wrapper">
-								<image :src="item.coverPicUrl" mode="aspectFill"></image>
+								<image :src="item.coverPicUrl + '?imageView2/1/w/200/h/200'" mode="aspectFill"></image>
 							</view>
 							 <view class="uni-flex uni-row" style="width: 100%;">
 							    <view class="flex-item" style="width: 50%;">
@@ -553,7 +553,7 @@
 				let seconds = this.seconds
 				let [day, hour, minute, second] = [0, 0, 0, 0]
 				if (seconds > 0) {
-					day = Math.floor(seconds / (60 * 60 * 24))
+					// day = Math.floor(seconds / (60 * 60 * 24))
 					hour = Math.floor(seconds / (60 * 60)) - day * 24
 					minute = Math.floor(seconds / 60) - day * 24 * 60 - hour * 60
 					second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60
@@ -632,6 +632,14 @@
 			}
 		},
 		onLoad(options){ //进入首页设置邀请ID
+			if(options.scene){
+				let scene=decodeURIComponent(options.scene);
+				let userId=scene.split("&")[0];
+				uni.setStorage({//缓存用户登陆状态
+				    key: 'inviteUserId',  
+				    data: userId  
+				})
+			}
 			if(options.inviteUserId){
 				uni.setStorage({//缓存用户登陆状态
 				    key: 'inviteUserId',  
@@ -888,7 +896,6 @@
 			}
 			.timer{
 				display:inline-block;
-				width:26rpx;
 				height:26rpx;
 				text-align:center;
 				line-height:26rpx;
@@ -897,6 +904,7 @@
 				color:#007366;
 				border-radius:2px;
 				background:#FFFFFF;
+				padding: 0 4rpx;
 			}
 			.icon-you{
 				font-size: $font-lg;

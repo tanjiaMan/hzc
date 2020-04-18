@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<img class="showimg" src="https://pic.youx365.com/pay-success-show.png" />
-		<text class="tit" v-if="orderInfo.payStatus == 20">订单成功支付 {{orderInfo.totalPrice}}元</text>
+		<text class="tit" v-if="orderInfo.payStatus >= 20">订单成功支付 {{orderInfo.totalPrice}}元</text>
 		<text class="tit" v-else-if="orderInfo.payStatus == 0">等待支付通知</text>
 		<text class="tit" v-else>支付失败</text>
 		
@@ -12,9 +12,9 @@
 			<view>
 				<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
 			</view>
-			<view class="mix-btn hollow1" @click="transOrderStock()">
+			<!-- <view class="mix-btn hollow1" @click="transOrderStock()">
 				转入库存
-			</view>
+			</view> -->
 		</view>
 		<!-- <view class="btn-group">
 			<view class="bt-rule">

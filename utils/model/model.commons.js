@@ -22,5 +22,11 @@ export default{
 		let url = config.api + '/h5/common/send-verifycode?mobile='+mobile+'&type='+type;
 		let result = await request.get(url,{});
 		return result;
-	}
+	},
+	
+	async getSharePic(data){
+		let url = config.api + '/h5/common/wx-share-url';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
 }

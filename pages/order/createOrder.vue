@@ -51,6 +51,14 @@
 			</view>
 		</view>
 		<uni-number-box v-if="!errorMsg"></uni-number-box>
+		
+		<view class="yt-list" v-if="!productparam.source || productparam.source == 'agentOrder'">
+			<view class="yt-list-cell">
+				<text class="cell-tit">转入库存</text>
+				<view style="width: 100rpx;"><switch :checked="productparam.source == 'agentOrder'" color="#FF443F" @change="switchChange" /></view>
+			</view>
+		</view>
+		
 		<!-- 金额明细 -->
 		<view class="yt-list" v-if="!errorMsg">
 			<view class="yt-list-cell b-b">
@@ -188,7 +196,9 @@
 			}
 		},
 		onLoad(option){
-			this.productparam.source = option.source;
+			if(option.source){
+				this.productparam.source = option.source;
+			}
 			//商品数据
 			let data = JSON.parse(option.order);
 			this.productparam.orderProducts = data;
@@ -204,6 +214,13 @@
 			})
 		},
 		methods: {
+			switchChange(e){
+				if(e.detail.value == false){
+					this.productparam.source = '';
+				}else{
+					this.productparam.source = 'agentOrder';
+				}
+			},
 			async calute(){
 				if(this.addressData.id){
 					this.productparam.addressId = this.addressData.id;
@@ -266,7 +283,7 @@
 				this.productparam.addressId = this.addressData.id;
 				let result = await this.$request.ModelOrder.createOrder(this.productparam);
 				if(result.orderNum){
-					if(this.productparam.source == 'agent'){
+					if(this.productparam.source == 'agent' && this.data.totalPrice  == 0){
 						this.$fire.$emit('refresh',{});
 						uni.navigateBack({delta: 1});
 					}else{

@@ -710,7 +710,7 @@
 				})
 			},
 			//海报接口
-			initData(){
+			async initData(){
 				if(!this.hasLogin){
 					uni.showModal({
 					    title: '请先登陆',
@@ -725,11 +725,13 @@
 					return;
 				}
 				if(!this.template.views){
+					let values = {page:'pages/index/index',scene:this.userInfo.id,width: 430};
+					let picurl = await this.$request.ModelCommons.getSharePic(values);
 					uni.showLoading({
 					    title: "拼命生成中...",
 					    mask: true,
 					});
-					this.template = new Card().palette(this.goods.coverPicUrl,this.goods.name,this.goods.originPrice,this.goods.price);
+					this.template = new Card().palette(this.goods.coverPicUrl,this.goods.name,this.goods.originPrice,this.goods.price,picurl);
 				}
 				this.$refs['showimage'].open();
 			},
@@ -925,8 +927,11 @@
 				    data: options.inviteUserId  
 				})
 			}
-			
-			this.source = options.source;
+			if(options.source){
+				this.source = options.source;
+			}else{
+				this.source = "";
+			}
 			let id = options.id;
 			this.id = id;
 			this.dataLoad(id);
