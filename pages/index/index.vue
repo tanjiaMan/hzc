@@ -342,142 +342,151 @@
 					subData = {};
 				}
 				// 加载配置项
-				let config = await this.$request.ModelHome.getConfig(pid);
-				subData.config = config;
-				//秒杀倒计时
-				this.startTimeup(config.seckillLeftSec);
+				this.$request.ModelHome.getConfig(pid).then(config => {
+					subData.config = config;
+					//秒杀倒计时
+					this.startTimeup(config.seckillLeftSec);
+				});
 				
 				//加载子菜单
-				let menu = await this.$request.ModelHome.getCategoryByPid(pid);
-				subData.menu = menu;
+				this.$request.ModelHome.getCategoryByPid(pid).then(menu => {
+					subData.menu = menu;
+				});
+				
 				
 				//加载banner
-				let banner = await this.$request.ModelHome.getBanner(pid);
-				subData.banner = banner;
+				this.$request.ModelHome.getBanner(pid).then(banner => {
+					subData.banner = banner;
+				});
 				
 				//加载文章
-				let articles = await this.$request.ModelHome.getArticeList(pid);
-				subData.articles = articles;
+				this.$request.ModelHome.getArticeList(pid).then(articles => {
+					subData.articles = articles;	
+				});
 				
 				//获取秒杀
-				let seckill = await this.$request.ModelHome.getSeckill({classifyPid: pid});
-				if(seckill && seckill.records && seckill.records.length>0){
-					subData.seckill = seckill.records;
-				}
+				this.$request.ModelHome.getSeckill({classifyPid: pid}).then(seckill => {
+					if(seckill && seckill.records && seckill.records.length>0){
+						subData.seckill = seckill.records;
+					}
+				});
+				
 				
 				//获取砍价
-				let bargin = await this.$request.ModelHome.getBargin({classifyPid: pid,pageSize: 6});
-				this.kjFrameHeight = 'height: 0px !important;'
-				if(bargin && bargin.records && bargin.records.length>0){
-					//高度 3个： 760,2: 520, 1:  140 rpx
-					if(bargin.records.length == 1){
-						// #ifndef H5
-						this.kjFrameHeight = 'height: 260rpx !important;'
-						// #endif
-						// #ifdef H5
-						this.kjFrameHeight = 'height: 130px !important;'
-						// #endif
-					}else{
-						// #ifndef H5
-						this.kjFrameHeight = 'height: 520rpx !important;'
-						// #endif
-						// #ifdef H5
-						this.kjFrameHeight = 'height: 260px !important;'
-						// #endif
-					}
-					let info = [],temp = [];
-					let index = 0;
-					for(var i=0;i<bargin.records.length;i++){
-						if(index > 2){
-							info.push(temp);
-							temp = [];index = 0;
+				this.$request.ModelHome.getBargin({classifyPid: pid,pageSize: 6}).then(bargin => {
+					this.kjFrameHeight = 'height: 0px !important;'
+					if(bargin && bargin.records && bargin.records.length>0){
+						//高度 3个： 760,2: 520, 1:  140 rpx
+						if(bargin.records.length == 1){
+							// #ifndef H5
+							this.kjFrameHeight = 'height: 260rpx !important;'
+							// #endif
+							// #ifdef H5
+							this.kjFrameHeight = 'height: 130px !important;'
+							// #endif
+						}else{
+							// #ifndef H5
+							this.kjFrameHeight = 'height: 520rpx !important;'
+							// #endif
+							// #ifdef H5
+							this.kjFrameHeight = 'height: 260px !important;'
+							// #endif
 						}
-						temp.push(bargin.records[i]);
-						index ++;
+						let info = [],temp = [];
+						let index = 0;
+						for(var i=0;i<bargin.records.length;i++){
+							if(index > 2){
+								info.push(temp);
+								temp = [];index = 0;
+							}
+							temp.push(bargin.records[i]);
+							index ++;
+						}
+						if(temp.length != 0){
+							info.push(temp);
+						}
+						subData.bargin = info;
+						this.kjCurrent = 0;
 					}
-					if(temp.length != 0){
-						info.push(temp);
-					}
-					subData.bargin = info;
-					this.kjCurrent = 0;
-				}
+				});
+				
 				
 				//团购优惠
-				let groupbuy = await this.$request.ModelHome.getGroupBuy({classifyPid: pid,pageSize:9});
-				
-				this.tgFrameHeight = 'height: 0px !important;'
-				
-				if(groupbuy && groupbuy.records && groupbuy.records.length>0){
-					//高度 3个： 760,2: 520, 1:  140 rpx
-					if(groupbuy.records.length == 1){
-						// #ifndef H5
-						this.tgFrameHeight = 'height: 260rpx !important;'
-						// #endif
-						// #ifdef H5
-						this.tgFrameHeight = 'height: 130px !important;'
-						// #endif
-					}else if(groupbuy.records.length == 2){
-						// #ifndef H5
-						this.tgFrameHeight = 'height: 520rpx !important;'
-						// #endif
-						// #ifdef H5
-						this.tgFrameHeight = 'height: 260px !important;'
-						// #endif
-					}else{
-						// #ifndef H5
-						this.tgFrameHeight = 'height: 760rpx !important;'
-						// #endif
-						// #ifdef H5
-						this.tgFrameHeight = 'height: 380px !important;'
-						// #endif
-					}
-					let info = [],temp = [];
-					let index = 0;
-					for(var i=0;i<groupbuy.records.length;i++){
-						if(index > 2){
-							info.push(temp);
-							temp = [];index = 0;
+				this.$request.ModelHome.getGroupBuy({classifyPid: pid,pageSize:9}).then(groupbuy => {
+					this.tgFrameHeight = 'height: 0px !important;'
+					if(groupbuy && groupbuy.records && groupbuy.records.length>0){
+						//高度 3个： 760,2: 520, 1:  140 rpx
+						if(groupbuy.records.length == 1){
+							// #ifndef H5
+							this.tgFrameHeight = 'height: 260rpx !important;'
+							// #endif
+							// #ifdef H5
+							this.tgFrameHeight = 'height: 130px !important;'
+							// #endif
+						}else if(groupbuy.records.length == 2){
+							// #ifndef H5
+							this.tgFrameHeight = 'height: 520rpx !important;'
+							// #endif
+							// #ifdef H5
+							this.tgFrameHeight = 'height: 260px !important;'
+							// #endif
+						}else{
+							// #ifndef H5
+							this.tgFrameHeight = 'height: 760rpx !important;'
+							// #endif
+							// #ifdef H5
+							this.tgFrameHeight = 'height: 380px !important;'
+							// #endif
 						}
-						temp.push(groupbuy.records[i]);
-						index ++;
+						let info = [],temp = [];
+						let index = 0;
+						for(var i=0;i<groupbuy.records.length;i++){
+							if(index > 2){
+								info.push(temp);
+								temp = [];index = 0;
+							}
+							temp.push(groupbuy.records[i]);
+							index ++;
+						}
+						if(temp.length != 0){
+							info.push(temp);
+						}
+						subData.groupbuy = info;
+						this.tgCurrent = 0;
 					}
-					if(temp.length != 0){
-						info.push(temp);
-					}
-					subData.groupbuy = info;
-					this.tgCurrent = 0;
-				}
+				});
 				
 				//爆款推荐
-				let bkgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:9,orderBySort:true,direction: true});
-				if(bkgoods && bkgoods.records && bkgoods.records.length > 0){
-					let info = [],temp = [];
-					let index = 0;
-					for(var i=0;i<bkgoods.records.length;i++){
-						if(index > 2){
-							info.push(temp);
-							temp = [];index = 0;
+				this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:9,orderBySort:true,direction: true}).then(bkgoods => {
+					if(bkgoods && bkgoods.records && bkgoods.records.length > 0){
+						let info = [],temp = [];
+						let index = 0;
+						for(var i=0;i<bkgoods.records.length;i++){
+							if(index > 2){
+								info.push(temp);
+								temp = [];index = 0;
+							}
+							bkgoods.records[i].index = i + 1;
+							temp.push(bkgoods.records[i]);
+							index ++;
 						}
-						bkgoods.records[i].index = i + 1;
-						temp.push(bkgoods.records[i]);
-						index ++;
+						if(temp.length != 0){
+							info.push(temp);
+						}
+						subData.bkgoods = info;
+						this.bkCurrent = 0;
 					}
-					if(temp.length != 0){
-						info.push(temp);
-					}
-					subData.bkgoods = info;
-					this.bkCurrent = 0;
-				}
+				});
+				
 				
 				//热销
-				let rxgoods = await this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true});
-				if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
-					subData.rxgoods = rxgoods.records;
-				}
-				
+				this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true}).then(rxgoods => {
+					if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
+						subData.rxgoods = rxgoods.records;
+					}
+				});
 				this.newsitems[this.TabCur] = subData;
-				this.newsitems = Object.assign({}, this.newsitems);
-				console.log('this.newsitems',this.newsitems);
+				this.$forceUpdate();
 			},
 			navToLogin(url){
 				if(!this.hasLogin){
