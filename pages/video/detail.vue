@@ -16,7 +16,7 @@
 				<view><text class="tit1">{{info.nickName}}</text><!-- <text class="tit2">长沙市</text> --></view>
 				<view class="tit3">{{info.viewCount}}次播放</view>
 			</view>
-			<view v-if="info.userId>0" class="flex-item d-3" @click="follow(info.userId)">
+			<view class="flex-item d-3" @click="follow(info.userId)">
 				<view class="bt-1">关注</view>
 			</view>
 		</view>
@@ -269,8 +269,9 @@
 				if(item.collected){ //取消收藏
 					this.$request.ModelOrder.removeCollect(values).then(result => {
 						if(result.code == 'ok'){
-							this.$api.msg('取消收藏');
+							this.$api.msg('取消点赞');
 							item.collected = !item.collected;
+							item.collectNum = item.collectNum - 1;
 						}else{
 							this.$api.msg(result.msg);
 						}
@@ -278,8 +279,9 @@
 				}else{
 					this.$request.ModelOrder.addCollect(values).then(result => {
 						if(result.code == 'ok'){
-							this.$api.msg('收藏成功');
+							this.$api.msg('点赞成功');
 							item.collected = !item.collected;
+							item.collectNum = item.collectNum + 1;
 						}else{
 							this.$api.msg(result.msg);
 						}

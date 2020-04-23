@@ -128,28 +128,40 @@
 			<view class="line"></view>
 			<uni-grid :column="3" :square="false" :show-border="false" :highlight="false" >
 			    <uni-grid-item>
-			        <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.publishCount || 0}}</view>
-					<view class="tit2">我的发布</view>
+					<view @click="navTo('/pages/video/publish')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.videoInfo.publishCount || 0}}</view>
+						<view class="tit2">我的发布</view>
+					</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-				   <view class="tit1">{{fullUser.collectInfo && fullUser.collectInfo.videoCount || 0}}</view>
-			       <view class="tit2">我的收藏</view>
+					<view @click="navTo('/pages/video/collect')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.collectInfo && fullUser.collectInfo.videoCount || 0}}</view>
+						<view class="tit2">我的收藏</view>
+					</view>
 			    </uni-grid-item>
 			    <uni-grid-item>
-			       <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.draftCount || 0}}</view>
-			       <view class="tit2">草稿箱</view>
+					<view @click="navTo('/pages/video/draft')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.draftCount || 0}}</view>
+						<view class="tit2">草稿箱</view>
+					</view>
 			    </uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.followCount || 0}}</view>
-				   <view class="tit2">我的关注</view>
+					<view @click="navTo('/pages/video/focus')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.followCount || 0}}</view>
+						<view class="tit2">我的关注</view>
+					</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.fansCount || 0}}</view>
-				   <view class="tit2">粉丝</view>
+					<view @click="navTo('/pages/video/fans')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.followFansInfo && fullUser.followFansInfo.fansCount || 0}}</view>
+						<view class="tit2">粉丝</view>
+					</view>
 				</uni-grid-item>
 				<uni-grid-item>
-				   <view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.praiseCount || 0}}</view>
-				   <view class="tit2">获赞</view>
+					<view @click="navTo('/pages/video/praise')" style="line-height: initial;text-align: center;">
+						<view class="tit1">{{fullUser.videoInfo && fullUser.videoInfo.praiseCount || 0}}</view>
+						<view class="tit2">获赞</view>
+					</view>
 				</uni-grid-item>
 			</uni-grid>
 		</view>

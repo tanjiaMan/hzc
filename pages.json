@@ -339,6 +339,36 @@
 				"navigationBarTitleText": "短视频"
 			}
         },{
+            "path" : "pages/video/publish",
+            "style" : {
+				"navigationBarTitleText": "我的发布"
+			}
+        },{
+            "path" : "pages/video/collect",
+            "style" : {
+				"navigationBarTitleText": "我的收藏"
+			}
+        },{
+            "path" : "pages/video/draft",
+            "style" : {
+				"navigationBarTitleText": "草稿箱"
+			}
+        },{
+            "path" : "pages/video/focus",
+            "style" : {
+				"navigationBarTitleText": "我的关注"
+			}
+        },{
+            "path" : "pages/video/fans",
+            "style" : {
+				"navigationBarTitleText": "我的粉丝"
+			}
+        },{
+            "path" : "pages/video/praise",
+            "style" : {
+				"navigationBarTitleText": "赞与收藏"
+			}
+        },{
             "path" : "pages/user/shopcert",
             "style" : {
 				"navigationBarTitleText": "店铺认证"

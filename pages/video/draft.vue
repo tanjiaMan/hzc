@@ -1,33 +1,5 @@
 <template>
-	<view class="container">
-		<view class="d-header" v-if="defalutBanner && banner.length>0">
-			<scroll-view class="scroll-view_H" scroll-x="true">
-				<view class="scroll-view-item_H" v-for="(item,index) in banner" :key="index" @click="navTo('/pages/video/detail?id='+item.id)">
-					<image class="header-video" :src="item.coverUrl" mode="aspectFill"></image>
-					<view class="d-1">
-						<img class="img" src="https://pic.youx365.com/video-bf.png" />
-						<view class="d-2 uni-flex uni-row">
-							<view class="flex-item" style="width: 80%;text-align: left;padding-left: 45rpx;margin-top: 15rpx;">
-								<view class="d-avr">
-									<img class="imgavr" :src="item.avatarUrl" />
-									<text class="tit2">官方短视频</text>
-								</view>
-								<view class="tit">
-									{{item.nickName}}
-								</view>
-							</view>
-							<view class="flex-item" style="width:20%">
-								<img class="imgsc" :class="item.collected?'':'gray'" 
-									@click.stop="stopPrevent" @click="doCollect(item,'header')"
-									src="https://pic.youx365.com/video-sc.png" />
-								<view class="tit1">{{item.collectNum}}</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		
+	<view class="container">		
 		<!-- 分类 -->
 		<view class="d-fenlei">
 			<view id="tab-bar" class="flex-item d-nav-tab">
@@ -58,9 +30,7 @@
 						<text class="tit2">{{item.nickName}}</text>
 					</view>
 					<view class="flex-item d-sc">
-						<img class="imgsc" :class="item.collected?'':'gray'" 
-							@click.stop="stopPrevent" @click="doCollect(item,'header')"
-							src="https://pic.youx365.com/video-sc.png" />
+						<img class="imgsc" src="https://pic.youx365.com/video-sc.png" />
 						<text class="tit3">{{item.collectNum}}</text>
 					</view>
 				</view>
@@ -85,10 +55,9 @@
 				//
 				TabCur: 0,
 				scrollLeft: 0,
-				defalutBanner:{},
-				tabBars: [],
-				
-				banner:[],
+				tabBars: [{
+					id:0,name:'全部'
+				}],
 				//翻页
 				loadingType: 'more',
 				pageIndex: 1,
@@ -99,17 +68,10 @@
 		async onLoad(){//第一次加载
 			let result = await this.$request.ModelHome.getMediaCategoryByPid(1);
 			result.map(item => {
-				if(item.type == 0){
-					this.defalutBanner = item;
-				}else{
+				if(item.type != 0){
 					this.tabBars.push(item);
 				}
 			});
-			if(this.defalutBanner && this.defalutBanner.id){
-				this.$request.ModelHome.pageArtice({classId: this.defalutBanner.id,type:1,pageIndex:1,pageSize: 10}).then(result => {
-					this.banner = result.records || [];
-				})
-			};
 			this.loadData('refresh');
 		},
 		onPageScroll(e){
@@ -161,133 +123,16 @@
 					this.loadingType = 'more'; 
 				}
 				this.pageIndex = this.pageIndex + 1;
-			},
-			doCollect(item,type){
-				let values = {refId: item.id,type:3};
-				if(item.collected){ //取消收藏
-					this.$request.ModelOrder.removeCollect(values).then(result => {
-						if(result.code == 'ok'){
-							this.$api.msg('取消收藏');
-							item.collected = !item.collected;
-							item.collectNum = item.collectNum - 1;
-						}else{
-							this.$api.msg(result.msg);
-						}
-					})
-				}else{
-					this.$request.ModelOrder.addCollect(values).then(result => {
-						if(result.code == 'ok'){
-							this.$api.msg('收藏成功');
-							item.collected = !item.collected;
-							item.collectNum = item.collectNum + 1;
-						}else{
-							this.$api.msg(result.msg);
-						}
-					})
-				}
 			}
 		}
 	}
 </script>
 
 <style lang='scss'>
-	.d-header{
-		width: 100%;
-		height: 402rpx;
+	body{
 		background-color: #FFFFFF;
-		padding-top: 25rpx;
-		
-		.scroll-view_H {
-			white-space: nowrap;
-			width: 100%;
-			padding: 0 20rpx;
-		}
-		
-		.scroll-view-item_H {
-			display: inline-block;
-			width: 609rpx;
-			height: 352rpx;
-			line-height: 352rpx;
-			border-radius:30rpx;
-			margin-left: 30rpx;
-			position: relative;
-			
-			.d-1{
-				position: absolute;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				border-radius:30rpx;
-				text-align: center;
-				
-				.img{
-					width: 96rpx;
-					height: 96rpx;
-					margin-top: 120rpx;
-				}
-				
-				.d-2{
-					height: 110rpx;
-					width: 100%;
-					
-					.tit{
-						font-size:20rpx;
-						font-family:SourceHanSansCN;
-						font-weight:400;
-						color:rgba(255,255,255,1);
-					}
-					
-					.imgsc{
-						width: 40rpx;
-						height: 40rpx;
-					}
-					
-					.tit1{
-						font-size:20rpx;
-						font-family:SourceHanSansCN;
-						font-weight:400;
-						color:rgba(255,255,255,1);
-						margin-top: -20rpx;
-					}
-					
-					.d-avr{
-						background:#ffffffad;
-						border-radius:21rpx;
-						width: fit-content;
-						padding: 0px 12rpx 0 12rpx;
-						height: 42rpx;
-						line-height: 38rpx;
-						
-						.imgavr{
-							width:34rpx;
-							height:34rpx;
-							border-radius:50%;
-							vertical-align: middle;
-							margin-right: 8rpx;
-						}
-						
-						.tit2{
-							font-size:20rpx;
-							font-family:SourceHanSansCN;
-							font-weight:400;
-							color:rgba(0,0,0,1);
-						}
-					}
-				}
-			}
-		}
-		
-		.header-video{
-			width: 609rpx;
-			height: 352rpx;
-			border-radius:30rpx;
-		}
-		
-		/deep/ .uni-video-cover{
-			display: none !important;
-		}
 	}
-
+	
 	.d-fenlei{
 		height: 70rpx;
 		margin-top: 10rpx;

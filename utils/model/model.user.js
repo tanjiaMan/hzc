@@ -43,12 +43,24 @@ export default{
 	async followUserId(followUserId){
 		let url = config.api + '/h5/user/follow?followUserId='+followUserId;
 		let result = await request.get(url,{});
-		return result && result.data;
+		return result;
 	},
 	
 	async cancelFollowUserId(followUserId){
 		let url = config.api + '/h5/user/cancel-follow?followUserId='+followUserId;
 		let result = await request.get(url,{});
+		return result;
+	},
+	
+	async pageFollow(data){
+		let url = config.api + '/h5/user/page-my-follow';
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async pageFans(data){
+		let url = config.api + '/h5/user/page-my-fans';
+		let result = await request.post(url,data,{});
 		return result && result.data;
 	},
 	
