@@ -408,12 +408,12 @@
 				"selectedIconPath": "static/menu/tab-cate.png",
 				"text": "分类"
 			},
-			// {
-			// 	"pagePath": "pages/video/index",
-			// 	"iconPath": "static/menu/tab-video.png",
-			// 	"selectedIconPath": "static/menu/tab-video.png",
-			// 	"text": "短视频"
-			// },
+			{
+				"pagePath": "pages/video/index",
+				"iconPath": "static/menu/tab-video.png",
+				"selectedIconPath": "static/menu/tab-video.png",
+				"text": "短视频"
+			},
 			{
 				"pagePath": "pages/cart/cart",
 				"iconPath": "static/menu/tab-cart.png",

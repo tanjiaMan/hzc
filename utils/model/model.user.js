@@ -40,6 +40,18 @@ export default{
 		return result && result.data;
 	},
 	
+	async followUserId(followUserId){
+		let url = config.api + '/h5/user/follow?followUserId='+followUserId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
+	async cancelFollowUserId(followUserId){
+		let url = config.api + '/h5/user/cancel-follow?followUserId='+followUserId;
+		let result = await request.get(url,{});
+		return result && result.data;
+	},
+	
 	//签到
 	async signToday(){
 		let url = config.api + '/h5/user/sign';

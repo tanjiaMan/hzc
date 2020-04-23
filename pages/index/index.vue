@@ -35,9 +35,9 @@
 		</view>
 		
 		<!-- 详细内容 -->
-		<swiper :current="TabCur" class="swiper-box" @change="changeTab">
-			<swiper-item v-for="(item,index) in tabBars" :key="index">
-				<scroll-view class="list" scroll-y>
+		<view :current="TabCur" class="swiper-box" @change="changeTab">
+			<!-- <swiper-item v-for="(item,index) in tabBars" :key="index"> -->
+				<scroll-view class="list" scroll-y @scrolltolower="scroll" >
 					<!-- 头部广告 -->
 					<view class="v-ad" v-if="newsitems[TabCur] && newsitems[TabCur].banner && newsitems[TabCur].banner.length > 0">
 						<swiper class="carousel" circular 
@@ -58,7 +58,6 @@
 							</view>
 						</view>
 					</scroll-view>
-					
 					
 					<!-- 今日头条 -->
 					<view class="d-toutiao uni-flex uni-row" v-if="newsitems[TabCur] && newsitems[TabCur].menu && newsitems[TabCur].articles.length > 0">
@@ -260,8 +259,8 @@
 					</view>
 					<view style="height: 60rpx;"></view>
 				</scroll-view>
-			</swiper-item>
-		</swiper>
+			<!-- </swiper-item> -->
+		</view>
 		
 	</view>
 </template>
@@ -317,6 +316,10 @@
 				timer: null,
 				seconds: 0, //剩余支付时间
 				
+				//瀑布流
+				pageIndex: 1,
+				hasMore: true,
+				pageLoading: false,
 			};
 		},
 		methods: {
@@ -353,7 +356,6 @@
 					subData.menu = menu;
 				});
 				
-				
 				//加载banner
 				this.$request.ModelHome.getBanner(pid).then(banner => {
 					subData.banner = banner;
@@ -370,7 +372,6 @@
 						subData.seckill = seckill.records;
 					}
 				});
-				
 				
 				//获取砍价
 				this.$request.ModelHome.getBargin({classifyPid: pid,pageSize: 6}).then(bargin => {
@@ -409,7 +410,6 @@
 						this.kjCurrent = 0;
 					}
 				});
-				
 				
 				//团购优惠
 				this.$request.ModelHome.getGroupBuy({classifyPid: pid,pageSize:9}).then(groupbuy => {
@@ -478,15 +478,37 @@
 					}
 				});
 				
-				
 				//热销
-				this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:6,orderBySell:true,direction: true}).then(rxgoods => {
+				this.pageIndex = 1;this.pageLoading = true;this.hasMore=true;
+				this.$request.ModelHome.getGoodsList({classifyPid:pid,pageSize:10,pageIndex: this.pageIndex,orderBySell:true,direction: true}).then(rxgoods => {
+					this.pageLoading = false;
 					if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
 						subData.rxgoods = rxgoods.records;
 					}
 				});
 				this.newsitems[this.TabCur] = subData;
 				this.$forceUpdate();
+			},
+			moreRex(){ //加载热销
+				let firstCat = this.tabBars[this.TabCur];
+				this.pageIndex = this.pageIndex + 1;
+				this.pageLoading = true
+				this.$request.ModelHome.getGoodsList({classifyPid:firstCat.id,pageSize:10,pageIndex: this.pageIndex,orderBySell:true,direction: true}).then(rxgoods => {
+					this.pageLoading = false;
+					if(rxgoods && rxgoods.records && rxgoods.records.length > 0){
+						let subData = this.newsitems[this.TabCur];
+						if(!subData.rxgoods){
+							subData.rxgoods = [];
+						}
+						rxgoods.records.map(item => {
+							subData.rxgoods.push(item);
+						});
+						this.newsitems[this.TabCur] = subData;
+						this.$forceUpdate();
+					}else{
+						this.hasMore = false;
+					}
+				});
 			},
 			navToLogin(url){
 				if(!this.hasLogin){
@@ -604,6 +626,12 @@
 					}
 					this.countDown()
 				}, 1000)
+			},
+			scroll(){
+				console.log('scroll');
+				if(this.hasMore && this.pageLoading ==false ){
+					this.moreRex();	
+				}
 			}
 		},
 		beforeDestroy() {
@@ -875,6 +903,7 @@
 		width:710rpx;
 		margin:16rpx auto;
 		border-radius:16rpx;
+		position: relative;
 
 		.s-h-img{
 			height: 186rpx;

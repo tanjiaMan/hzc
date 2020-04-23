@@ -283,14 +283,14 @@
 				this.productparam.addressId = this.addressData.id;
 				let result = await this.$request.ModelOrder.createOrder(this.productparam);
 				if(result.orderNum){
-					if(this.productparam.source == 'agent' && this.data.totalPrice  == 0){
-						this.$fire.$emit('refresh',{});
-						uni.navigateBack({delta: 1});
-					}else{
+					// if(this.productparam.source == 'agent' && this.data.totalPrice  == 0){
+					// 	this.$fire.$emit('refresh',{});
+					// 	uni.navigateBack({delta: 1});
+					// }else{
 						uni.redirectTo({
 							url: '/pages/money/pay?orderNum='+result.orderNum
 						})
-					}
+					// }
 				}else{
 					this.$api.msg('创建订单失败');
 				}

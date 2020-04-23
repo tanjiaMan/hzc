@@ -20,7 +20,7 @@
 								<img class="imgsc" :class="item.collected?'':'gray'" 
 									@click.stop="stopPrevent" @click="doCollect(item,'header')"
 									src="https://pic.youx365.com/video-sc.png" />
-								<view class="tit1">{{item.praiseCount}}</view>
+								<view class="tit1">{{item.collectNum}}</view>
 							</view>
 						</view>
 					</view>
@@ -61,7 +61,7 @@
 						<img class="imgsc" :class="item.collected?'':'gray'" 
 							@click.stop="stopPrevent" @click="doCollect(item,'header')"
 							src="https://pic.youx365.com/video-sc.png" />
-						<text class="tit3">{{item.praiseCount}}</text>
+						<text class="tit3">{{item.collectNum}}</text>
 					</view>
 				</view>
 			</view>
@@ -122,7 +122,7 @@
 		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.loadData();
 		},
 		methods: {
 			stopPrevent(){},
@@ -169,6 +169,7 @@
 						if(result.code == 'ok'){
 							this.$api.msg('取消收藏');
 							item.collected = !item.collected;
+							item.collectNum = item.collectNum - 1;
 						}else{
 							this.$api.msg(result.msg);
 						}
@@ -178,6 +179,7 @@
 						if(result.code == 'ok'){
 							this.$api.msg('收藏成功');
 							item.collected = !item.collected;
+							item.collectNum = item.collectNum + 1;
 						}else{
 							this.$api.msg(result.msg);
 						}

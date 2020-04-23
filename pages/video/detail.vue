@@ -16,7 +16,7 @@
 				<view><text class="tit1">{{info.nickName}}</text><!-- <text class="tit2">长沙市</text> --></view>
 				<view class="tit3">{{info.viewCount}}次播放</view>
 			</view>
-			<view class="flex-item d-3">
+			<view v-if="info.userId>0" class="flex-item d-3" @click="follow(info.userId)">
 				<view class="bt-1">关注</view>
 			</view>
 		</view>
@@ -31,34 +31,62 @@
 					相关产品
 				</view>
 				<view class="cu-item" :class="1 == dayTabCur ? 'text-white':''" @tap="dayTabSelect" data-id="1">
-					评论（10）
+					评论
 				</view>
 			</scroll-view>
 		</view>
 		
 		<view class="goods-detail" v-if="0 == dayTabCur">
-			<view class="goods-list" v-for="item in 3" :key="item">
+			<view class="goods-list" v-for="item in productObj.records" :key="item">
 				<view class="uni-flex uni-row">
 					<view class="flex-item">
-						<image class="img" src="https://pic.youx365.com/wazi2.JPG" mode="aspectFill" />
+						<image class="img" :src="item.productCoverPicUrl" mode="aspectFill" />
 					</view>
 					<view class="flex-item d_1">
-						<view class="name">联想 310S-15 i5-7200U</view>
-						<view class="num">规格：默认</view>
+						<view class="name">{{item.productName}}</view>
+						<!-- <view class="num">规格：默认</view> -->
 						<view class="uni-flex uni-row" style="width: 100%;margin-top: 20rpx;">
-							<view class="price">￥29.8</view>
-							<view class="cart"><img class="img" src="https://pic.youx365.com/video-cart.png" /></view>
+							<view class="price">￥{{item.productPrice}}</view>
+							<view class="cart" @click="addcart(item.productId)"><img class="img" src="https://pic.youx365.com/video-cart.png" /></view>
 						</view>
 					</view>
 				</view>
 			</view>
+			<uni-load-more :status="productObj.loadingType"></uni-load-more>
+		</view>
+		<view class="eval-detail" v-if="1 == dayTabCur">
+			<view
+				v-for="(item,index) in evalObj.records" :key="index"
+				class="eva-box uni-flex uni-row"
+			>
+				<image class="portrait" :src="item.avatarUrl" mode="aspectFill"></image>
+				<view class="right">
+					<view style="display: flex;">
+						<text class="name">{{item.nickName}}</text>
+						<text class="time">{{item.createTime}}</text>
+					</view>
+					<text class="con">{{item.message}}</text>
+					<scroll-view class="floor-list" scroll-x v-if="item.picUrlList.length > 0">
+						<view class="scoll-wrapper">
+							<view 
+								v-for="(subimg, subin) in item.picUrlList" :key="subin"
+								class="floor-item"
+								@click="previewImage(subin,item.picUrlList)"
+							>
+								<image :src="subimg" mode="aspectFill"></image>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+			</view>
+			<uni-load-more :status="evalObj.loadingType"></uni-load-more>
 		</view>
 		
 		<view style="height: 135rpx;"></view>
 		<view class="d-bottom uni-flex uni-row">
 			<view class="uni-flex d-frame" @click.stop="stopPrevent" @click="doCollect(info)">
 				<img class="img" :class="info.collected?'':'gray'" src="https://pic.youx365.com/video-praise.png" />
-				<text class="tit">赞.{{info.praiseCount}}</text>
+				<text class="tit">赞.{{info.collectNum}}</text>
 			</view>
 			<view>
 				<view class="line"></view>
@@ -75,13 +103,29 @@
 
 <script>
 	import {mapState} from 'vuex';
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	
 	export default {
+		components: {
+			uniLoadMore
+		},
 		data() {
 			return {
 				play: false,
 				
 				dayTabCur:0,
+				productObj:{
+					pageIndex:1,
+					pageSize:10,
+					records:[],
+					loadingType: 'more',
+				},
+				evalObj:{
+					pageIndex:1,
+					pageSize:10,
+					records:[],
+					loadingType: 'more',
+				},
 				
 				info:{},
 				id:0,
@@ -101,7 +145,8 @@
 			this.id = options.id;
 			this.$request.ModelHome.getArticeInfo(this.id).then(result => {
 				this.info = result;
-			})
+			});
+			this.loadData('refresh');
 		},
 		onShareAppMessage() { //设置分享
 			return {
@@ -119,7 +164,7 @@
 		},
 		//加载更多
 		onReachBottom(){
-			this.$api.msg('加载更多');
+			this.loadData();
 		},
 		methods: {
 			ended(){
@@ -137,8 +182,88 @@
 			},
 			async dayTabSelect(e){
 				this.dayTabCur = e.currentTarget.dataset.id;
+				this.loadData('refresh');
+			},
+			async loadData(loadType){
+				let navItem = {};
+				if(this.dayTabCur == 0){
+					navItem = this.productObj;
+				}else if(this.dayTabCur == 1){
+					navItem = this.evalObj;
+				}else{
+					return;
+				}
+				if(loadType == 'refresh'){
+					navItem.pageIndex = 1;
+					navItem.loadingType = 'more';
+					navItem.records = [];
+				}
+				if(navItem.loadingType === 'loading' || navItem.loadingType == 'noMore'){
+					return;
+				}
+				navItem.loadingType = 'loading'
+				let values = {mediaId: this.id,pageIndex:navItem.pageIndex,pageSize: navItem.pageSize};
+				let result = null;
+				if(this.dayTabCur == 0){
+					result = await this.$request.ModelHome.pageRefProduct(values);
+				}else{
+					result = await this.$request.ModelHome.pageRefEval(values);
+				}
+				result = result || {};
+				let orderList = result.records || [];
+				orderList.forEach(item=>{
+					navItem.records.push(item);
+				})
+				if(orderList.length < navItem.pageSize){
+					navItem.loadingType = 'noMore';
+				}else{
+					navItem.loadingType = 'more'; 
+				}
+				navItem.pageIndex = navItem.pageIndex + 1;
 			},
 			stopPrevent(){},
+			previewImage(index,picUrlList){
+				uni.previewImage({
+					current: index,
+					urls: picUrlList,
+					loop: true,
+				})
+			},
+			follow(userId){
+				this.$request.ModelUser.followUserId(userId).then(res => {
+					if(result.code == 'ok'){
+						this.$api.msg('关注成功');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
+			cancelFollow(userId){
+				this.$request.ModelUser.cancelFollowUserId(userId).then(res => {
+					if(result.code == 'ok'){
+						this.$api.msg('取消成功');
+					}else{
+						this.$api.msg(result.msg);
+					}
+				})
+			},
+			addcart(goodsId){
+				let values = {increaseNum:1,productId:goodsId};
+				this.$request.ModelOrder.addShopCar(values).then(result => {
+					if(result.code == 'ok'){
+						uni.showToast({
+							title: '加入购物车成功',
+							duration: 2000
+						});
+					}else{
+						uni.showToast({
+							icon:'none',
+							title: '加入购物车失败',
+							duration: 2000
+						});
+					}
+				})	
+			},
 			doCollect(item){
 				let values = {refId: item.id,type:3};
 				if(item.collected){ //取消收藏
@@ -426,5 +551,80 @@
 	
 	.gray{
 		filter: grayscale(100%);
+	}
+	
+	.eva-box{
+		display: flex;
+		padding: 20upx;
+		.portrait{
+			flex-shrink: 0;
+			width: 64rpx;
+			height: 64rpx;
+			border-radius: 100px;
+		}
+		.right{
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			font-size: $font-base;
+			color: $font-color-base;
+			padding-left: 26rpx;
+			
+			.time{
+				font-size:25rpx;
+				font-family:Source Han Sans CN;
+				font-weight:400;
+				color:rgba(155,155,155,1);
+			}
+			
+			.name{
+				flex: 1;
+			}
+			
+			.name span{
+				font-size:26rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(51,51,51,1);
+			}
+			.con{
+				font-size:24rpx;
+				font-family:SourceHanSansCN;
+				font-weight:400;
+				color:rgba(102,102,102,1);
+				padding: 20rpx 0;
+			}
+			.bot{
+				display: flex;
+				justify-content: space-between;
+				font-size: $font-sm;
+				color:$font-color-light;
+			}
+			
+			.floor-list{
+				white-space: nowrap;
+				width: 560rpx;
+			}
+			.scoll-wrapper{
+				display:flex;
+				align-items: flex-start;
+			}
+			.floor-item{
+				width: 168rpx;
+				margin-right: 26rpx;
+				
+				image{
+					width: 168rpx;
+					height: 168rpx;
+					border-radius: 10rpx;
+				}
+				
+				img{
+					width: 168rpx;
+					height: 168rpx;
+					border-radius: 10rpx;
+				}
+			}
+		}
 	}
 </style>

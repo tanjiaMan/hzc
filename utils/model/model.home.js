@@ -273,4 +273,17 @@ export default{
 		let result = await request.get(url,{});
 		return result && result.data;
 	},
+	
+	//媒体相关
+	async pageRefProduct(data){
+		let url = config.api + `/h5/index/media/page-ref-product`;
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
+	
+	async pageRefEval(data){
+		let url = config.api + `/h5/index/media/page-eval`;
+		let result = await request.post(url,data,{});
+		return result && result.data;
+	},
 }
