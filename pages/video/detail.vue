@@ -16,8 +16,11 @@
 				<view><text class="tit1">{{info.nickName}}</text><!-- <text class="tit2">长沙市</text> --></view>
 				<view class="tit3">{{info.viewCount}}次播放</view>
 			</view>
-			<view class="flex-item d-3" @click="follow(info.userId)">
+			<view class="flex-item d-3" v-if="!info.followed" @click="follow(info)">
 				<view class="bt-1">关注</view>
+			</view>
+			<view class="flex-item d-3" v-else @click="cancelFollow(info)">
+				<view class="bt-2">取消关注</view>
 			</view>
 		</view>
 		<view class="d-desc">
@@ -229,19 +232,23 @@
 					loop: true,
 				})
 			},
-			follow(userId){
-				this.$request.ModelUser.followUserId(userId).then(res => {
-					if(result.code == 'ok'){
+			follow(item){
+				this.$request.ModelUser.followUserId(item.userId).then(res => {
+					if(res.code == 'ok'){
 						this.$api.msg('关注成功');
+						item.followed = true;
+						this.$forceUpdate();
 					}else{
 						this.$api.msg(result.msg);
 					}
 				})
 			},
-			cancelFollow(userId){
-				this.$request.ModelUser.cancelFollowUserId(userId).then(res => {
-					if(result.code == 'ok'){
+			cancelFollow(item){
+				this.$request.ModelUser.cancelFollowUserId(item.userId).then(res => {
+					if(res.code == 'ok'){
 						this.$api.msg('取消成功');
+						item.followed = false;
+						this.$forceUpdate();
 					}else{
 						this.$api.msg(result.msg);
 					}
@@ -339,7 +346,7 @@
 		}
 		
 		.d-2{
-			width:473rpx;
+			width:430rpx;
 			
 			.tit1{
 				font-size:26rpx;
@@ -363,7 +370,7 @@
 		}
 		
 		.d-3{
-			width: 124rpx;
+			flex: 1;
 			
 			.bt-1{
 				width:103rpx;
@@ -376,6 +383,18 @@
 				font-weight:400;
 				color:rgba(255,68,63,1);
 				text-align: center;
+			}
+			.bt-2{
+				width: 145rpx;
+				line-height: 46rpx;
+				text-align: center;
+				padding: 0 20rpx;
+				border-radius: 2rpx;
+				background-color: #EAEAEA;
+				color: #A2A2A2;
+				font-size: 22rpx;
+				font-family: Source Han Sans CN;
+				font-weight: 400;
 			}
 		}
 	}

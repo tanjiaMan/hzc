@@ -74,9 +74,10 @@
 			},
 			follow(item){
 				this.$request.ModelUser.followUserId(item.followUserId).then(res => {
-					if(result.code == 'ok'){
+					if(res.code == 'ok'){
 						this.$api.msg('关注成功');
 						item.follow = true;
+						this.$forceUpdate();
 					}else{
 						this.$api.msg(result.msg);
 					}
@@ -84,9 +85,10 @@
 			},
 			cancelFollow(item){
 				this.$request.ModelUser.cancelFollowUserId(item.followUserId).then(res => {
-					if(result.code == 'ok'){
+					if(res.code == 'ok'){
 						this.$api.msg('取消成功');
 						item.follow = false;
+						this.$forceUpdate();
 					}else{
 						this.$api.msg(result.msg);
 					}

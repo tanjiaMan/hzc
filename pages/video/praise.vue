@@ -1,7 +1,7 @@
 <template>  
     <view class="container">
 		<view class="tab_detail">
-			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item">
+			<view class="tab_item uni-flex uni-row" v-for="item in records" :key="item"  @click="navTo('/pages/video/detail?id='+item.refId)">
 				<view class="flex-item d_1">
 					<img class="img" :src="item.iconUrl"  />
 				</view>
@@ -52,6 +52,7 @@
 			this.loadData('tabChange');
 		},
         methods: {
+			navTo(url){uni.navigateTo({url})},
 			 async loadData(source){
 			 	if(this.loadingType === 'loading'){
 			 		//防止重复加载
